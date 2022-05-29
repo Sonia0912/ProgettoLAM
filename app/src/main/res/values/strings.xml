@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ProgettoLAM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_leave_message">Do you want to leave the game?</string>
+    <string name="lobby">Lobby</string>
+    <string name="max_players_message">You can\'t have more than six players.</string>
+</resources>
