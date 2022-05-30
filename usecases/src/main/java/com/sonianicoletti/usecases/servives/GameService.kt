@@ -6,6 +6,6 @@ import com.sonianicoletti.entities.User
 interface GameService {
 
     suspend fun createGame() : Game
-    suspend fun updateGamePlayers(gameID: String, players: List<User>)
 
+    suspend fun updateGame(game: Game)
 }

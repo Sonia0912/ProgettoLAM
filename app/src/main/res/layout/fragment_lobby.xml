@@ -25,14 +25,14 @@
         android:layout_marginTop="32dp"
         android:hint="Username"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/players_list"
+        app:layout_constraintEnd_toEndOf="@+id/players_list"
+        app:layout_constraintStart_toStartOf="@+id/players_list"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:imeOptions="actionDone"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/players_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
