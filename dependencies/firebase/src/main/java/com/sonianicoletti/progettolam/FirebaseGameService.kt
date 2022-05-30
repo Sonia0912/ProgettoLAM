@@ -21,22 +21,25 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         return Game(
             id = gameDocument.id,
             host = currentUser.id,
-            players = listOf(currentUser)
+            players = mutableListOf(currentUser)
         )
-    }
-
-    override suspend fun updateGamePlayers(gameID: String, players: List<User>) {
-        val gameRef = firestore.collection("games").document(gameID)
-        gameRef
-            .update("players", players.map { it.id })
-            .await()
     }
 
     private suspend fun getCurrentUser() = authService.getUser() ?: throw NullPointerException("User must not be null")
 
     private fun createNewGameData(currentUser: User) = hashMapOf(
-        "host" to currentUser.id,
-        "players" to listOf(currentUser.id)
+        HOST to currentUser.id,
+        PLAYERS to listOf(currentUser.id)
+    )
+
+    override suspend fun updateGame(game: Game) {
+        val gameRef = firestore.collection("games").document(game.id)
+        gameRef.update(game.toMap()).await()
+    }
+
+    private fun Game.toMap() = mapOf(
+        HOST to host,
+        PLAYERS to players
     )
 
     private suspend fun addGameToFirestore(gameData: HashMap<String, Any>) = firestore.collection("games")
@@ -44,4 +47,9 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         .await() // restituisce DocumentReference
         .get()
         .await() // restituisce DocumentSpanshot
+
+    companion object {
+        private const val HOST = "host"
+        private const val PLAYERS = "players"
+    }
 }

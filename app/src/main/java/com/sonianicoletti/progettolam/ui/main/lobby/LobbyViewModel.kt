@@ -1,67 +1,89 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.progettolam.ui.main.lobby.exception.DuplicatePlayerException
+import com.sonianicoletti.progettolam.ui.main.lobby.exception.MaxPlayersException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.GameService
 import com.sonianicoletti.usecases.servives.UserService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LobbyViewModel @Inject constructor(val gameService: GameService, val userService: UserService) : ViewModel() {
+class LobbyViewModel @Inject constructor(
+    private val gameService: GameService,
+    private val userService: UserService,
+) : ViewModel() {
+
+    private val viewStateEmitter = MutableLiveData<ViewState>()
+    val viewState: LiveData<ViewState> = viewStateEmitter
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
-    lateinit var game: Game
+
+    private lateinit var game: Game
 
     init {
-        viewModelScope.launch {
+        createGame()
+    }
+
+    private fun createGame() = viewModelScope.launch {
+        try {
+            viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
-            viewEventEmitter.postValue(ViewEvent.UpdatePlayersList(game.players))
+            viewStateEmitter.postValue(ViewState.Loaded(game))
+        } catch (e: Throwable) {
+            viewStateEmitter.postValue(ViewState.Error(e))
         }
     }
 
+    fun addPlayer(playerEmail: String) = viewModelScope.launch {
+        val invitedPlayer = userService.getUserByEmail(playerEmail)
 
-
-    fun addPlayer(playerEmail : String) = viewModelScope.launch {
-        if(game.players.size > 5) {
-            viewEventEmitter.value = ViewEvent.OpenMaxPlayersDialog
-            return@launch
-        }
         try {
-            val invitedPlayer = userService.getUserByEmail(playerEmail)
-            // controllo che non ci sia gia' lo stesso giocatore
-            if(game.players.any { it.id == invitedPlayer.id }) {
-                viewEventEmitter.value = ViewEvent.DuplicatePlayerAlert
-                return@launch
-            }
+            checkPlayerCapacity()
+            checkDuplicatePlayer(invitedPlayer)
             addPlayerToGame(invitedPlayer)
-        } catch(e: UserNotFoundException) {
-            viewEventEmitter.value = ViewEvent.NotFoundUserAlert
+        } catch (e: UserNotFoundException) {
+            viewEventEmitter.postValue(ViewEvent.NotFoundUserAlert)
+        } catch (e: MaxPlayersException) {
+            viewEventEmitter.postValue(ViewEvent.OpenMaxPlayersDialog)
+        } catch (e: DuplicatePlayerException) {
+            viewEventEmitter.postValue(ViewEvent.DuplicatePlayerAlert)
+        }
+    }
+
+    private fun checkPlayerCapacity() {
+        if (game.players.size > 5) {
+            throw MaxPlayersException()
+        }
+    }
+
+    private fun checkDuplicatePlayer(invitedPlayer: User) {
+        // controllo che non ci sia gia' lo stesso giocatore
+        if (game.players.any { it.id == invitedPlayer.id }) {
+            throw DuplicatePlayerException()
         }
     }
 
     private suspend fun addPlayerToGame(player: User) {
-        val newGamePlayers = mutableListOf<User>().apply {
-            addAll(game.players)
-            add(player)
-        }
-        game = game.copy(players = newGamePlayers)
-        gameService.updateGamePlayers(game.id, newGamePlayers)
-        // switcha al main thread (per settare i valori di viewEvent dal main thread)
-        // non uso postValue() perche' e' asincrono e ne farebbe solo uno dei due
-        withContext(Dispatchers.Main) {
-            viewEventEmitter.value = ViewEvent.UpdatePlayersList(newGamePlayers)
-            viewEventEmitter.value = ViewEvent.ClearText
-        }
+        game.players.add(player)
+        gameService.updateGame(game)
+        viewStateEmitter.postValue(ViewState.Loaded(game))
+        viewEventEmitter.postValue(ViewEvent.ClearText)
+    }
+
+    sealed class ViewState {
+        object Loading : ViewState()
+        data class Loaded(val game: Game) : ViewState()
+        data class Error(val error: Throwable) : ViewState()
     }
 
     // rappresenta una ristretta gerarchia di classe per fornire piu' controllo sull'ereditarieta'
@@ -69,9 +91,7 @@ class LobbyViewModel @Inject constructor(val gameService: GameService, val userS
     sealed class ViewEvent {
         object OpenMaxPlayersDialog : ViewEvent()
         object NotFoundUserAlert : ViewEvent()
-        object DuplicatePlayerAlert: ViewEvent()
-        class UpdatePlayersList(val players : List<User>) : ViewEvent()
+        object DuplicatePlayerAlert : ViewEvent()
         object ClearText : ViewEvent()
     }
-
 }

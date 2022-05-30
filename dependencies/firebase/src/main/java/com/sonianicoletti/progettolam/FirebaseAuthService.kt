@@ -10,7 +10,9 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 // @Inject dice a Hilt come fornire un'istanza della classe
-class FirebaseAuthService @Inject constructor(private val userService: UserService) : AuthService {
+class FirebaseAuthService @Inject constructor(
+    private val userService: UserService
+) : AuthService {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firestore = Firebase.firestore
@@ -24,35 +26,25 @@ class FirebaseAuthService @Inject constructor(private val userService: UserServi
             id = firebaseUser.uid,
             email = firebaseUser.email.orEmpty(),
             // nel caso non abbia un nome viene mostrata l'email
-            displayName = firebaseUser.displayName?:firebaseUser.email.orEmpty()
+            displayName = firebaseUser.displayName ?: firebaseUser.email.orEmpty()
         )
     }
 
-    override fun signOut() {
-        firebaseAuth.signOut()
-    }
+    override fun signOut() = firebaseAuth.signOut()
 
     override suspend fun register(email: String, password: String, displayName: String): User {
-        val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-        val firebaseUser = authResult.user ?: throw NullPointerException("user is null during register")
-        createUser(email, displayName)
+        val createUserResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+        val firebaseUser = createUserResult.user ?: throw NullPointerException("user is null during register")
+        addUserToFirestore(email, displayName)
         return User(
             id = firebaseUser.uid,
             email = firebaseUser.email.orEmpty(),
             // nel caso non abbia un nome viene mostrata l'email
-            displayName = firebaseUser.displayName?:firebaseUser.email.orEmpty()
+            displayName = firebaseUser.displayName ?: firebaseUser.email.orEmpty()
         )
     }
 
-    override suspend fun getUser() = firebaseAuth.currentUser?.let{
-        it.email?.let { email ->
-            val user = userService.getUserByEmail(email)
-            // orEmpty usa una stringa vuota se e' null
-            User(it.uid, email, user.displayName)
-        }
-    }
-
-    private suspend fun createUser(email: String, username: String) {
+    private suspend fun addUserToFirestore(email: String, username: String) {
         // Create a new user
         val user = hashMapOf(
             "displayName" to username,
@@ -64,5 +56,11 @@ class FirebaseAuthService @Inject constructor(private val userService: UserServi
             .await()
     }
 
-
+    override suspend fun getUser() = firebaseAuth.currentUser?.let {
+        it.email?.let { email ->
+            val user = userService.getUserByEmail(email)
+            // orEmpty usa una stringa vuota se e' null
+            User(it.uid, email, user.displayName)
+        }
+    }
 }

@@ -14,6 +14,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
+import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
+import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewState.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,34 +33,68 @@ class LobbyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
+        initActionBar()
+        setClickListeners()
+        initPlayersList()
+        observeViewState()
+        observeViewEvents()
+        return binding.root
+    }
+
+    private fun initActionBar() {
         (activity as AppCompatActivity).apply {
             setSupportActionBar(binding.toolBar)
             supportActionBar?.setDisplayShowTitleEnabled(false)
         }
+    }
 
+    private fun initPlayersList() {
+        binding.playersList.layoutManager = LinearLayoutManager(context)
+        binding.playersList.adapter = playersAdapter
+    }
+
+    private fun setClickListeners() {
         binding.imageViewExit.setOnClickListener {
-            openLeaveDialog()
+            showLeaveGameDialog()
         }
 
         binding.editTextTextPersonName.setOnEditorActionListener { textView, actionId, keyEvent ->
             // quando clicca enter
-            if(actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.addPlayer(textView.text.toString())
                 true
+            } else {
+                false
             }
-            false
         }
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-
-        binding.recyclerView.adapter = playersAdapter
-
-        observeViewEvents()
-
-        return binding.root
     }
 
-    private fun openLeaveDialog() {
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        when (state) {
+            // se e' una classe serve is, se e' un oggetto no\
+            Loading -> Unit
+            is Loaded -> updatePlayersList(state.game.players)
+            is Error -> Unit
+        }
+    }
+
+    private fun updatePlayersList(playerList : List<User>) {
+        this.playerList.clear()
+        this.playerList.addAll(playerList)
+        playersAdapter.notifyDataSetChanged()
+    }
+
+    // it e' l'evento
+    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
+        when (it) {
+            OpenMaxPlayersDialog -> showMaxPlayersDialog()
+            NotFoundUserAlert -> showUserNotFoundDialog()
+            DuplicatePlayerAlert -> showDuplicatePlayerDialog()
+            ClearText -> binding.editTextTextPersonName.setText("")
+        }
+    }
+
+    private fun showLeaveGameDialog() {
         // Se context non e' nullo continua, il context diventa "it" e anche se cambia
         // si continua ad usare il context usato per la verifica
         context?.let {
@@ -70,7 +106,7 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun openMaxPlayersDialog() {
+    private fun showMaxPlayersDialog() {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setMessage(getString(R.string.max_players_message))
@@ -79,31 +115,11 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun notFoundUserAlert() {
+    private fun showUserNotFoundDialog() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("No user found with that email").show()
     }
 
-    private fun duplicatePlayerAlert() {
+    private fun showDuplicatePlayerDialog() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("Player already in game").show()
     }
-
-
-    private fun updatePlayersList(playerList : List<User>) {
-        this.playerList.clear()
-        this.playerList.addAll(playerList)
-        playersAdapter.notifyDataSetChanged()
-    }
-
-    // it e' l'evento
-    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
-        when (it) {
-            // se e' una classe serve is, se e' un oggetto no
-            LobbyViewModel.ViewEvent.OpenMaxPlayersDialog -> openMaxPlayersDialog()
-            LobbyViewModel.ViewEvent.NotFoundUserAlert -> notFoundUserAlert()
-            LobbyViewModel.ViewEvent.DuplicatePlayerAlert -> duplicatePlayerAlert()
-            is LobbyViewModel.ViewEvent.UpdatePlayersList -> updatePlayersList(it.players)
-            LobbyViewModel.ViewEvent.ClearText -> binding.editTextTextPersonName.setText("")
-        }
-    }
-
 }
