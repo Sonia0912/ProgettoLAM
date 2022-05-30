@@ -1,11 +1,9 @@
 package com.sonianicoletti.usecases.servives
 
 import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.User
 
 interface GameService {
-
     suspend fun createGame() : Game
-
     suspend fun updateGame(game: Game)
+    suspend fun getGameByID(gameID: String) : Game
 }

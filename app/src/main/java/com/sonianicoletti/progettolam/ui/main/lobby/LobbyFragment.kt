@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
@@ -34,8 +35,8 @@ class LobbyFragment : Fragment() {
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
         initActionBar()
-        setClickListeners()
         initPlayersList()
+        setClickListeners()
         observeViewState()
         observeViewEvents()
         return binding.root
@@ -69,31 +70,6 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
-        when (state) {
-            // se e' una classe serve is, se e' un oggetto no\
-            Loading -> Unit
-            is Loaded -> updatePlayersList(state.game.players)
-            is Error -> Unit
-        }
-    }
-
-    private fun updatePlayersList(playerList : List<User>) {
-        this.playerList.clear()
-        this.playerList.addAll(playerList)
-        playersAdapter.notifyDataSetChanged()
-    }
-
-    // it e' l'evento
-    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
-        when (it) {
-            OpenMaxPlayersDialog -> showMaxPlayersDialog()
-            NotFoundUserAlert -> showUserNotFoundDialog()
-            DuplicatePlayerAlert -> showDuplicatePlayerDialog()
-            ClearText -> binding.editTextTextPersonName.setText("")
-        }
-    }
-
     private fun showLeaveGameDialog() {
         // Se context non e' nullo continua, il context diventa "it" e anche se cambia
         // si continua ad usare il context usato per la verifica
@@ -103,6 +79,40 @@ class LobbyFragment : Fragment() {
                 .setPositiveButton("Yes") { _, _ -> findNavController().navigateUp() } // il secondo parametro e' una funzione callback di default
                 .setNegativeButton("No") { _, _ -> }
                 .show()
+        }
+    }
+
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        when (state) {
+            // se e' una classe serve is, se e' un oggetto no\
+            Loading -> Unit
+            is Loaded -> renderLoaded(state.game)
+            is Error -> Unit
+        }
+    }
+
+    private fun renderLoaded(game : Game) {
+        updatePlayersList(game.players)
+        showGameID(game.id)
+    }
+
+    private fun updatePlayersList(playerList : List<User>) {
+        this.playerList.clear()
+        this.playerList.addAll(playerList)
+        playersAdapter.notifyDataSetChanged()
+    }
+
+    private fun showGameID(id: String) {
+        binding.gameID.text = id
+    }
+
+    // it e' l'evento
+    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
+        when (it) {
+            OpenMaxPlayersDialog -> showMaxPlayersDialog()
+            NotFoundUserAlert -> showUserNotFoundDialog()
+            DuplicatePlayerAlert -> showDuplicatePlayerDialog()
+            ClearText -> binding.editTextTextPersonName.setText("")
         }
     }
 
