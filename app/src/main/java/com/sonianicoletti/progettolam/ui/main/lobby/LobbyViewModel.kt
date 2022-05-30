@@ -52,11 +52,11 @@ class LobbyViewModel @Inject constructor(
             checkDuplicatePlayer(invitedPlayer)
             addPlayerToGame(invitedPlayer)
         } catch (e: UserNotFoundException) {
-            viewEventEmitter.value = ViewEvent.NotFoundUserAlert
+            viewEventEmitter.postValue(ViewEvent.NotFoundUserAlert)
         } catch (e: MaxPlayersException) {
-            viewEventEmitter.value = ViewEvent.OpenMaxPlayersDialog
+            viewEventEmitter.postValue(ViewEvent.OpenMaxPlayersDialog)
         } catch (e: DuplicatePlayerException) {
-            viewEventEmitter.value = ViewEvent.DuplicatePlayerAlert
+            viewEventEmitter.postValue(ViewEvent.DuplicatePlayerAlert)
         }
     }
 
