@@ -93,6 +93,7 @@ class LobbyFragment : Fragment() {
     private fun renderLoaded(game : Game) {
         updatePlayersList(game.players)
         showGameID(game.id)
+        viewModel.generateQrCode(game.id)
     }
 
     private fun updatePlayersList(playerList : List<User>) {

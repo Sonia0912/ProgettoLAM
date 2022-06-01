@@ -42,7 +42,6 @@ class LobbyViewModel @Inject constructor(
             viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
             viewStateEmitter.postValue(ViewState.Loaded(game))
-            generateGameIdQRCode(game.id)
         } catch (e: Throwable) {
             e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
@@ -85,7 +84,7 @@ class LobbyViewModel @Inject constructor(
         viewEventEmitter.postValue(ViewEvent.ClearText)
     }
 
-    private fun generateGameIdQRCode(gameId: String) {
+    fun generateQrCode(gameId: String) {
         val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
         viewEventEmitter.postValue(ViewEvent.SetQRCode(qrCodeBitmap))
     }
