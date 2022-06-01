@@ -7,22 +7,32 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.exceptions.GameNotFoundException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
+import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JoingameViewModel @Inject constructor(private val gameService: GameService) :  ViewModel() {
+class JoingameViewModel @Inject constructor(
+    private val gameService: GameService,
+    private val authService: AuthService,
+    ) :  ViewModel() {
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
     fun joinGame(gameID : String) {
         viewModelScope.launch {
-            if(checkGameAvailability(gameID)) {
+            if (checkGameAvailability(gameID)) {
                 // Add the current user to the game's players in firestore
                 // navigate to LobbyFragment
+                authService.getUser()?.let { user ->
+                    val game = gameService.getGameByID(gameID)
+                    game.players.add(user)
+                    gameService.updateGame(game)
+                    viewEventEmitter.postValue(ViewEvent.NavigateToLobby(game.id))
+                }
             } else {
                 viewEventEmitter.postValue(ViewEvent.GameNotFoundAlert)
             }
@@ -43,6 +53,7 @@ class JoingameViewModel @Inject constructor(private val gameService: GameService
 
     sealed class ViewEvent {
         object GameNotFoundAlert : ViewEvent()
+        data class NavigateToLobby(val gameID: String) : ViewEvent()
     }
 
 }

@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
 import androidx.constraintlayout.motion.utils.ViewState
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.zxing.QRCodeGenerator
 import com.sonianicoletti.progettolam.ui.main.lobby.exception.DuplicatePlayerException
 import com.sonianicoletti.progettolam.ui.main.lobby.exception.MaxPlayersException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class LobbyViewModel @Inject constructor(
     private val gameService: GameService,
     private val userService: UserService,
+    private val qrCodeGenerator: QRCodeGenerator,
 ) : ViewModel() {
 
     private val viewStateEmitter = MutableLiveData<ViewState>()
@@ -32,16 +35,24 @@ class LobbyViewModel @Inject constructor(
 
     private lateinit var game: Game
 
-    init {
-        createGame()
-    }
-
-    private fun createGame() = viewModelScope.launch {
+    fun createGame() = viewModelScope.launch {
         try {
             viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
             viewStateEmitter.postValue(ViewState.Loaded(game))
         } catch (e: Throwable) {
+            e.printStackTrace()
+            viewStateEmitter.postValue(ViewState.Error(e))
+        }
+    }
+
+    fun loadGame(gameID: String) = viewModelScope.launch {
+        try {
+            viewStateEmitter.postValue(ViewState.Loading)
+            game = gameService.getGameByID(gameID)
+            viewStateEmitter.postValue(ViewState.Loaded(game))
+        } catch (e: Throwable) {
+            e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
         }
     }
@@ -94,6 +105,11 @@ class LobbyViewModel @Inject constructor(
         viewEventEmitter.postValue(ViewEvent.ClearText)
     }
 
+    fun generateQrCode(gameId: String) {
+        val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
+        viewEventEmitter.postValue(ViewEvent.SetQRCode(qrCodeBitmap))
+    }
+
     sealed class ViewState {
         object Loading : ViewState()
         data class Loaded(val game: Game) : ViewState()
@@ -109,5 +125,6 @@ class LobbyViewModel @Inject constructor(
         object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()
         object NavigateToGame : ViewEvent()
+        class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }
 }

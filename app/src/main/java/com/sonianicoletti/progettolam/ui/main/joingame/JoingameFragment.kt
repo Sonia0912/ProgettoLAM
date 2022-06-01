@@ -1,14 +1,22 @@
 package com.sonianicoletti.progettolam.ui.main.joingame
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentJoingameBinding
+import com.sonianicoletti.zxing.ZxingScannerActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,6 +24,14 @@ class JoingameFragment : Fragment() {
 
     private lateinit var binding: FragmentJoingameBinding
     private val viewModel: JoingameViewModel by viewModels()
+
+    private val barcodeLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val intent = result.data
+            val qrCodeContent = intent?.getStringExtra("qrcontent")
+            qrCodeContent?.let { viewModel.joinGame(it) }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +56,10 @@ class JoingameFragment : Fragment() {
         }
 
         // Partecipa con il QR code
-        // TODO
+        binding.joinByQrButton.setOnClickListener {
+            val intent = Intent(requireContext(), ZxingScannerActivity::class.java)
+            barcodeLauncher.launch(intent)
+        }
 
         observeViewEvents()
         return binding.root
@@ -53,6 +72,10 @@ class JoingameFragment : Fragment() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
             JoingameViewModel.ViewEvent.GameNotFoundAlert -> gameNotFoundAlert()
+            is JoingameViewModel.ViewEvent.NavigateToLobby -> {
+                val args = Bundle().apply { putString("GAME_ID", it.gameID) }
+                findNavController().navigate(R.id.lobbyFragment, args)
+            }
         }
     }
 

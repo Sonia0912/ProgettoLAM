@@ -28,14 +28,19 @@ class LobbyFragment : Fragment() {
     private val viewModel: LobbyViewModel by viewModels()
 
     private val playerList = mutableListOf<User>()
-
-    var playersAdapter = PlayersAdapter(playerList)
+    private var playersAdapter = PlayersAdapter(playerList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
+
+
+        arguments?.getString("GAME_ID")?.let {
+            viewModel.loadGame(it)
+        } ?: viewModel.createGame()
+
         initActionBar()
         initPlayersList()
         setClickListeners()
@@ -100,6 +105,7 @@ class LobbyFragment : Fragment() {
     private fun renderLoaded(game : Game) {
         updatePlayersList(game.players)
         showGameID(game.id)
+        viewModel.generateQrCode(game.id)
     }
 
     private fun updatePlayersList(playerList : List<User>) {
@@ -121,6 +127,7 @@ class LobbyFragment : Fragment() {
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextTextPersonName.setText("")
             NavigateToGame -> navigateToGame()
+            is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }
     }
 

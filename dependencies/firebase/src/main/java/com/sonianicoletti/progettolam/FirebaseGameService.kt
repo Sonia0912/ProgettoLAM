@@ -43,7 +43,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     private fun createNewGameData(currentUser: User) = hashMapOf(
         HOST to currentUser.id,
         STATUS to GameStatus.LOBBY,
-        PLAYERS to listOf(currentUser.id)
+        PLAYERS to listOf(currentUser)
     )
 
     override suspend fun updateGame(game: Game) {
@@ -65,11 +65,17 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     override suspend fun getGameByID(gameID: String) : Game {
         val gameRef = firestore.collection("games").document(gameID).get().await()
         if(!gameRef.exists()) throw GameNotFoundException()
+
+        val playersList = (gameRef["players"] as List<HashMap<String, Any>>).map {
+            User(
+                it["id"] as String, it["email"] as String, it["displayName"] as String
+            )
+        }
         return Game(
             id = gameRef.id,
             host = gameRef.getString("host").orEmpty(),
-            status = gameRef["status"] as? GameStatus ?: throw IllegalStateException(),
-            players = gameRef["players"] as? MutableList<User> ?: mutableListOf<User>()
+            status = gameRef["status"] as? GameStatus ?: GameStatus.LOBBY,
+            players = playersList.toMutableList()
         )
     }
 
