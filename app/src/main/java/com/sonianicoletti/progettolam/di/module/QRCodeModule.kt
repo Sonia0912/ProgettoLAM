@@ -1,0 +1,16 @@
+package com.sonianicoletti.progettolam.di.module
+
+import com.sonianicoletti.zxing.QRCodeGenerator
+import com.sonianicoletti.zxing.ZxingQRCodeGenerator
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class QRCodeModule {
+
+    @Binds
+    abstract fun bindQRCodeGenerator(zxingQRCodeGenerator: ZxingQRCodeGenerator): QRCodeGenerator
+}

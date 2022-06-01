@@ -25,9 +25,8 @@ class LobbyFragment : Fragment() {
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: LobbyViewModel by viewModels()
 
-    val playerList = mutableListOf<User>()
-
-    var playersAdapter = PlayersAdapter(playerList)
+    private val playerList = mutableListOf<User>()
+    private var playersAdapter = PlayersAdapter(playerList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,6 +112,7 @@ class LobbyFragment : Fragment() {
             NotFoundUserAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             ClearText -> binding.editTextTextPersonName.setText("")
+            is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }
     }
 

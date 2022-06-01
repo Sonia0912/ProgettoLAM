@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.zxing.QRCodeGenerator
 import com.sonianicoletti.progettolam.ui.main.lobby.exception.DuplicatePlayerException
 import com.sonianicoletti.progettolam.ui.main.lobby.exception.MaxPlayersException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
@@ -20,6 +22,7 @@ import javax.inject.Inject
 class LobbyViewModel @Inject constructor(
     private val gameService: GameService,
     private val userService: UserService,
+    private val qrCodeGenerator: QRCodeGenerator,
 ) : ViewModel() {
 
     private val viewStateEmitter = MutableLiveData<ViewState>()
@@ -39,7 +42,9 @@ class LobbyViewModel @Inject constructor(
             viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
             viewStateEmitter.postValue(ViewState.Loaded(game))
+            generateGameIdQRCode(game.id)
         } catch (e: Throwable) {
+            e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
         }
     }
@@ -80,6 +85,11 @@ class LobbyViewModel @Inject constructor(
         viewEventEmitter.postValue(ViewEvent.ClearText)
     }
 
+    private fun generateGameIdQRCode(gameId: String) {
+        val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
+        viewEventEmitter.postValue(ViewEvent.SetQRCode(qrCodeBitmap))
+    }
+
     sealed class ViewState {
         object Loading : ViewState()
         data class Loaded(val game: Game) : ViewState()
@@ -93,5 +103,6 @@ class LobbyViewModel @Inject constructor(
         object NotFoundUserAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
         object ClearText : ViewEvent()
+        class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }
 }

@@ -3,15 +3,11 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    // connette in una direzione il modulo dataaccess a usecases
-    // come se il modulo usecases fosse una libreria
     implementation project(path: ':usecases')
     implementation project(path: ':entities')
-
-    implementation 'com.google.dagger:hilt-android:2.38.1'
 }
