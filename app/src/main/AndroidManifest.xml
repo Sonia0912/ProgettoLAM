@@ -25,6 +25,10 @@
             android:name=".ui.main.MainActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".ui.game.GameActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

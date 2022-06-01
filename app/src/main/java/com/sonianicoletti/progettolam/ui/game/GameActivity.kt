@@ -1,18 +1,18 @@
-package com.sonianicoletti.progettolam.ui.main
+package com.sonianicoletti.progettolam.ui.game
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.sonianicoletti.progettolam.databinding.ActivityMainBinding
+import com.sonianicoletti.progettolam.databinding.ActivityGameBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 

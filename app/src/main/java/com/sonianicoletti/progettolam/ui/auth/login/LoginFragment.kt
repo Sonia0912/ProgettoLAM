@@ -63,8 +63,8 @@ class LoginFragment : Fragment() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
             // se e' una classe serve is, se e' un oggetto no
-            LoginViewModel.ViewEvent.handleWrongCredentials -> handleWrongCredentials()
-            LoginViewModel.ViewEvent.navigateToMain -> navigateToMain()
+            LoginViewModel.ViewEvent.HandleWrongCredentials -> handleWrongCredentials()
+            LoginViewModel.ViewEvent.NavigateToMain -> navigateToMain()
         }
     }
 

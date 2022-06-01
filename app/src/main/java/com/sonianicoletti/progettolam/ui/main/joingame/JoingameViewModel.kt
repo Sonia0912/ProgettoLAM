@@ -37,9 +37,7 @@ class JoingameViewModel @Inject constructor(private val gameService: GameService
         } catch(e: GameNotFoundException) {
             return false
         }
-        // controlla che la partita non sia terminata o in gioco (?)
-
-        // controlla che ci siano meno di 6 giocatori
+        // controlla che la partita non sia terminata o in gioco e  che ci siano meno di 6 giocatori
         return (gameToJoin.players.size <= 5) && (gameToJoin.status == GameStatus.LOBBY)
     }
 

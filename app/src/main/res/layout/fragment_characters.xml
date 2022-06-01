@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose your character"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <ImageView
+        android:id="@+id/imageViewPeacock"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewPlum"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewMustard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mrs_peacock" />
+
+    <ImageView
+        android:id="@+id/imageViewMustard"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewWhite"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewScarlett"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPeacock"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/colonel_mustard" />
+
+    <ImageView
+        android:id="@+id/imageViewScarlett"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewGreen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewMustard"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/miss_scarlett" />
+
+    <ImageView
+        android:id="@+id/imageViewPlum"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPeacock"
+        app:srcCompat="@drawable/professor_plum" />
+
+    <ImageView
+        android:id="@+id/imageViewWhite"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewGreen"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPlum"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewMustard"
+        app:srcCompat="@drawable/mrs_white" />
+
+    <ImageView
+        android:id="@+id/imageViewGreen"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewScarlett"
+        app:layout_constraintStart_toEndOf="@+id/imageViewWhite"
+        app:srcCompat="@drawable/rev_green" />
+
+    <TextView
+        android:id="@+id/textViewPeacock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username1"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewPlum"
+        app:layout_constraintEnd_toStartOf="@+id/textViewMustard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPeacock" />
+
+    <TextView
+        android:id="@+id/textViewMustard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username2"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewWhite"
+        app:layout_constraintEnd_toStartOf="@+id/textViewScarlett"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewMustard"
+        app:layout_constraintStart_toEndOf="@+id/textViewPeacock"/>
+
+    <TextView
+        android:id="@+id/textViewScarlett"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username3"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewGreen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewScarlett"
+        app:layout_constraintStart_toEndOf="@+id/textViewMustard"/>
+
+    <TextView
+        android:id="@+id/textViewPlum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPlum"
+        app:layout_constraintEnd_toStartOf="@+id/textViewWhite"/>
+
+    <TextView
+        android:id="@+id/textViewWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewPlum"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewWhite"
+        app:layout_constraintEnd_toStartOf="@+id/textViewGreen"/>
+
+    <TextView
+        android:id="@+id/textViewGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Username6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewWhite"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewGreen" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         viewModelScope.launch {
             // se l'utente ha gia' fatto il login va direttamente alla MainActivity
             if(authService.getUser() != null) {
-                viewEventEmitter.postValue(ViewEvent.navigateToMain)
+                viewEventEmitter.postValue(ViewEvent.NavigateToMain)
             }
         }
     }
@@ -29,16 +29,16 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         viewModelScope.launch {
             try {
                 authService.signIn(email, password)
-                viewEventEmitter.postValue(ViewEvent.navigateToMain)
+                viewEventEmitter.postValue(ViewEvent.NavigateToMain)
             } catch(e: Exception) {
-                viewEventEmitter.value = LoginViewModel.ViewEvent.handleWrongCredentials
+                viewEventEmitter.value = LoginViewModel.ViewEvent.HandleWrongCredentials
             }
         }
     }
 
     sealed class ViewEvent {
-        object handleWrongCredentials : LoginViewModel.ViewEvent()
-        object navigateToMain : LoginViewModel.ViewEvent()
+        object HandleWrongCredentials : LoginViewModel.ViewEvent()
+        object NavigateToMain : LoginViewModel.ViewEvent()
     }
 
 

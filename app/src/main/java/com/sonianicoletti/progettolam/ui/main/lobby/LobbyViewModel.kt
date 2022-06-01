@@ -1,10 +1,12 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
+import androidx.constraintlayout.motion.utils.ViewState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.ui.main.lobby.exception.DuplicatePlayerException
@@ -45,10 +47,10 @@ class LobbyViewModel @Inject constructor(
     }
 
     fun addPlayer(playerEmail: String) = viewModelScope.launch {
-        val invitedPlayer = userService.getUserByEmail(playerEmail)
 
         try {
             checkPlayerCapacity()
+            val invitedPlayer = userService.getUserByEmail(playerEmail)
             checkDuplicatePlayer(invitedPlayer)
             addPlayerToGame(invitedPlayer)
         } catch (e: UserNotFoundException) {
@@ -57,6 +59,18 @@ class LobbyViewModel @Inject constructor(
             viewEventEmitter.postValue(ViewEvent.OpenMaxPlayersDialog)
         } catch (e: DuplicatePlayerException) {
             viewEventEmitter.postValue(ViewEvent.DuplicatePlayerAlert)
+        }
+    }
+
+    fun startGame() {
+        viewModelScope.launch {
+            if(game.players.size < 3) {
+                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
+            } else {
+                game.status = GameStatus.ACTIVE
+                gameService.updateGame(game)
+                viewEventEmitter.postValue(ViewEvent.NavigateToGame)
+            }
         }
     }
 
@@ -92,6 +106,8 @@ class LobbyViewModel @Inject constructor(
         object OpenMaxPlayersDialog : ViewEvent()
         object NotFoundUserAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
+        object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()
+        object NavigateToGame : ViewEvent()
     }
 }

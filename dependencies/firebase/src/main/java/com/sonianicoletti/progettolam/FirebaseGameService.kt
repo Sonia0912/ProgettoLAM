@@ -53,6 +53,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     private fun Game.toMap() = mapOf(
         HOST to host,
+        STATUS to status,
         PLAYERS to players
     )
 

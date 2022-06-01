@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
+import com.sonianicoletti.progettolam.ui.game.GameActivity
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewState.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +27,7 @@ class LobbyFragment : Fragment() {
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: LobbyViewModel by viewModels()
 
-    val playerList = mutableListOf<User>()
+    private val playerList = mutableListOf<User>()
 
     var playersAdapter = PlayersAdapter(playerList)
 
@@ -67,6 +69,10 @@ class LobbyFragment : Fragment() {
             } else {
                 false
             }
+        }
+
+        binding.buttonStartgame.setOnClickListener {
+            viewModel.startGame()
         }
     }
 
@@ -112,8 +118,17 @@ class LobbyFragment : Fragment() {
             OpenMaxPlayersDialog -> showMaxPlayersDialog()
             NotFoundUserAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
+            NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextTextPersonName.setText("")
+            NavigateToGame -> navigateToGame()
         }
+    }
+
+    private fun navigateToGame() {
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
+        context?.startActivity(intent)
+        activity?.finish()
     }
 
     private fun showMaxPlayersDialog() {
@@ -132,4 +147,9 @@ class LobbyFragment : Fragment() {
     private fun showDuplicatePlayerDialog() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("Player already in game").show()
     }
+
+    private fun showNotEnoughPlayersDialog() {
+        MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
+    }
+
 }
