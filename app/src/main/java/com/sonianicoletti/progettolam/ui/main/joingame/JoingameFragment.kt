@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentJoingameBinding
 import com.sonianicoletti.zxing.ZxingScannerActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +29,7 @@ class JoingameFragment : Fragment() {
         if (result.resultCode == RESULT_OK) {
             val intent = result.data
             val qrCodeContent = intent?.getStringExtra("qrcontent")
-            Toast.makeText(requireContext(), qrCodeContent, Toast.LENGTH_SHORT).show()
+            qrCodeContent?.let { viewModel.joinGame(it) }
         }
     }
 
@@ -71,6 +72,10 @@ class JoingameFragment : Fragment() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
             JoingameViewModel.ViewEvent.GameNotFoundAlert -> gameNotFoundAlert()
+            is JoingameViewModel.ViewEvent.NavigateToLobby -> {
+                val args = Bundle().apply { putString("GAME_ID", it.gameID) }
+                findNavController().navigate(R.id.lobbyFragment, args)
+            }
         }
     }
 

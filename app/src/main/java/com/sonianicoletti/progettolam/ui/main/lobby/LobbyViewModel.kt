@@ -33,14 +33,21 @@ class LobbyViewModel @Inject constructor(
 
     private lateinit var game: Game
 
-    init {
-        createGame()
-    }
-
-    private fun createGame() = viewModelScope.launch {
+    fun createGame() = viewModelScope.launch {
         try {
             viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
+            viewStateEmitter.postValue(ViewState.Loaded(game))
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            viewStateEmitter.postValue(ViewState.Error(e))
+        }
+    }
+
+    fun loadGame(gameID: String) = viewModelScope.launch {
+        try {
+            viewStateEmitter.postValue(ViewState.Loading)
+            game = gameService.getGameByID(gameID)
             viewStateEmitter.postValue(ViewState.Loaded(game))
         } catch (e: Throwable) {
             e.printStackTrace()

@@ -33,6 +33,12 @@ class LobbyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
+
+
+        arguments?.getString("GAME_ID")?.let {
+            viewModel.loadGame(it)
+        } ?: viewModel.createGame()
+
         initActionBar()
         initPlayersList()
         setClickListeners()
