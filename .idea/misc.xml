@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/eddec/AndroidStudioProjects/ProgettoLAM/app/src/main/res/layout/fragment_joingame.xml" value="0.2328125" />
         <entry key="..\:/Users/eddec/AndroidStudioProjects/ProgettoLAM/app/src/main/res/layout/fragment_lobby.xml" value="0.19074074074074074" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/ProgettoLAM/app/src/main/res/drawable/ic_person.xml" value="0.179" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/ProgettoLAM/app/src/main/res/layout/activity_auth.xml" value="0.26875" />
