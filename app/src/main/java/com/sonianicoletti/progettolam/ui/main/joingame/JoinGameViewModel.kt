@@ -46,7 +46,7 @@ class JoinGameViewModel @Inject constructor(
     private fun validateGameId(gameID: String) {
         if (gameID.isBlank()) {
             throw BlankFieldException()
-        } else if (gameID.length < 6) {
+        } else if (gameID.length != 6) {
             throw MinCharsNotAddedException()
         }
     }

@@ -47,10 +47,12 @@ class LobbyFragment : Fragment() {
 
     private fun initGame() {
         val gameID = arguments?.getString(ARG_GAME_ID)
-
+        // quando qualcuno si unisce alla partita la lobby viene caricata
         if (gameID != null) {
             viewModel.loadGame(gameID)
-        } else {
+        }
+        // quando l'host crea la partita la lobby viene creata e viene generato l'ID della partita
+        else {
             viewModel.createGame()
         }
     }
@@ -166,6 +168,7 @@ class LobbyFragment : Fragment() {
     }
 
     companion object {
+        // assicura che la stringa chiamara nel viewmodel e nel fragment sia la stessa
         const val ARG_GAME_ID = "ARG_GAME_ID"
     }
 }
