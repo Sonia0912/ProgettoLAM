@@ -86,7 +86,7 @@ class LobbyViewModel @Inject constructor(
             } else {
                 game.status = GameStatus.ACTIVE
                 gameService.updateGame(game)
-                viewEventEmitter.postValue(ViewEvent.NavigateToGame)
+                viewEventEmitter.postValue(ViewEvent.NavigateToGame(game.id))
             }
         }
     }
@@ -130,7 +130,7 @@ class LobbyViewModel @Inject constructor(
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()
-        object NavigateToGame : ViewEvent()
+        class NavigateToGame(val gameID: String) : ViewEvent()
         class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }
 }

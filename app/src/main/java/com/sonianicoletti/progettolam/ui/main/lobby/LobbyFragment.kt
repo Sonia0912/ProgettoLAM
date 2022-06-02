@@ -134,14 +134,15 @@ class LobbyFragment : Fragment() {
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextTextPersonName.setText("")
-            NavigateToGame -> navigateToGame()
+            is NavigateToGame -> navigateToGame(it.gameID)
             is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }
     }
 
-    private fun navigateToGame() {
+    private fun navigateToGame(gameID: String) {
         val intent = Intent(requireContext(), GameActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
+        intent.putExtra("gameID", gameID)
         context?.startActivity(intent)
         activity?.finish()
     }
