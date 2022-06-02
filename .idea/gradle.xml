@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/usecases" />
           </set>
         </option>
+        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

@@ -1,6 +1,5 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
-import androidx.constraintlayout.motion.utils.ViewState
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,17 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.User
+import com.sonianicoletti.entities.exceptions.DuplicatePlayerException
+import com.sonianicoletti.entities.exceptions.MaxPlayersException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
-import com.sonianicoletti.zxing.QRCodeGenerator
-import com.sonianicoletti.progettolam.ui.main.lobby.exception.DuplicatePlayerException
-import com.sonianicoletti.progettolam.ui.main.lobby.exception.MaxPlayersException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.GameService
 import com.sonianicoletti.usecases.servives.UserService
+import com.sonianicoletti.zxing.QRCodeGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -67,12 +65,11 @@ class LobbyViewModel @Inject constructor(
     }
 
     fun addPlayer(playerEmail: String) = viewModelScope.launch {
-
         try {
             checkPlayerCapacity()
             val invitedPlayer = userService.getUserByEmail(playerEmail)
             checkDuplicatePlayer(invitedPlayer)
-            addPlayerToGame(invitedPlayer)
+            addPlayerToGame(Player.fromUser(invitedPlayer))
         } catch (e: UserNotFoundException) {
             viewEventEmitter.postValue(ViewEvent.NotFoundUserAlert)
         } catch (e: MaxPlayersException) {
@@ -107,7 +104,7 @@ class LobbyViewModel @Inject constructor(
         }
     }
 
-    private suspend fun addPlayerToGame(player: User) {
+    private suspend fun addPlayerToGame(player: Player) {
         game.players.add(player)
         gameService.updateGame(game)
         viewStateEmitter.postValue(ViewState.Loaded(game))
@@ -116,7 +113,7 @@ class LobbyViewModel @Inject constructor(
 
     fun generateQrCode(gameId: String) {
         val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
-        viewEventEmitter.postValue(ViewEvent.SetQRCode(qrCodeBitmap))
+        viewEventEmitter.value = ViewEvent.SetQRCode(qrCodeBitmap)
     }
 
     sealed class ViewState {

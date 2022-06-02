@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.GameStatus
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.*
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,9 +62,9 @@ class JoinGameViewModel @Inject constructor(
     }
 
     private suspend fun addCurrentPlayerToGame(gameID: String) {
-        authService.getUser()?.let { player ->
+        authService.getUser()?.let { user ->
             val game = gameService.getGameByID(gameID)
-            game.players.add(player)
+            game.players.add(Player.fromUser(user))
             gameService.updateGame(game)
         } ?: throw UserNotFoundException()
     }

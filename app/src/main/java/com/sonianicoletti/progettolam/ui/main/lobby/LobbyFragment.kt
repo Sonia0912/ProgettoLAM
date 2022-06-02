@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.User
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
 import com.sonianicoletti.progettolam.ui.game.GameActivity
@@ -27,7 +27,7 @@ class LobbyFragment : Fragment() {
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: LobbyViewModel by viewModels()
 
-    private val playerList = mutableListOf<User>()
+    private val playerList = mutableListOf<Player>()
     private var playersAdapter = PlayersAdapter(playerList)
 
     override fun onCreateView(
@@ -116,7 +116,7 @@ class LobbyFragment : Fragment() {
         viewModel.generateQrCode(game.id)
     }
 
-    private fun updatePlayersList(playerList: List<User>) {
+    private fun updatePlayersList(playerList: List<Player>) {
         this.playerList.clear()
         this.playerList.addAll(playerList)
         playersAdapter.notifyDataSetChanged()

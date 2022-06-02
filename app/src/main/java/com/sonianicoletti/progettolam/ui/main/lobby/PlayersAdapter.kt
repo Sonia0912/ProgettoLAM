@@ -3,10 +3,10 @@ package com.sonianicoletti.progettolam.ui.main.lobby
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sonianicoletti.entities.User
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.databinding.ListItemPlayerBinding
 
-class PlayersAdapter(private val players: List<User>) : RecyclerView.Adapter<PlayersAdapter.ViewHolder>() {
+class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayersAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListItemPlayerBinding.inflate(LayoutInflater.from(parent.context))
@@ -21,9 +21,8 @@ class PlayersAdapter(private val players: List<User>) : RecyclerView.Adapter<Pla
     override fun getItemCount() = players.size
 
     class ViewHolder(private val binding: ListItemPlayerBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(player: User) {
+        fun bind(player: Player) {
             binding.username.text = player.displayName
-            binding.email.text = player.email
         }
     }
 

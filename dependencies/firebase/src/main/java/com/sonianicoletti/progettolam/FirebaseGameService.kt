@@ -4,9 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.GameStatus
-import com.sonianicoletti.entities.User
+import com.sonianicoletti.entities.*
 import com.sonianicoletti.entities.exceptions.GameNotFoundException
 import com.sonianicoletti.usecases.servives.GameService
 import kotlinx.coroutines.channels.awaitClose
@@ -22,14 +20,15 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     override suspend fun createGame(): Game {
         val currentUser = getCurrentUser()
         val gameID = generateID()
-        val gameMap = createNewGameData(currentUser)
+        val currentPlayer = Player.fromUser(currentUser)
+        val gameMap = createNewGameData(currentPlayer)
         addGameToFirestore(gameMap, gameID)
 
         return Game(
             id = gameID,
             host = currentUser.id,
             status = GameStatus.LOBBY,
-            players = mutableListOf(currentUser)
+            players = mutableListOf(currentPlayer)
         )
     }
 
@@ -44,10 +43,10 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         return gameID
     }
 
-    private fun createNewGameData(currentUser: User) = hashMapOf(
-        HOST to currentUser.id,
+    private fun createNewGameData(currentPlayer: Player) = hashMapOf(
+        HOST to currentPlayer.id,
         STATUS to GameStatus.LOBBY,
-        PLAYERS to listOf(currentUser)
+        PLAYERS to listOf(currentPlayer)
     )
 
 
@@ -85,16 +84,24 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         return gameRef
     }
 
-    private fun getPlayersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<User> {
+    private fun getPlayersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Player> {
         val playersMapList = gameSnapshot["players"] as? List<HashMap<String, Any>> ?: emptyList()
-        return playersMapList.map { it.toUser() }.toMutableList()
+        return playersMapList.map { it.toPlayer() }.toMutableList()
     }
 
-    private fun HashMap<String, Any>.toUser() = User(
+    private fun HashMap<String, Any>.toPlayer() = Player(
         get("id") as String,
-        get("email") as String,
-        get("displayName") as String
+        get("displayName") as String,
+        Character.valueOf(get("character") as String),
+        (get("cards") as List<HashMap<String, Any>>).map { it.toCard() }
     )
+
+    private fun HashMap<String, Any>.toCard() : Card {
+        return Card(
+            get("name") as String,
+            get("type") as String
+        )
+    }
 
     override suspend fun observeGameByID(gameID: String) = firestore.collection("games").document(gameID).observe()
 
