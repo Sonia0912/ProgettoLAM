@@ -36,17 +36,23 @@ class LobbyFragment : Fragment() {
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
 
-
-        arguments?.getString("GAME_ID")?.let {
-            viewModel.loadGame(it)
-        } ?: viewModel.createGame()
-
+        initGame()
         initActionBar()
         initPlayersList()
         setClickListeners()
         observeViewState()
         observeViewEvents()
         return binding.root
+    }
+
+    private fun initGame() {
+        val gameID = arguments?.getString(ARG_GAME_ID)
+
+        if (gameID != null) {
+            viewModel.loadGame(gameID)
+        } else {
+            viewModel.createGame()
+        }
     }
 
     private fun initActionBar() {
@@ -102,13 +108,13 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun renderLoaded(game : Game) {
+    private fun renderLoaded(game: Game) {
         updatePlayersList(game.players)
         showGameID(game.id)
         viewModel.generateQrCode(game.id)
     }
 
-    private fun updatePlayersList(playerList : List<User>) {
+    private fun updatePlayersList(playerList: List<User>) {
         this.playerList.clear()
         this.playerList.addAll(playerList)
         playersAdapter.notifyDataSetChanged()
@@ -159,4 +165,7 @@ class LobbyFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
     }
 
+    companion object {
+        const val ARG_GAME_ID = "ARG_GAME_ID"
+    }
 }

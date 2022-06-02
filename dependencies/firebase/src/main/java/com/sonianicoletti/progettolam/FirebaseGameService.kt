@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam
 
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonianicoletti.entities.Game
@@ -15,7 +16,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     private val firestore = Firebase.firestore
 
-    override suspend fun createGame() : Game {
+    override suspend fun createGame(): Game {
         val currentUser = getCurrentUser()
         val gameID = generateID()
         val gameMap = createNewGameData(currentUser)
@@ -29,22 +30,28 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         )
     }
 
-    private suspend fun generateID() : String {
-        val gameID =  (100000..999999).random().toString()
+    private suspend fun getCurrentUser() = authService.getUser() ?: throw NullPointerException("User must not be null")
+
+    private suspend fun generateID(): String {
+        val gameID = (100000..999999).random().toString()
         val existingGame = firestore.collection("games").document(gameID).get().await()
-        if(existingGame.exists()) {
+        if (existingGame.exists()) {
             return generateID()
         }
         return gameID
     }
-
-    private suspend fun getCurrentUser() = authService.getUser() ?: throw NullPointerException("User must not be null")
 
     private fun createNewGameData(currentUser: User) = hashMapOf(
         HOST to currentUser.id,
         STATUS to GameStatus.LOBBY,
         PLAYERS to listOf(currentUser)
     )
+
+
+    private suspend fun addGameToFirestore(gameData: HashMap<String, Any>, gameID: String) = firestore.collection("games")
+        .document(gameID)
+        .set(gameData)
+        .await() // restituisce DocumentReference
 
     override suspend fun updateGame(game: Game) {
         val gameRef = firestore.collection("games").document(game.id)
@@ -57,27 +64,34 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         PLAYERS to players
     )
 
-    private suspend fun addGameToFirestore(gameData: HashMap<String, Any>, gameID: String) = firestore.collection("games")
-        .document(gameID)
-        .set(gameData)
-        .await() // restituisce DocumentReference
+    override suspend fun getGameByID(gameID: String): Game {
+        val gameSnapshot = getGameRef(gameID)
+        val players = getPlayersFromGameSnapshot(gameSnapshot)
 
-    override suspend fun getGameByID(gameID: String) : Game {
-        val gameRef = firestore.collection("games").document(gameID).get().await()
-        if(!gameRef.exists()) throw GameNotFoundException()
-
-        val playersList = (gameRef["players"] as List<HashMap<String, Any>>).map {
-            User(
-                it["id"] as String, it["email"] as String, it["displayName"] as String
-            )
-        }
         return Game(
-            id = gameRef.id,
-            host = gameRef.getString("host").orEmpty(),
-            status = gameRef["status"] as? GameStatus ?: GameStatus.LOBBY,
-            players = playersList.toMutableList()
+            id = gameSnapshot.id,
+            host = gameSnapshot.getString("host").orEmpty(),
+            status = GameStatus.fromValue(gameSnapshot.getString("status")),
+            players = players
         )
     }
+
+    private suspend fun getGameRef(gameID: String): DocumentSnapshot {
+        val gameRef = firestore.collection("games").document(gameID).get().await()
+        if (!gameRef.exists()) throw GameNotFoundException()
+        return gameRef
+    }
+
+    private fun getPlayersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<User> {
+        val playersMapList = gameSnapshot["players"] as List<HashMap<String, Any>>
+        return playersMapList.map { it.toUser() }.toMutableList()
+    }
+
+    private fun HashMap<String, Any>.toUser() = User(
+        get("id") as String,
+        get("email") as String,
+        get("displayName") as String
+    )
 
     companion object {
         private const val HOST = "host"

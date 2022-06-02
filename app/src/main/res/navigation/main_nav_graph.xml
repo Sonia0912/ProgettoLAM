@@ -33,9 +33,9 @@
         tools:layout="@layout/fragment_profile"/>
     <fragment
         android:id="@+id/joingameFragment"
-        android:name="com.sonianicoletti.progettolam.ui.main.joingame.JoingameFragment"
+        android:name="com.sonianicoletti.progettolam.ui.main.joingame.JoinGameFragment"
         android:label="fragment_joingame"
-        tools:layout="@layout/fragment_joingame">
+        tools:layout="@layout/fragment_join_game">
         <action
             android:id="@+id/action_joingameFragment_to_lobbyFragment"
             app:destination="@id/lobbyFragment" />

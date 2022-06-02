@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">ProgettoLAM</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dialog_leave_message">Do you want to leave the game?</string>
     <string name="lobby">Lobby</string>
+    <string name="ok">Ok</string>
     <string name="max_players_message">You can\'t have more than six players.</string>
+    <string name="join_game_error_game_not_found">No active games found with this ID</string>
+    <string name="join_game_error_game_full">This game is full</string>
+    <string name="please_log_in">Please log in to continue</string>
+    <string name="join_game_error_blank_field">Please insert a game ID</string>
+    <string name="join_game_error_invalid_id">A game ID must be 6 characters</string>
 </resources>

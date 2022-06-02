@@ -22,5 +22,4 @@ class FirebaseUserService @Inject constructor() : UserService {
             displayName = userDocument.getString("displayName").orEmpty()
         )
     }
-
 }

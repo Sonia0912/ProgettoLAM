@@ -5,7 +5,7 @@
     <application>
 
         <activity
-            android:name=".ZxingScannerActivity" />
+            android:name=".QRCodeScannerActivity" />
 
     </application>
 
