@@ -9,6 +9,7 @@ import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

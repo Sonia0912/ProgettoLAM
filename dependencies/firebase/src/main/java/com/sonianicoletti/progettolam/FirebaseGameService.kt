@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -8,6 +9,8 @@ import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.entities.exceptions.GameNotFoundException
 import com.sonianicoletti.usecases.servives.GameService
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -83,7 +86,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     }
 
     private fun getPlayersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<User> {
-        val playersMapList = gameSnapshot["players"] as List<HashMap<String, Any>>
+        val playersMapList = gameSnapshot["players"] as? List<HashMap<String, Any>> ?: emptyList()
         return playersMapList.map { it.toUser() }.toMutableList()
     }
 
@@ -92,6 +95,26 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         get("email") as String,
         get("displayName") as String
     )
+
+    override suspend fun observeGameByID(gameID: String) = firestore.collection("games").document(gameID).observe()
+
+    private fun DocumentReference.observe() = callbackFlow {
+        val callback = addSnapshotListener { value, error ->
+            if (value != null) trySend(value.toGame()) else close(GameNotFoundException(error))
+        }
+        awaitClose { callback.remove() }
+    }
+
+    private fun DocumentSnapshot.toGame(): Game {
+        val players = getPlayersFromGameSnapshot(this)
+
+        return Game(
+            id = id,
+            host = getString("host").orEmpty(),
+            status = GameStatus.fromValue(getString("status")),
+            players = players
+        )
+    }
 
     companion object {
         private const val HOST = "host"

@@ -1,6 +1,7 @@
 package com.sonianicoletti.usecases.servives
 
 import com.sonianicoletti.entities.Game
+import kotlinx.coroutines.flow.Flow
 
 interface GameService {
 
@@ -9,4 +10,6 @@ interface GameService {
     suspend fun updateGame(game: Game)
 
     suspend fun getGameByID(gameID: String) : Game
+
+    suspend fun observeGameByID(gameID: String): Flow<Game>
 }
