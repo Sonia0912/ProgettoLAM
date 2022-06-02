@@ -9,6 +9,7 @@ import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,7 +46,7 @@ class JoinGameViewModel @Inject constructor(
     private fun validateGameId(gameID: String) {
         if (gameID.isBlank()) {
             throw BlankFieldException()
-        } else if (gameID.length < 6) {
+        } else if (gameID.length != 6) {
             throw MinCharsNotAddedException()
         }
     }

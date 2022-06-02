@@ -25,6 +25,7 @@ class JoinGameFragment : Fragment() {
     private lateinit var binding: FragmentJoinGameBinding
     private val viewModel: JoinGameViewModel by viewModels()
 
+    // inizia l'Activity per scannerizzare il codice QR
     private val qrCodeScannerLauncher = registerForActivityResult(StartActivityForResult()) { onQrCodeScanned(it) }
 
     override fun onCreateView(

@@ -8,20 +8,21 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 
 class QRCodeScannerActivity : AppCompatActivity() {
-
-    private val qrCodeScannerLauncher = registerForActivityResult(ScanContract()) { onQrCodeScanned(it)}
+    // inizia lo scan del codice QR
+    private val qrCodeScannerLauncher = registerForActivityResult(ScanContract()) { onQrCodeScanned(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         launchScanner()
     }
 
+    // il permesso per la fotocamera e' gia' incluso nella libreria
     private fun launchScanner() {
         val options = ScanOptions()
             .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
             .setBeepEnabled(false)
             .setOrientationLocked(false)
-        qrCodeScannerLauncher.launch(options)
+        qrCodeScannerLauncher.launch(options) // apre la fotocamera
     }
 
     private fun onQrCodeScanned(result: ScanIntentResult) {

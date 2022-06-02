@@ -17,6 +17,8 @@ import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.GameService
 import com.sonianicoletti.usecases.servives.UserService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,17 +42,24 @@ class LobbyViewModel @Inject constructor(
             viewStateEmitter.postValue(ViewState.Loading)
             game = gameService.createGame()
             viewStateEmitter.postValue(ViewState.Loaded(game))
+            observeGame(game.id)
         } catch (e: Throwable) {
             e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
         }
     }
 
+    private suspend fun observeGame(gameID: String) {
+        gameService.observeGameByID(gameID).collect() {
+            game = it
+            viewStateEmitter.postValue(ViewState.Loaded(it))
+        }
+    }
+
     fun loadGame(gameID: String) = viewModelScope.launch {
         try {
             viewStateEmitter.postValue(ViewState.Loading)
-            game = gameService.getGameByID(gameID)
-            viewStateEmitter.postValue(ViewState.Loaded(game))
+            observeGame(gameID)
         } catch (e: Throwable) {
             e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
