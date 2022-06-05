@@ -14,7 +14,6 @@ import com.sonianicoletti.entities.exceptions.MaxPlayersException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
-import com.sonianicoletti.usecases.servives.GameService
 import com.sonianicoletti.usecases.servives.UserService
 import com.sonianicoletti.zxing.QRCodeGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LobbyViewModel @Inject constructor(
-    private val gameService: GameService,
     private val userService: UserService,
     private val qrCodeGenerator: QRCodeGenerator,
     private val gameRepository: GameRepository,
@@ -35,23 +33,19 @@ class LobbyViewModel @Inject constructor(
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
-    private lateinit var game: Game
-
     fun createGame() = viewModelScope.launch {
         try {
             viewStateEmitter.postValue(ViewState.Loading)
-            game = gameService.createGame()
-            viewStateEmitter.postValue(ViewState.Loaded(game))
-            observeGame(game.id)
+            gameRepository.createGame()
+            observeGame()
         } catch (e: Throwable) {
             e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
         }
     }
 
-    private suspend fun observeGame(gameID: String) {
-        gameService.observeGameByID(gameID).collect {
-            game = it
+    private suspend fun observeGame() {
+        gameRepository.getOngoingGameUpdates().collect {
             viewStateEmitter.postValue(ViewState.Loaded(it))
         }
     }
@@ -59,7 +53,7 @@ class LobbyViewModel @Inject constructor(
     fun loadGame(gameID: String) = viewModelScope.launch {
         try {
             viewStateEmitter.postValue(ViewState.Loading)
-            observeGame(gameID)
+            gameRepository.loadGame(gameID)
         } catch (e: Throwable) {
             e.printStackTrace()
             viewStateEmitter.postValue(ViewState.Error(e))
@@ -69,7 +63,7 @@ class LobbyViewModel @Inject constructor(
     fun addPlayer(playerEmail: String) = viewModelScope.launch {
         try {
             checkPlayerCapacity()
-            val invitedPlayer = userService.getUserByEmail(playerEmail)
+            val invitedPlayer = userService.getUserByEmail(playerEmail.lowercase())
             checkDuplicatePlayer(invitedPlayer)
             addPlayerToGame(Player.fromUser(invitedPlayer))
         } catch (e: UserNotFoundException) {
@@ -81,35 +75,34 @@ class LobbyViewModel @Inject constructor(
         }
     }
 
-    fun startGame() {
-        viewModelScope.launch {
-            if(game.players.size >= 3) {
-                game.status = GameStatus.CHARACTER_SELECT
-                gameService.updateGame(game)
-                viewEventEmitter.postValue(ViewEvent.NavigateToGame(game.id))
-            } else {
-                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
-            }
-        }
-    }
+    private fun Game.hasMinimumPlayers() = players.size >= 3
 
     private fun checkPlayerCapacity() {
-        if (game.players.size > 5) {
+        if (gameRepository.getOngoingGame().players.size > 5) {
             throw MaxPlayersException()
         }
     }
 
     private fun checkDuplicatePlayer(invitedPlayer: User) {
         // controllo che non ci sia gia' lo stesso giocatore
-        if (game.players.any { it.id == invitedPlayer.id }) {
+        if (gameRepository.getOngoingGame().players.any { it.id == invitedPlayer.id }) {
             throw DuplicatePlayerException()
         }
     }
 
+    fun startGame() {
+        viewModelScope.launch {
+            if(gameRepository.getOngoingGame().hasMinimumPlayers()) {
+                gameRepository.updateGameStatus(GameStatus.CHARACTER_SELECT)
+                viewEventEmitter.postValue(ViewEvent.NavigateToGame)
+            } else {
+                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
+            }
+        }
+    }
+
     private suspend fun addPlayerToGame(player: Player) {
-        game.players.add(player)
-        gameService.updateGame(game)
-        viewStateEmitter.postValue(ViewState.Loaded(game))
+        gameRepository.addPlayer(player)
         viewEventEmitter.postValue(ViewEvent.ClearText)
     }
 
@@ -132,7 +125,7 @@ class LobbyViewModel @Inject constructor(
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()
-        class NavigateToGame(val gameID: String) : ViewEvent()
+        object NavigateToGame : ViewEvent()
         class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }
 }

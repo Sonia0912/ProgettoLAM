@@ -17,7 +17,6 @@ import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
 import com.sonianicoletti.progettolam.ui.game.GameActivity
-import com.sonianicoletti.progettolam.ui.game.GameActivity.Companion.INTENT_EXTRA_GAME_ID
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewState.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,7 +103,7 @@ class LobbyFragment : Fragment() {
 
     private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
         when (state) {
-            // se e' una classe serve is, se e' un oggetto no\
+            // se e' una classe serve is, se e' un oggetto no
             Loading -> Unit
             is Loaded -> renderLoaded(state.game)
             is Error -> Unit
@@ -135,15 +134,13 @@ class LobbyFragment : Fragment() {
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextTextPersonName.setText("")
-            is NavigateToGame -> navigateToGame(it.gameID)
+            is NavigateToGame -> navigateToGame()
             is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }
     }
 
-    private fun navigateToGame(gameID: String) {
+    private fun navigateToGame() {
         val intent = Intent(requireContext(), GameActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
-        intent.putExtra(INTENT_EXTRA_GAME_ID, gameID)
         context?.startActivity(intent)
         activity?.finish()
     }

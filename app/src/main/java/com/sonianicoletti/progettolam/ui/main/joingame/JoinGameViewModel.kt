@@ -3,20 +3,19 @@ package com.sonianicoletti.progettolam.ui.main.joingame
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.*
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
+import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
-import com.sonianicoletti.usecases.servives.GameService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class JoinGameViewModel @Inject constructor(
-    private val gameService: GameService,
     private val authService: AuthService,
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
@@ -52,20 +51,15 @@ class JoinGameViewModel @Inject constructor(
     }
 
     private suspend fun checkGameAvailability(gameID: String) {
-        // controlla che l'ID esista
-        val gameToJoin = gameService.getGameByID(gameID)
-
-        // controlla che la partita non sia terminata o in gioco e che ci siano meno di 6 giocatori
-        if (gameToJoin.players.size > 5 || gameToJoin.status != GameStatus.LOBBY) {
+        if (!gameRepository.isGameJoinable(gameID)) {
             throw UnableToJoinGameException()
         }
     }
 
     private suspend fun addCurrentPlayerToGame(gameID: String) {
-        authService.getUser()?.let { user ->
-            val game = gameService.getGameByID(gameID)
-            game.players.add(Player.fromUser(user))
-            gameService.updateGame(game)
+        authService.getUser()?.let {
+            gameRepository.addPlayer(gameID, Player.fromUser(it))
+            gameRepository.loadGame(gameID)
         } ?: throw UserNotFoundException()
     }
 

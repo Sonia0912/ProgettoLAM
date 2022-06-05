@@ -10,9 +10,4 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
-) : ViewModel() {
-
-    fun setOngoingGame(gameID: String) = viewModelScope.launch {
-        gameRepository.startObservingGame(gameID)
-    }
-}
+) : ViewModel()

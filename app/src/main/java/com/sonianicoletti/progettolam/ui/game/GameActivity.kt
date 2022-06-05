@@ -16,15 +16,5 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setOngoingGame()
-    }
-
-    private fun setOngoingGame() {
-        val gameID = intent.getStringExtra(INTENT_EXTRA_GAME_ID) ?: throw IllegalStateException("GameActivity was started with no game id")
-        viewModel.setOngoingGame(gameID)
-    }
-
-    companion object {
-        const val INTENT_EXTRA_GAME_ID = "INTENT_EXTRA_GAME_ID"
     }
 }
