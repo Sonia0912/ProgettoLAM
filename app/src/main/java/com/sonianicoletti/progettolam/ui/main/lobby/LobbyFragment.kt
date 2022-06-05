@@ -60,7 +60,7 @@ class LobbyFragment : Fragment() {
             showLeaveGameDialog()
         }
 
-        binding.editTextTextPersonName.setOnEditorActionListener { textView, actionId, keyEvent ->
+        binding.editTextAddPlayer.setOnEditorActionListener { textView, actionId, keyEvent ->
             // quando clicca enter
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.addPlayer(textView.text.toString())
@@ -87,12 +87,13 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun observeGameState() = viewModel.gameState.observe(viewLifecycleOwner) { game ->
-        updatePlayersList(game.players)
-        showGameID(game.id)
-        viewModel.generateQrCode(game.id)
+    private fun observeGameState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        updatePlayersList(state.game.players)
+        updateHostPrivileges(state.isHost)
+        showGameID(state.game.id)
+        viewModel.generateQrCode(state.game.id)
 
-        if (game.status == GameStatus.CHARACTER_SELECT) {
+        if (state.game.status == GameStatus.CHARACTER_SELECT) {
             navigateToGame()
         }
     }
@@ -101,6 +102,11 @@ class LobbyFragment : Fragment() {
         this.playerList.clear()
         this.playerList.addAll(playerList)
         playersAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateHostPrivileges(isHost: Boolean) {
+        binding.editTextAddPlayer.isEnabled = isHost
+        binding.buttonStartgame.isEnabled = isHost
     }
 
     private fun showGameID(id: String) {
@@ -114,7 +120,7 @@ class LobbyFragment : Fragment() {
             ShowUserNotFoundAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
-            ClearText -> binding.editTextTextPersonName.setText("")
+            ClearText -> binding.editTextAddPlayer.setText("")
             is NavigateToGame -> navigateToGame()
             is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }

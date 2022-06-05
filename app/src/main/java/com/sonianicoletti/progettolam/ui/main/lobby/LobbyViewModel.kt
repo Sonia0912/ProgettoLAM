@@ -14,6 +14,7 @@ import com.sonianicoletti.entities.exceptions.MaxPlayersException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
+import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.UserService
 import com.sonianicoletti.zxing.QRCodeGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,12 +24,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LobbyViewModel @Inject constructor(
     private val userService: UserService,
+    private val authService: AuthService,
     private val qrCodeGenerator: QRCodeGenerator,
     private val gameRepository: GameRepository,
 ) : ViewModel() {
 
-    private val gameStateEmitter = MutableLiveData<Game>()
-    val gameState: LiveData<Game> = gameStateEmitter
+    private val viewStateEmitter = MutableLiveData<ViewState>()
+    val viewState: LiveData<ViewState> = viewStateEmitter
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
@@ -39,7 +41,13 @@ class LobbyViewModel @Inject constructor(
 
     private fun startObservingGame() = viewModelScope.launch {
         gameRepository.getOngoingGameUpdates().collect { game ->
-            gameStateEmitter.postValue(game)
+            val user = authService.getUser()
+            if (user != null) {
+                val isHost = user.id == game.host
+                viewStateEmitter.postValue(ViewState(game, isHost))
+            } else {
+                viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
+            }
         }
     }
 
@@ -92,6 +100,8 @@ class LobbyViewModel @Inject constructor(
         val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
         viewEventEmitter.value = ViewEvent.SetQRCode(qrCodeBitmap)
     }
+
+    data class ViewState(val game: Game, val isHost: Boolean)
 
     // rappresenta una ristretta gerarchia di classe per fornire piu' controllo sull'ereditarieta'
     // vogliamo che tutto quello che c'e' dentro la classe erediti dal tipo originale
