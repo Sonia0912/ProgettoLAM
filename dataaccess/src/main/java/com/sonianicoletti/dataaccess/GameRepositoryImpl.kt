@@ -5,7 +5,9 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
+import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.usecases.repositories.GameRepository
+import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
@@ -13,7 +15,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GameRepositoryImpl @Inject constructor(private val gameService: GameService) : GameRepository {
+class GameRepositoryImpl @Inject constructor(
+    private val gameService: GameService,
+    private val authService: AuthService,
+) : GameRepository {
 
     private var game: Game? = null
     private var gameFlow: Flow<Game>? = null
@@ -49,6 +54,15 @@ class GameRepositoryImpl @Inject constructor(private val gameService: GameServic
         val game = gameService.getGameByID(gameID)
         game.players.add(player)
         gameService.updateGame(game)
+    }
+
+    override suspend fun leaveGame() {
+        val game = getOngoingGame()
+        val user = authService.getUser() ?: throw UserNotFoundException()
+        game.players.removeAll { it.id == user.id }
+        gameService.updateGame(game)
+        gameFlow = null
+        this.game = null
     }
 
     override suspend fun updateGameStatus(gameStatus: GameStatus) {

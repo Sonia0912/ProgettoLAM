@@ -22,6 +22,8 @@ interface GameRepository {
 
     suspend fun addPlayer(gameID: String, player: Player)
 
+    suspend fun leaveGame()
+
     suspend fun updateGameStatus(gameStatus: GameStatus)
 
     suspend fun updateCharacter(userID: String, character: Character)

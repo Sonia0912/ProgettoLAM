@@ -101,6 +101,11 @@ class LobbyViewModel @Inject constructor(
         viewEventEmitter.value = ViewEvent.SetQRCode(qrCodeBitmap)
     }
 
+    fun handleLeaveGame() = viewModelScope.launch {
+        gameRepository.leaveGame()
+        viewEventEmitter.postValue(ViewEvent.NavigateUp)
+    }
+
     data class ViewState(val game: Game, val isHost: Boolean)
 
     // rappresenta una ristretta gerarchia di classe per fornire piu' controllo sull'ereditarieta'
@@ -112,6 +117,7 @@ class LobbyViewModel @Inject constructor(
         object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()
         object NavigateToGame : ViewEvent()
+        object NavigateUp : ViewEvent()
         class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }
 }

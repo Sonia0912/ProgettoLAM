@@ -81,7 +81,7 @@ class LobbyFragment : Fragment() {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setMessage(getString(R.string.dialog_leave_message))
-                .setPositiveButton("Yes") { _, _ -> findNavController().navigateUp() } // il secondo parametro e' una funzione callback di default
+                .setPositiveButton("Yes") { _, _ -> viewModel.handleLeaveGame() } // il secondo parametro e' una funzione callback di default
                 .setNegativeButton("No") { _, _ -> }
                 .show()
         }
@@ -121,7 +121,8 @@ class LobbyFragment : Fragment() {
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextAddPlayer.setText("")
-            is NavigateToGame -> navigateToGame()
+            NavigateToGame -> navigateToGame()
+            NavigateUp -> findNavController().navigateUp()
             is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
         }
     }
