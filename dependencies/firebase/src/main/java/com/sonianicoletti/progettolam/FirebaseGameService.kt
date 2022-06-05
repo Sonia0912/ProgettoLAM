@@ -36,7 +36,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     private suspend fun generateID(): String {
         val gameID = (100000..999999).random().toString()
-        val existingGame = firestore.collection("games").document(gameID).get().await()
+        val existingGame = firestore.collection(GAMES_COLLECTION).document(gameID).get().await()
         if (existingGame.exists()) {
             return generateID()
         }
@@ -50,13 +50,13 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     )
 
 
-    private suspend fun addGameToFirestore(gameData: HashMap<String, Any>, gameID: String) = firestore.collection("games")
+    private suspend fun addGameToFirestore(gameData: HashMap<String, Any>, gameID: String) = firestore.collection(GAMES_COLLECTION)
         .document(gameID)
         .set(gameData)
         .await() // restituisce DocumentReference
 
     override suspend fun updateGame(game: Game) {
-        val gameRef = firestore.collection("games").document(game.id)
+        val gameRef = firestore.collection(GAMES_COLLECTION).document(game.id)
         gameRef.update(game.toMap()).await()
     }
 
@@ -79,7 +79,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     }
 
     private suspend fun getGameRef(gameID: String): DocumentSnapshot {
-        val gameRef = firestore.collection("games").document(gameID).get().await()
+        val gameRef = firestore.collection(GAMES_COLLECTION).document(gameID).get().await()
         if (!gameRef.exists()) throw GameNotFoundException()
         return gameRef
     }
@@ -103,7 +103,9 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         )
     }
 
-    override suspend fun observeGameByID(gameID: String) = firestore.collection("games").document(gameID).observe()
+    override suspend fun observeGameByID(gameID: String) = firestore.collection(GAMES_COLLECTION)
+        .document(gameID)
+        .observe()
 
     private fun DocumentReference.observe() = callbackFlow {
         val callback = addSnapshotListener { value, error ->
@@ -117,15 +119,25 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
         return Game(
             id = id,
-            host = getString("host").orEmpty(),
-            status = GameStatus.fromValue(getString("status")),
+            host = getString(HOST).orEmpty(),
+            status = GameStatus.fromValue(getString(STATUS)),
             players = players
         )
     }
 
+    override suspend fun chooseCharacter(playerID: String, character: Character) {
+        firestore.collection(GAMES_COLLECTION)
+            .document(playerID)
+            .update(CHARACTER, character)
+    }
+
     companion object {
+        private const val GAMES_COLLECTION = "games"
+
         private const val HOST = "host"
         private const val STATUS = "status"
         private const val PLAYERS = "players"
+
+        private const val CHARACTER = "character"
     }
 }

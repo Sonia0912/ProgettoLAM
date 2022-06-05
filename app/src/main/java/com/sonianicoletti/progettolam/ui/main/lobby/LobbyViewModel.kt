@@ -71,7 +71,7 @@ class LobbyViewModel @Inject constructor(
             checkDuplicatePlayer(invitedPlayer)
             addPlayerToGame(Player.fromUser(invitedPlayer))
         } catch (e: UserNotFoundException) {
-            viewEventEmitter.postValue(ViewEvent.NotFoundUserAlert)
+            viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
         } catch (e: MaxPlayersException) {
             viewEventEmitter.postValue(ViewEvent.OpenMaxPlayersDialog)
         } catch (e: DuplicatePlayerException) {
@@ -126,7 +126,7 @@ class LobbyViewModel @Inject constructor(
     // vogliamo che tutto quello che c'e' dentro la classe erediti dal tipo originale
     sealed class ViewEvent {
         object OpenMaxPlayersDialog : ViewEvent()
-        object NotFoundUserAlert : ViewEvent()
+        object ShowUserNotFoundAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
         object ClearText : ViewEvent()

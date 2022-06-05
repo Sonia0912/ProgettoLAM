@@ -10,4 +10,6 @@ java {
 dependencies {
     implementation project(path: ':usecases')
     implementation project(path: ':entities')
+
+    implementation "javax.inject:javax.inject:1"
 }

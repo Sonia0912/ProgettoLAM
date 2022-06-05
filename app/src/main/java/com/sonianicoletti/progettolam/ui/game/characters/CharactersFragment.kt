@@ -29,13 +29,13 @@ class CharactersFragment : Fragment() {
 
     private fun initCharacterGrid() {
         val characterItems = createCharacterItems()
-        val adapter = CharactersAdapter(characterItems)
+        val adapter = CharactersAdapter(characterItems) { viewModel.selectCharacter(it) }
         val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
         binding.characterGrid.adapter = adapter
         binding.characterGrid.addItemDecoration(itemOffsetDecoration)
     }
 
-    private fun createCharacterItems() = listOf(
+    private fun createCharacterItems() = mutableListOf(
         SelectCharacterItem(Character.PEACOCK, R.drawable.mrs_peacock, null),
         SelectCharacterItem(Character.MUSTARD, R.drawable.colonel_mustard, null),
         SelectCharacterItem(Character.SCARLETT, R.drawable.miss_scarlett, null),

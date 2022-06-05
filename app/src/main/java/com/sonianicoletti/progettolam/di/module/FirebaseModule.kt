@@ -9,17 +9,20 @@ import com.sonianicoletti.usecases.servives.UserService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 abstract class FirebaseModule {
 
     // crea un binding per AuthService usando FirebaseAuthService come un'implementazione
     @Binds
     abstract fun bindAuthService(firebaseAuthService: FirebaseAuthService): AuthService
+
     @Binds
     abstract fun bindGameService(firebaseGameService: FirebaseGameService): GameService
+
     @Binds
     abstract fun bindUserService(firebaseUserService: FirebaseUserService): UserService
 }

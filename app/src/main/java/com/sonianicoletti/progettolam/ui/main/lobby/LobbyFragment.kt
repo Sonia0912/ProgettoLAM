@@ -130,7 +130,7 @@ class LobbyFragment : Fragment() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
             OpenMaxPlayersDialog -> showMaxPlayersDialog()
-            NotFoundUserAlert -> showUserNotFoundDialog()
+            ShowUserNotFoundAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextTextPersonName.setText("")

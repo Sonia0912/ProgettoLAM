@@ -101,7 +101,6 @@ class JoinGameFragment : Fragment() {
         startActivity(intent)
     }
 
-
     private fun onQrCodeScanned(result: ActivityResult) {
         if (result.resultCode == RESULT_OK) {
             val intent = result.data
