@@ -90,7 +90,7 @@ class JoinGameFragment : Fragment() {
     private fun showUserNotFoundAlert() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.please_log_in))
-            .setPositiveButton(R.string.ok) { _, _ -> navigateToAuthActivity() }
+            .setPositiveButton(android.R.string.ok) { _, _ -> navigateToAuthActivity() }
             .setOnDismissListener { navigateToAuthActivity() }
             .show()
     }

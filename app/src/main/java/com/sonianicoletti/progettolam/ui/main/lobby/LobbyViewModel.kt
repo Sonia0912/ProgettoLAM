@@ -48,7 +48,7 @@ class LobbyViewModel @Inject constructor(
     }
 
     private suspend fun observeGame(gameID: String) {
-        gameService.observeGameByID(gameID).collect() {
+        gameService.observeGameByID(gameID).collect {
             game = it
             viewStateEmitter.postValue(ViewState.Loaded(it))
         }
@@ -81,12 +81,12 @@ class LobbyViewModel @Inject constructor(
 
     fun startGame() {
         viewModelScope.launch {
-            if(game.players.size < 3) {
-                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
-            } else {
-                game.status = GameStatus.ACTIVE
+            if(game.players.size >= 3) {
+                game.status = GameStatus.CHARACTER_SELECT
                 gameService.updateGame(game)
                 viewEventEmitter.postValue(ViewEvent.NavigateToGame(game.id))
+            } else {
+                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
             }
         }
     }

@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.sonianicoletti.entities.Character
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
+import com.sonianicoletti.progettolam.util.ItemOffsetDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,26 +23,24 @@ class CharactersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCharactersBinding.inflate(inflater)
-
-        binding.imageViewPeacock.setOnClickListener {
-            viewModel.selectCharacter(Character.PEACOCK)
-        }
-        binding.imageViewGreen.setOnClickListener {
-            viewModel.selectCharacter(Character.GREEN)
-        }
-        binding.imageViewMustard.setOnClickListener {
-            viewModel.selectCharacter(Character.MUSTARD)
-        }
-        binding.imageViewPlum.setOnClickListener {
-            viewModel.selectCharacter(Character.PLUM)
-        }
-        binding.imageViewScarlett.setOnClickListener {
-            viewModel.selectCharacter(Character.SCARLETT)
-        }
-        binding.imageViewWhite.setOnClickListener {
-            viewModel.selectCharacter(Character.WHITE)
-        }
-
+        initCharacterGrid()
         return binding.root
     }
+
+    private fun initCharacterGrid() {
+        val characterItems = createCharacterItems()
+        val adapter = CharactersAdapter(characterItems)
+        val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
+        binding.characterGrid.adapter = adapter
+        binding.characterGrid.addItemDecoration(itemOffsetDecoration)
+    }
+
+    private fun createCharacterItems() = listOf(
+        SelectCharacterItem(Character.PEACOCK, R.drawable.mrs_peacock, null),
+        SelectCharacterItem(Character.MUSTARD, R.drawable.colonel_mustard, null),
+        SelectCharacterItem(Character.SCARLETT, R.drawable.miss_scarlett, null),
+        SelectCharacterItem(Character.PLUM, R.drawable.professor_plum, null),
+        SelectCharacterItem(Character.WHITE, R.drawable.mrs_white, null),
+        SelectCharacterItem(Character.GREEN, R.drawable.rev_green, null),
+    )
 }
