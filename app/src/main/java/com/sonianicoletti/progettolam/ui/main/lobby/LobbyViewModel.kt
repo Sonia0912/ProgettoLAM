@@ -27,36 +27,19 @@ class LobbyViewModel @Inject constructor(
     private val gameRepository: GameRepository,
 ) : ViewModel() {
 
-    private val viewStateEmitter = MutableLiveData<ViewState>()
-    val viewState: LiveData<ViewState> = viewStateEmitter
+    private val gameStateEmitter = MutableLiveData<Game>()
+    val gameState: LiveData<Game> = gameStateEmitter
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
-    fun createGame() = viewModelScope.launch {
-        try {
-            viewStateEmitter.postValue(ViewState.Loading)
-            gameRepository.createGame()
-            observeGame()
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            viewStateEmitter.postValue(ViewState.Error(e))
-        }
+    init {
+        startObservingGame()
     }
 
-    private suspend fun observeGame() {
-        gameRepository.getOngoingGameUpdates().collect {
-            viewStateEmitter.postValue(ViewState.Loaded(it))
-        }
-    }
-
-    fun loadGame(gameID: String) = viewModelScope.launch {
-        try {
-            viewStateEmitter.postValue(ViewState.Loading)
-            gameRepository.loadGame(gameID)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            viewStateEmitter.postValue(ViewState.Error(e))
+    private fun startObservingGame() = viewModelScope.launch {
+        gameRepository.getOngoingGameUpdates().collect { game ->
+            gameStateEmitter.postValue(game)
         }
     }
 
@@ -109,12 +92,6 @@ class LobbyViewModel @Inject constructor(
     fun generateQrCode(gameId: String) {
         val qrCodeBitmap = qrCodeGenerator.generateQRCode(gameId, 100, 100)
         viewEventEmitter.value = ViewEvent.SetQRCode(qrCodeBitmap)
-    }
-
-    sealed class ViewState {
-        object Loading : ViewState()
-        data class Loaded(val game: Game) : ViewState()
-        data class Error(val error: Throwable) : ViewState()
     }
 
     // rappresenta una ristretta gerarchia di classe per fornire piu' controllo sull'ereditarieta'

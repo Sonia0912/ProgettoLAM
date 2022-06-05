@@ -61,7 +61,7 @@ class JoinGameFragment : Fragment() {
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
-            is JoinGameViewModel.ViewEvent.NavigateToLobby -> navigateToLobby(it.gameID)
+            is JoinGameViewModel.ViewEvent.NavigateToLobby -> navigateToLobby()
             JoinGameViewModel.ViewEvent.ShowGameNotFoundAlert -> showGameNotFoundAlert()
             JoinGameViewModel.ViewEvent.ShowBlankFieldError -> binding.editTextGameID.error = getString(R.string.join_game_error_blank_field)
             JoinGameViewModel.ViewEvent.ShowMinCharsNotAddedError -> binding.editTextGameID.error = getString(R.string.join_game_error_invalid_id)
@@ -70,9 +70,8 @@ class JoinGameFragment : Fragment() {
         }
     }
 
-    private fun navigateToLobby(gameID: String) {
-        val args = Bundle().apply { putString(LobbyFragment.ARG_GAME_ID, gameID) }
-        findNavController().navigate(R.id.lobbyFragment, args)
+    private fun navigateToLobby() {
+        findNavController().navigate(R.id.lobbyFragment)
     }
 
     private fun showGameNotFoundAlert() {

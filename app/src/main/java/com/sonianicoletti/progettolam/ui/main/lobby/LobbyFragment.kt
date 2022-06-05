@@ -12,13 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
 import com.sonianicoletti.progettolam.ui.game.GameActivity
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
-import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewState.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,25 +34,12 @@ class LobbyFragment : Fragment() {
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
 
-        initGame()
         initActionBar()
         initPlayersList()
         setClickListeners()
-        observeViewState()
+        observeGameState()
         observeViewEvents()
         return binding.root
-    }
-
-    private fun initGame() {
-        val gameID = arguments?.getString(ARG_GAME_ID)
-        // quando qualcuno si unisce alla partita la lobby viene caricata
-        if (gameID != null) {
-            viewModel.loadGame(gameID)
-        }
-        // quando l'host crea la partita la lobby viene creata e viene generato l'ID della partita
-        else {
-            viewModel.createGame()
-        }
     }
 
     private fun initActionBar() {
@@ -101,16 +86,7 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
-        when (state) {
-            // se e' una classe serve is, se e' un oggetto no
-            Loading -> Unit
-            is Loaded -> renderLoaded(state.game)
-            is Error -> Unit
-        }
-    }
-
-    private fun renderLoaded(game: Game) {
+    private fun observeGameState() = viewModel.gameState.observe(viewLifecycleOwner) { game ->
         updatePlayersList(game.players)
         showGameID(game.id)
         viewModel.generateQrCode(game.id)
@@ -164,10 +140,5 @@ class LobbyFragment : Fragment() {
 
     private fun showNotEnoughPlayersDialog() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
-    }
-
-    companion object {
-        // assicura che la stringa chiamara nel viewmodel e nel fragment sia la stessa
-        const val ARG_GAME_ID = "ARG_GAME_ID"
     }
 }
