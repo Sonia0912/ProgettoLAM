@@ -27,6 +27,7 @@ class JoinGameViewModel @Inject constructor(
                 validateGameId(gameID)
                 checkGameAvailability(gameID)
                 addCurrentPlayerToGame(gameID)
+                gameRepository.loadGame(gameID)
                 viewEventEmitter.postValue(ViewEvent.NavigateToLobby(gameID))
             } catch (e: BlankFieldException) {
                 viewEventEmitter.postValue(ViewEvent.ShowBlankFieldError)
@@ -59,7 +60,6 @@ class JoinGameViewModel @Inject constructor(
     private suspend fun addCurrentPlayerToGame(gameID: String) {
         authService.getUser()?.let {
             gameRepository.addPlayer(gameID, Player.fromUser(it))
-            gameRepository.loadGame(gameID)
         } ?: throw UserNotFoundException()
     }
 

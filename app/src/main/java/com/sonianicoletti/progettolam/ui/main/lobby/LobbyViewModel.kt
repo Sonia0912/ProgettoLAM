@@ -77,7 +77,6 @@ class LobbyViewModel @Inject constructor(
         viewModelScope.launch {
             if(gameRepository.getOngoingGame().hasMinimumPlayers()) {
                 gameRepository.updateGameStatus(GameStatus.CHARACTER_SELECT)
-                viewEventEmitter.postValue(ViewEvent.NavigateToGame)
             } else {
                 viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
             }
@@ -86,7 +85,7 @@ class LobbyViewModel @Inject constructor(
 
     private suspend fun addPlayerToGame(player: Player) {
         gameRepository.addPlayer(player)
-        viewEventEmitter.postValue(ViewEvent.ClearText)
+        viewEventEmitter.value = ViewEvent.ClearText
     }
 
     fun generateQrCode(gameId: String) {

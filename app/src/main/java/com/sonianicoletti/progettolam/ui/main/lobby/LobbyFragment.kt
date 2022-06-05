@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
@@ -90,6 +91,10 @@ class LobbyFragment : Fragment() {
         updatePlayersList(game.players)
         showGameID(game.id)
         viewModel.generateQrCode(game.id)
+
+        if (game.status == GameStatus.CHARACTER_SELECT) {
+            navigateToGame()
+        }
     }
 
     private fun updatePlayersList(playerList: List<Player>) {

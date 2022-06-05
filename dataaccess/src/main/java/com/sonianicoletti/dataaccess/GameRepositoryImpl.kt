@@ -8,43 +8,39 @@ import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.GameService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GameRepositoryImpl @Inject constructor(private val gameService: GameService) : GameRepository {
 
-    private var ongoingGame: Game? = null
+    private var game: Game? = null
     private var gameFlow: Flow<Game>? = null
 
     override suspend fun createGame() {
         gameService.createGame().also {
-            ongoingGame = it
+            game = it
             gameFlow = gameService.observeGameByID(it.id)
         }
     }
 
     override suspend fun loadGame(gameID: String) {
-        startObservingGame(gameID)
+        gameFlow = gameService.observeGameByID(gameID)
     }
 
-    override fun getOngoingGame() = ongoingGame ?: throw GameNotRunningException()
+    override fun getOngoingGame() = game ?: throw GameNotRunningException()
 
     override suspend fun isGameJoinable(gameID: String): Boolean {
         val game = gameService.getGameByID(gameID)
         // controlla che la partita non sia terminata o in gioco e che ci siano meno di 6 giocatori
-        return game.players.size > 5 || game.status != GameStatus.LOBBY
+        return game.players.size <= 5 || game.status == GameStatus.LOBBY
     }
 
-    override suspend fun startObservingGame(gameID: String) {
-        gameFlow = gameService.observeGameByID(gameID)
-        gameFlow?.collect { ongoingGame = it }
-    }
-
-    override suspend fun getOngoingGameUpdates() = gameFlow ?: throw GameNotRunningException()
+    override suspend fun getOngoingGameUpdates() = gameFlow?.onEach { game = it } ?: throw GameNotRunningException()
 
     override suspend fun addPlayer(player: Player) {
-        val game = getGame()
+        val game = getOngoingGame()
         game.players.add(player)
         gameService.updateGame(game)
     }
@@ -56,15 +52,13 @@ class GameRepositoryImpl @Inject constructor(private val gameService: GameServic
     }
 
     override suspend fun updateGameStatus(gameStatus: GameStatus) {
-        val game = getGame()
+        val game = getOngoingGame()
         game.status = gameStatus
         gameService.updateGame(game)
     }
 
-    private fun getGame() = ongoingGame ?: throw GameNotRunningException()
-
     override suspend fun updateCharacter(userID: String, character: Character) {
-        val game = getGame()
+        val game = getOngoingGame()
         game.players.find { it.id == userID }?.character = character
         gameService.updateGame(game)
     }
