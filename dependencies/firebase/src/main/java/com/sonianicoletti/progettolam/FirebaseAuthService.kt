@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonianicoletti.entities.User
@@ -35,24 +36,25 @@ class FirebaseAuthService @Inject constructor(
     override suspend fun register(email: String, password: String, displayName: String): User {
         val createUserResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         val firebaseUser = createUserResult.user ?: throw NullPointerException("user is null during register")
-        addUserToFirestore(email, displayName)
+        addUserToFirestore(firebaseUser, displayName)
         return User(
             id = firebaseUser.uid,
             email = firebaseUser.email.orEmpty(),
             // nel caso non abbia un nome viene mostrata l'email
-            displayName = firebaseUser.displayName ?: firebaseUser.email.orEmpty()
+            displayName = displayName ?: firebaseUser.email.orEmpty()
         )
     }
 
-    private suspend fun addUserToFirestore(email: String, username: String) {
+    private suspend fun addUserToFirestore(firebaseUser: FirebaseUser, username: String) {
         // Create a new user
         val user = hashMapOf(
             "displayName" to username,
-            "email" to email
+            "email" to firebaseUser.email
         )
         // Add a new document with a generated ID
         firestore.collection("users")
-            .add(user)
+            .document(firebaseUser.uid)
+            .set(user)
             .await()
     }
 

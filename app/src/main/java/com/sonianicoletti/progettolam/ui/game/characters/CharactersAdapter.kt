@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam.ui.game.characters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,9 +8,10 @@ import com.sonianicoletti.entities.Character
 import com.sonianicoletti.progettolam.databinding.ListItemCharacterBinding
 
 class CharactersAdapter(
-    private val characterItems: MutableList<SelectCharacterItem>,
     private val onCharacterClick: (Character) -> Unit,
 ) : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
+
+    private val characterItems = mutableListOf<SelectCharacterItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListItemCharacterBinding.inflate(LayoutInflater.from(parent.context))
@@ -22,11 +24,13 @@ class CharactersAdapter(
 
     override fun getItemCount() = characterItems.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateItems(characterItems: List<SelectCharacterItem>) {
         this.characterItems.apply {
             clear()
             addAll(characterItems)
         }
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(val binding: ListItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {

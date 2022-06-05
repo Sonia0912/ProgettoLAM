@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.sonianicoletti.entities.Character
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
+import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.util.ItemOffsetDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +18,8 @@ class CharactersFragment : Fragment() {
 
     private lateinit var binding: FragmentCharactersBinding
     private val viewModel: CharactersViewModel by viewModels()
+
+    private lateinit var adapter: CharactersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,19 +31,14 @@ class CharactersFragment : Fragment() {
     }
 
     private fun initCharacterGrid() {
-        val characterItems = createCharacterItems()
-        val adapter = CharactersAdapter(characterItems) { viewModel.selectCharacter(it) }
+        adapter = CharactersAdapter { viewModel.selectCharacter(it) }
         val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
         binding.characterGrid.adapter = adapter
         binding.characterGrid.addItemDecoration(itemOffsetDecoration)
+        observeCharacterItems()
     }
 
-    private fun createCharacterItems() = mutableListOf(
-        SelectCharacterItem(Character.PEACOCK, R.drawable.mrs_peacock, null),
-        SelectCharacterItem(Character.MUSTARD, R.drawable.colonel_mustard, null),
-        SelectCharacterItem(Character.SCARLETT, R.drawable.miss_scarlett, null),
-        SelectCharacterItem(Character.PLUM, R.drawable.professor_plum, null),
-        SelectCharacterItem(Character.WHITE, R.drawable.mrs_white, null),
-        SelectCharacterItem(Character.GREEN, R.drawable.rev_green, null),
-    )
+    private fun observeCharacterItems() = viewModel.selectedCharacters.observe(viewLifecycleOwner) { characterItems ->
+        adapter.updateItems(characterItems)
+    }
 }

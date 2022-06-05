@@ -13,7 +13,7 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class FirebaseModule {
 
     // crea un binding per AuthService usando FirebaseAuthService come un'implementazione

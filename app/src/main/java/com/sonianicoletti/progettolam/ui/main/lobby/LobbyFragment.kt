@@ -17,6 +17,7 @@ import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
 import com.sonianicoletti.progettolam.ui.game.GameActivity
+import com.sonianicoletti.progettolam.ui.game.GameActivity.Companion.INTENT_EXTRA_GAME_ID
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewState.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -142,7 +143,7 @@ class LobbyFragment : Fragment() {
     private fun navigateToGame(gameID: String) {
         val intent = Intent(requireContext(), GameActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
-        intent.putExtra("gameID", gameID)
+        intent.putExtra(INTENT_EXTRA_GAME_ID, gameID)
         context?.startActivity(intent)
         activity?.finish()
     }

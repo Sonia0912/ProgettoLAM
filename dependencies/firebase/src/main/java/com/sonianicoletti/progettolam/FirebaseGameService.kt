@@ -125,19 +125,11 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         )
     }
 
-    override suspend fun chooseCharacter(playerID: String, character: Character) {
-        firestore.collection(GAMES_COLLECTION)
-            .document(playerID)
-            .update(CHARACTER, character)
-    }
-
     companion object {
         private const val GAMES_COLLECTION = "games"
 
         private const val HOST = "host"
         private const val STATUS = "status"
         private const val PLAYERS = "players"
-
-        private const val CHARACTER = "character"
     }
 }

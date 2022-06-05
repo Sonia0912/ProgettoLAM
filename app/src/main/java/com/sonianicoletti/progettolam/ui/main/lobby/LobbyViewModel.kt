@@ -13,6 +13,7 @@ import com.sonianicoletti.entities.exceptions.DuplicatePlayerException
 import com.sonianicoletti.entities.exceptions.MaxPlayersException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
+import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.GameService
 import com.sonianicoletti.usecases.servives.UserService
 import com.sonianicoletti.zxing.QRCodeGenerator
@@ -25,6 +26,7 @@ class LobbyViewModel @Inject constructor(
     private val gameService: GameService,
     private val userService: UserService,
     private val qrCodeGenerator: QRCodeGenerator,
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val viewStateEmitter = MutableLiveData<ViewState>()

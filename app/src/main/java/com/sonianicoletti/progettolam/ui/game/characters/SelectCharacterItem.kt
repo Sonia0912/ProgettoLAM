@@ -7,5 +7,5 @@ import com.sonianicoletti.entities.Player
 data class SelectCharacterItem(
     val character: Character,
     @DrawableRes val avatarRes: Int,
-    val assignedPlayer: Player?,
+    var assignedPlayer: Player?,
 )
