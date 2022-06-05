@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -60,7 +61,7 @@ class LobbyFragment : Fragment() {
             showLeaveGameDialog()
         }
 
-        binding.editTextAddPlayer.setOnEditorActionListener { textView, actionId, keyEvent ->
+        binding.editTextAddPlayer.setOnEditorActionListener { textView, actionId, _ ->
             // quando clicca enter
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.addPlayer(textView.text.toString())
@@ -121,6 +122,7 @@ class LobbyFragment : Fragment() {
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
             ClearText -> binding.editTextAddPlayer.setText("")
+            ShowHostLeftToast -> showHostLeftToast()
             NavigateToGame -> navigateToGame()
             NavigateUp -> findNavController().navigateUp()
             is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
@@ -152,5 +154,9 @@ class LobbyFragment : Fragment() {
 
     private fun showNotEnoughPlayersDialog() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
+    }
+
+    private fun showHostLeftToast() {
+        Toast.makeText(requireContext(), getString(R.string.host_left_toast), Toast.LENGTH_SHORT).show()
     }
 }

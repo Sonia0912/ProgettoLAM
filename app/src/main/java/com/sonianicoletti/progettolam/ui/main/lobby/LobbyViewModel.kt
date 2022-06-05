@@ -44,10 +44,21 @@ class LobbyViewModel @Inject constructor(
             val user = authService.getUser()
             if (user != null) {
                 val isHost = user.id == game.host
+                if (!isHost) {
+                    checkHostIsInGame(game)
+                }
                 viewStateEmitter.postValue(ViewState(game, isHost))
             } else {
                 viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
             }
+        }
+    }
+
+    private fun checkHostIsInGame(game: Game) {
+        val hostHasLeft = game.players.none { it.id == game.host }
+        if (hostHasLeft) {
+            viewEventEmitter.value = ViewEvent.ShowHostLeftToast
+            handleLeaveGame()
         }
     }
 
@@ -115,6 +126,7 @@ class LobbyViewModel @Inject constructor(
         object ShowUserNotFoundAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
+        object ShowHostLeftToast : ViewEvent()
         object ClearText : ViewEvent()
         object NavigateToGame : ViewEvent()
         object NavigateUp : ViewEvent()
