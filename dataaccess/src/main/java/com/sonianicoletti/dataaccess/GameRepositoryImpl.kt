@@ -36,6 +36,11 @@ class GameRepositoryImpl @Inject constructor(
 
     override fun getOngoingGame() = game ?: throw GameNotRunningException()
 
+    override suspend fun isUserInGame(userID: String, gameID: String): Boolean {
+        val game = gameService.getGameByID(gameID)
+        return game.players.any { it.id == userID }
+    }
+
     override suspend fun isGameJoinable(gameID: String): Boolean {
         val game = gameService.getGameByID(gameID)
         // controlla che la partita non sia terminata o in gioco e che ci siano meno di 6 giocatori

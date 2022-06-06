@@ -15,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentJoinGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
+import com.sonianicoletti.progettolam.ui.main.joingame.JoinGameViewModel.ViewEvent.*
 import com.sonianicoletti.zxing.QRCodeScannerActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,12 +61,13 @@ class JoinGameFragment : Fragment() {
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
-            is JoinGameViewModel.ViewEvent.NavigateToLobby -> navigateToLobby()
-            JoinGameViewModel.ViewEvent.ShowGameNotFoundAlert -> showGameNotFoundAlert()
-            JoinGameViewModel.ViewEvent.ShowBlankFieldError -> binding.editTextGameID.error = getString(R.string.join_game_error_blank_field)
-            JoinGameViewModel.ViewEvent.ShowMinCharsNotAddedError -> binding.editTextGameID.error = getString(R.string.join_game_error_invalid_id)
-            JoinGameViewModel.ViewEvent.ShowUnableToJoinGameAlert -> showUnableToJoinGameAlert()
-            JoinGameViewModel.ViewEvent.ShowUserNotLoggedInAlert -> showUserNotFoundAlert()
+            is NavigateToLobby -> navigateToLobby()
+            ShowGameNotFoundAlert -> showGameNotFoundAlert()
+            ShowBlankFieldError -> binding.editTextGameID.error = getString(R.string.join_game_error_blank_field)
+            ShowMinCharsNotAddedError -> binding.editTextGameID.error = getString(R.string.join_game_error_invalid_id)
+            ShowUnableToJoinGameAlert -> showUnableToJoinGameAlert()
+            ShowUserNotLoggedInAlert -> showUserNotFoundAlert()
+            ShowUserAlreadyInGameAlert -> showUserAlreadyInGameAlert()
         }
     }
 
@@ -97,6 +99,12 @@ class JoinGameFragment : Fragment() {
         val intent = Intent(requireContext(), AuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun showUserAlreadyInGameAlert() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.user_already_in_game_message))
+            .show()
     }
 
     private fun onQrCodeScanned(result: ActivityResult) {

@@ -25,6 +25,7 @@ class JoinGameViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 validateGameId(gameID)
+                checkIsAlreadyInGame(gameID)
                 checkGameAvailability(gameID)
                 addCurrentPlayerToGame(gameID)
                 gameRepository.loadGame(gameID)
@@ -33,6 +34,8 @@ class JoinGameViewModel @Inject constructor(
                 viewEventEmitter.postValue(ViewEvent.ShowBlankFieldError)
             } catch (e: MinCharsNotAddedException) {
                 viewEventEmitter.postValue(ViewEvent.ShowMinCharsNotAddedError)
+            } catch (e: UserAlreadyInGameException) {
+                viewEventEmitter.postValue(ViewEvent.ShowUserAlreadyInGameAlert)
             } catch (e: UnableToJoinGameException) {
                 viewEventEmitter.postValue(ViewEvent.ShowUnableToJoinGameAlert)
             } catch (e: GameNotFoundException) {
@@ -51,6 +54,13 @@ class JoinGameViewModel @Inject constructor(
         }
     }
 
+    private suspend fun checkIsAlreadyInGame(gameID: String) {
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        if (gameRepository.isUserInGame(user.id, gameID)) {
+            throw UserAlreadyInGameException()
+        }
+    }
+
     private suspend fun checkGameAvailability(gameID: String) {
         if (!gameRepository.isGameJoinable(gameID)) {
             throw UnableToJoinGameException()
@@ -58,14 +68,14 @@ class JoinGameViewModel @Inject constructor(
     }
 
     private suspend fun addCurrentPlayerToGame(gameID: String) {
-        authService.getUser()?.let {
-            gameRepository.addPlayer(gameID, Player.fromUser(it))
-        } ?: throw UserNotLoggedInException()
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        gameRepository.addPlayer(gameID, Player.fromUser(user))
     }
 
     sealed class ViewEvent {
         object ShowGameNotFoundAlert : ViewEvent()
         object ShowUserNotLoggedInAlert : ViewEvent()
+        object ShowUserAlreadyInGameAlert : ViewEvent()
         object ShowUnableToJoinGameAlert : ViewEvent()
         object ShowBlankFieldError : ViewEvent()
         object ShowMinCharsNotAddedError : ViewEvent()

@@ -14,6 +14,8 @@ interface GameRepository {
 
     fun getOngoingGame(): Game
 
+    suspend fun isUserInGame(userID: String, gameID: String): Boolean
+
     suspend fun isGameJoinable(gameID: String): Boolean
 
     suspend fun getOngoingGameUpdates(): Flow<Game>
