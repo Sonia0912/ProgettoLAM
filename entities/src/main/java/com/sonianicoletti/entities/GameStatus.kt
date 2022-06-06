@@ -5,7 +5,7 @@ enum class GameStatus {
     CHARACTER_SELECT,
     ACTIVE,
     FINISHED,
-    UNKNOWN;
+    CANCELLED;
 
     companion object {
         fun fromValue(value: String?) = when(value) {
@@ -13,7 +13,7 @@ enum class GameStatus {
             "CHARACTER_SELECT" -> CHARACTER_SELECT
             "ACTIVE" -> ACTIVE
             "FINISHED" -> FINISHED
-            else -> UNKNOWN
+            else -> CANCELLED
         }
     }
 }

@@ -10,6 +10,7 @@ import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -47,7 +48,9 @@ class GameRepositoryImpl @Inject constructor(
         return game.players.size <= 5 || game.status == GameStatus.LOBBY
     }
 
-    override suspend fun getOngoingGameUpdates() = gameFlow?.onEach { game = it } ?: throw GameNotRunningException()
+    override suspend fun getOngoingGameUpdates() = gameFlow?.onEach { game = it }
+        ?.catch { game = null; throw it }
+        ?: throw GameNotRunningException()
 
     override suspend fun addPlayer(player: Player) {
         val game = getOngoingGame()
@@ -62,12 +65,22 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun leaveGame() {
-        val game = getOngoingGame()
-        val user = authService.getUser() ?: throw UserNotFoundException()
-        game.players.removeAll { it.id == user.id }
-        gameService.updateGame(game)
-        gameFlow = null
-        this.game = null
+        try {
+            val game = getOngoingGame()
+            val user = authService.getUser() ?: throw UserNotFoundException()
+
+            if (game.host == user.id) {
+                gameService.deleteGame(game.id)
+            } else {
+                game.players.removeAll { it.id == user.id }
+                gameService.updateGame(game)
+            }
+        } catch (e: GameNotRunningException) {
+            // do nothing
+        } finally {
+            gameFlow = null
+            this.game = null
+        }
     }
 
     override suspend fun updateGameStatus(gameStatus: GameStatus) {

@@ -6,9 +6,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonianicoletti.entities.*
 import com.sonianicoletti.entities.exceptions.GameNotFoundException
+import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.usecases.servives.GameService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -106,6 +108,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     override suspend fun observeGameByID(gameID: String) = firestore.collection(GAMES_COLLECTION)
         .document(gameID)
         .observe()
+        .map { it.takeUnless { it.status == GameStatus.CANCELLED } ?: throw GameNotRunningException() }
 
     private fun DocumentReference.observe() = callbackFlow {
         val callback = addSnapshotListener { value, error ->
@@ -123,6 +126,10 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             status = GameStatus.fromValue(getString(STATUS)),
             players = players
         )
+    }
+
+    override suspend fun deleteGame(gameID: String) {
+        firestore.collection(GAMES_COLLECTION).document(gameID).delete().await()
     }
 
     companion object {

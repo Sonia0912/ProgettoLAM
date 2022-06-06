@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam.ui.main.lobby
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
+import com.sonianicoletti.progettolam.ui.auth.AuthActivity
 import com.sonianicoletti.progettolam.ui.game.GameActivity
 import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,7 +84,7 @@ class LobbyFragment : Fragment() {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setMessage(getString(R.string.dialog_leave_message))
-                .setPositiveButton("Yes") { _, _ -> viewModel.handleLeaveGame() } // il secondo parametro e' una funzione callback di default
+                .setPositiveButton("Yes") { _, _ -> viewModel.handleLeaveGameButton() } // il secondo parametro e' una funzione callback di default
                 .setNegativeButton("No") { _, _ -> }
                 .show()
         }
@@ -115,24 +117,24 @@ class LobbyFragment : Fragment() {
     }
 
     // it e' l'evento
-    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
-        when (it) {
-            OpenMaxPlayersDialog -> showMaxPlayersDialog()
+    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
+        when (event) {
+            ClearText -> clearText()
+            ShowMaxPlayersAlert -> showMaxPlayersDialog()
             ShowUserNotFoundAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
-            ClearText -> binding.editTextAddPlayer.setText("")
-            ShowHostLeftToast -> showHostLeftToast()
+            ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
+            ShowGameNotRunningToast -> showGameNotRunningToast()
             NavigateToGame -> navigateToGame()
-            NavigateUp -> findNavController().navigateUp()
-            is SetQRCode -> binding.gameQRCode.setImageBitmap(it.qrCodeBitmap)
+            NavigateUp -> navigateUp()
+            NavigateToAuth -> navigateToAuth()
+            is SetQRCode -> setQRCode(event.qrCodeBitmap)
         }
     }
 
-    private fun navigateToGame() {
-        val intent = Intent(requireContext(), GameActivity::class.java)
-        context?.startActivity(intent)
-        activity?.finish()
+    private fun clearText() {
+        binding.editTextAddPlayer.setText("")
     }
 
     private fun showMaxPlayersDialog() {
@@ -156,7 +158,31 @@ class LobbyFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
     }
 
-    private fun showHostLeftToast() {
-        Toast.makeText(requireContext(), getString(R.string.host_left_toast), Toast.LENGTH_SHORT).show()
+    private fun showUserNotLoggedInToast() {
+        Toast.makeText(requireContext(), getString(R.string.user_not_logged_in_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showGameNotRunningToast() {
+        Toast.makeText(requireContext(), getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToGame() {
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        context?.startActivity(intent)
+        activity?.finish()
+    }
+
+    private fun navigateToAuth() {
+        val intent = Intent(requireContext(), AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun navigateUp() {
+        findNavController().navigateUp()
+    }
+
+    private fun setQRCode(qrCodeBitmap: Bitmap) {
+        binding.gameQRCode.setImageBitmap(qrCodeBitmap)
     }
 }

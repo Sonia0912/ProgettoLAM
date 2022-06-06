@@ -9,6 +9,7 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.R
+import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -32,34 +33,11 @@ class CharactersViewModel @Inject constructor(
         observeGameUpdates()
     }
 
-    fun selectCharacter(character: Character) = viewModelScope.launch {
-        try {
-            handleSelectedCharacter(character)
-        } catch (e: UserNotFoundException) {
-            viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
-        } catch (e: GameNotRunningException) {
-            viewEventEmitter.postValue(ViewEvent.ShowGameNotRunningAlert)
-        }
-    }
-
-    private suspend fun handleSelectedCharacter(character: Character) {
-        val user = authService.getUser() ?: throw UserNotFoundException()
-        when {
-            isCharacterSelected(user.id, character) -> gameRepository.updateCharacter(user.id, Character.UNSELECTED)
-            isCharacterTaken(character) -> viewEventEmitter.postValue(ViewEvent.ShowCharacterTaken(character))
-            else -> gameRepository.updateCharacter(user.id, character)
-        }
-    }
-
-    private fun isCharacterSelected(userID: String, character: Character) =
-        selectedCharacters.value?.find { it.assignedPlayer?.id == userID }?.character == character
-
-    private fun isCharacterTaken(character: Character) =
-        selectedCharacters.value?.find { it.character == character }?.assignedPlayer != null
-
     private fun observeGameUpdates() = viewModelScope.launch {
-        gameRepository.getOngoingGameUpdates().collect { game ->
-            handleGameUpdate(game)
+        try {
+            gameRepository.getOngoingGameUpdates().collect { game -> handleGameUpdate(game) }
+        } catch (e: GameNotRunningException) {
+            handleGameNotRunning()
         }
     }
 
@@ -75,6 +53,40 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
+    private fun handleGameNotRunning() = viewModelScope.launch {
+        viewEventEmitter.value = ShowGameNotRunningToast
+        gameRepository.leaveGame()
+        viewEventEmitter.value = NavigateToMain
+    }
+
+    fun selectCharacter(character: Character) = viewModelScope.launch {
+        try {
+            handleSelectedCharacter(character)
+        } catch (e: UserNotFoundException) {
+            handleUserNotLoggedIn()
+        }
+    }
+
+    private fun handleUserNotLoggedIn() {
+        viewEventEmitter.value = ShowUserNotLoggedInToast
+        viewEventEmitter.value = NavigateToAuth
+    }
+
+    private suspend fun handleSelectedCharacter(character: Character) {
+        val user = authService.getUser() ?: throw UserNotFoundException()
+        when {
+            isCharacterSelected(user.id, character) -> gameRepository.updateCharacter(user.id, Character.UNSELECTED)
+            isCharacterTaken(character) -> viewEventEmitter.postValue(ShowCharacterTaken(character))
+            else -> gameRepository.updateCharacter(user.id, character)
+        }
+    }
+
+    private fun isCharacterSelected(userID: String, character: Character) =
+        selectedCharacters.value?.find { it.assignedPlayer?.id == userID }?.character == character
+
+    private fun isCharacterTaken(character: Character) =
+        selectedCharacters.value?.find { it.character == character }?.assignedPlayer != null
+
     private fun MutableLiveData<List<SelectCharacterItem>>.emit() = postValue(value)
 
     private fun createCharacterItems() = mutableListOf(
@@ -87,8 +99,10 @@ class CharactersViewModel @Inject constructor(
     )
 
     sealed class ViewEvent {
-        object ShowUserNotFoundAlert : ViewEvent()
-        object ShowGameNotRunningAlert : ViewEvent()
         data class ShowCharacterTaken(val character: Character) : ViewEvent()
+        object ShowUserNotLoggedInToast : ViewEvent()
+        object ShowGameNotRunningToast : ViewEvent()
+        object NavigateToAuth : ViewEvent()
+        object NavigateToMain : ViewEvent()
     }
 }

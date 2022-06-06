@@ -1,15 +1,17 @@
 package com.sonianicoletti.progettolam.ui.game.characters
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.sonianicoletti.entities.Character
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
-import com.sonianicoletti.progettolam.ui.game.GameViewModel
+import com.sonianicoletti.progettolam.ui.auth.AuthActivity
+import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.util.ItemOffsetDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,6 +29,7 @@ class CharactersFragment : Fragment() {
     ): View {
         binding = FragmentCharactersBinding.inflate(inflater)
         initCharacterGrid()
+        observeViewEvents()
         return binding.root
     }
 
@@ -40,5 +43,35 @@ class CharactersFragment : Fragment() {
 
     private fun observeCharacterItems() = viewModel.selectedCharacters.observe(viewLifecycleOwner) { characterItems ->
         adapter.updateItems(characterItems)
+    }
+
+    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
+        when (event) {
+            is ShowCharacterTaken -> Unit // TODO: Implement
+            NavigateToAuth -> navigateToAuth()
+            NavigateToMain -> navigateToMain()
+            ShowGameNotRunningToast -> showGameNotRunningToast()
+            ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
+        }
+    }
+
+    private fun navigateToAuth() {
+        val intent = Intent(requireContext(), AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(requireContext(), AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun showGameNotRunningToast() {
+        Toast.makeText(requireContext(), getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showUserNotLoggedInToast() {
+        Toast.makeText(requireContext(), getString(R.string.user_not_logged_in_toast), Toast.LENGTH_SHORT).show()
     }
 }

@@ -9,6 +9,7 @@
     <string name="join_game_error_blank_field">Please insert a game ID</string>
     <string name="join_game_error_invalid_id">A game ID must be 6 characters</string>
     <string name="choose_your_character">Choose your character</string>
-    <string name="host_left_toast">The host left the game</string>
+    <string name="game_not_running_toast">This game is no longer running</string>
+    <string name="user_not_logged_in_toast">Not logged in</string>
     <string name="user_already_in_game_message">You are already in this game on another device</string>
 </resources>
