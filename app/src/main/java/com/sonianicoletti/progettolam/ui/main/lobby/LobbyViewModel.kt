@@ -9,9 +9,7 @@ import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.User
-import com.sonianicoletti.entities.exceptions.DuplicatePlayerException
-import com.sonianicoletti.entities.exceptions.MaxPlayersException
-import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.entities.exceptions.*
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -41,24 +39,34 @@ class LobbyViewModel @Inject constructor(
 
     private fun startObservingGame() = viewModelScope.launch {
         gameRepository.getOngoingGameUpdates().collect { game ->
-            val user = authService.getUser()
-            if (user != null) {
-                val isHost = user.id == game.host
-                if (!isHost) {
-                    checkHostIsInGame(game)
-                }
-                viewStateEmitter.postValue(ViewState(game, isHost))
-            } else {
-                viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
-            }
+            handleGameUpdate(game)
         }
     }
 
-    private fun checkHostIsInGame(game: Game) {
-        val hostHasLeft = game.players.none { it.id == game.host }
-        if (hostHasLeft) {
+    private suspend fun handleGameUpdate(game: Game) {
+        try {
+            emitGameState(game)
+        } catch (e: UserNotLoggedInException) {
+            viewEventEmitter.postValue(ViewEvent.ShowUserNotLoggedInAlert)
+        } catch (e: HostLeftException) {
             viewEventEmitter.value = ViewEvent.ShowHostLeftToast
             handleLeaveGame()
+        }
+    }
+
+    private suspend fun emitGameState(game: Game) {
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        val isCurrentUserHost = user.id == game.host
+        checkHostIsInGame(game, isCurrentUserHost)
+        viewStateEmitter.postValue(ViewState(game, isCurrentUserHost))
+    }
+
+    private fun checkHostIsInGame(game: Game, isCurrentUserHost: Boolean) {
+        if (!isCurrentUserHost) {
+            val hostHasLeft = game.players.none { it.id == game.host }
+            if (hostHasLeft) {
+                throw HostLeftException()
+            }
         }
     }
 
@@ -124,6 +132,7 @@ class LobbyViewModel @Inject constructor(
     sealed class ViewEvent {
         object OpenMaxPlayersDialog : ViewEvent()
         object ShowUserNotFoundAlert : ViewEvent()
+        object ShowUserNotLoggedInAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
         object ShowHostLeftToast : ViewEvent()

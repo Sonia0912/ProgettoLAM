@@ -13,23 +13,22 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@style/Theme.ProgettoLAM">
+
         <activity
-            android:name=".ui.auth.AuthActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".ui.game.GameActivity"
-            android:exported="true">
-        </activity>
+
+        <activity android:name=".ui.auth.AuthActivity" />
+
+        <activity android:name=".ui.game.GameActivity" />
+
     </application>
 
 </manifest>

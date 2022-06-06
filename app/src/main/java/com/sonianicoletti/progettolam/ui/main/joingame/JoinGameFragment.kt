@@ -15,7 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentJoinGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
-import com.sonianicoletti.progettolam.ui.main.lobby.LobbyFragment
 import com.sonianicoletti.zxing.QRCodeScannerActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,7 +65,7 @@ class JoinGameFragment : Fragment() {
             JoinGameViewModel.ViewEvent.ShowBlankFieldError -> binding.editTextGameID.error = getString(R.string.join_game_error_blank_field)
             JoinGameViewModel.ViewEvent.ShowMinCharsNotAddedError -> binding.editTextGameID.error = getString(R.string.join_game_error_invalid_id)
             JoinGameViewModel.ViewEvent.ShowUnableToJoinGameAlert -> showUnableToJoinGameAlert()
-            JoinGameViewModel.ViewEvent.ShowUserNotFoundAlert -> showUserNotFoundAlert()
+            JoinGameViewModel.ViewEvent.ShowUserNotLoggedInAlert -> showUserNotFoundAlert()
         }
     }
 

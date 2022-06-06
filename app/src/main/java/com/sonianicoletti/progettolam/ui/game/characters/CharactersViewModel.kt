@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Character
+import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.R
@@ -33,12 +34,7 @@ class CharactersViewModel @Inject constructor(
 
     fun selectCharacter(character: Character) = viewModelScope.launch {
         try {
-            val user = authService.getUser() ?: throw UserNotFoundException()
-            when {
-                isCharacterSelected(user.id, character) -> gameRepository.updateCharacter(user.id, Character.UNSELECTED)
-                isCharacterTaken(character) -> viewEventEmitter.postValue(ViewEvent.ShowCharacterTaken(character))
-                else -> gameRepository.updateCharacter(user.id, character)
-            }
+            handleSelectedCharacter(character)
         } catch (e: UserNotFoundException) {
             viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
         } catch (e: GameNotRunningException) {
@@ -46,17 +42,36 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    private fun isCharacterSelected(userID: String, character: Character) = selectedCharacters.value?.find { it.assignedPlayer?.id == userID }?.character == character
+    private suspend fun handleSelectedCharacter(character: Character) {
+        val user = authService.getUser() ?: throw UserNotFoundException()
+        when {
+            isCharacterSelected(user.id, character) -> gameRepository.updateCharacter(user.id, Character.UNSELECTED)
+            isCharacterTaken(character) -> viewEventEmitter.postValue(ViewEvent.ShowCharacterTaken(character))
+            else -> gameRepository.updateCharacter(user.id, character)
+        }
+    }
 
-    private fun isCharacterTaken(character: Character) = selectedCharacters.value?.find { it.character == character }?.assignedPlayer != null
+    private fun isCharacterSelected(userID: String, character: Character) =
+        selectedCharacters.value?.find { it.assignedPlayer?.id == userID }?.character == character
+
+    private fun isCharacterTaken(character: Character) =
+        selectedCharacters.value?.find { it.character == character }?.assignedPlayer != null
 
     private fun observeGameUpdates() = viewModelScope.launch {
         gameRepository.getOngoingGameUpdates().collect { game ->
-            selectedCharacters.value?.forEach { characterItem ->
-                val player = game.players.find { it.character == characterItem.character }
-                characterItem.assignedPlayer = player
-            }
-            selectedCharactersEmitter.emit()
+            handleGameUpdate(game)
+        }
+    }
+
+    private fun handleGameUpdate(game: Game) {
+        assignPlayersSelectedCharacters(game)
+        selectedCharactersEmitter.emit()
+    }
+
+    private fun assignPlayersSelectedCharacters(game: Game) {
+        selectedCharacters.value?.forEach { characterItem ->
+            val player = game.players.find { it.character == characterItem.character }
+            characterItem.assignedPlayer = player
         }
     }
 

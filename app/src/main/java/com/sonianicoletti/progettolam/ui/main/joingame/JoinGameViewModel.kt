@@ -37,8 +37,8 @@ class JoinGameViewModel @Inject constructor(
                 viewEventEmitter.postValue(ViewEvent.ShowUnableToJoinGameAlert)
             } catch (e: GameNotFoundException) {
                 viewEventEmitter.postValue(ViewEvent.ShowGameNotFoundAlert)
-            } catch (e: UserNotFoundException) {
-                viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
+            } catch (e: UserNotLoggedInException) {
+                viewEventEmitter.postValue(ViewEvent.ShowUserNotLoggedInAlert)
             }
         }
     }
@@ -60,12 +60,12 @@ class JoinGameViewModel @Inject constructor(
     private suspend fun addCurrentPlayerToGame(gameID: String) {
         authService.getUser()?.let {
             gameRepository.addPlayer(gameID, Player.fromUser(it))
-        } ?: throw UserNotFoundException()
+        } ?: throw UserNotLoggedInException()
     }
 
     sealed class ViewEvent {
         object ShowGameNotFoundAlert : ViewEvent()
-        object ShowUserNotFoundAlert : ViewEvent()
+        object ShowUserNotLoggedInAlert : ViewEvent()
         object ShowUnableToJoinGameAlert : ViewEvent()
         object ShowBlankFieldError : ViewEvent()
         object ShowMinCharsNotAddedError : ViewEvent()
