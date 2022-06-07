@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
             supportActionBar?.setDisplayShowTitleEnabled(false)
         }
         setClickListeners()
+        observeViewState()
         observeViewEvents()
         return binding.root
     }
@@ -40,6 +42,10 @@ class HomeFragment : Fragment() {
         binding.createGameButton.setOnClickListener { viewModel.handleCreateGameButton() }
         binding.joinGameButton.setOnClickListener { viewModel.handleJoinGameButton() }
         binding.imageViewPerson.setOnClickListener { viewModel.handleProfileButton() }
+    }
+
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        binding.progressLayout.isVisible = state == HomeViewModel.ViewState.Loading
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->

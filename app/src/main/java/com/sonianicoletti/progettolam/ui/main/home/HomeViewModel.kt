@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam.ui.main.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
@@ -12,15 +13,21 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val gameRepository: GameRepository) : ViewModel() {
 
+    private val viewStateEmitter = MutableLiveData<ViewState>(ViewState.Idle)
+    val viewState: LiveData<ViewState> = viewStateEmitter
+
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
     fun handleCreateGameButton() = viewModelScope.launch {
         try {
+            viewStateEmitter.postValue(ViewState.Loading)
             gameRepository.createGame()
             viewEventEmitter.postValue(ViewEvent.NavigateToLobby)
         } catch (e: Exception) {
             viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorDialog)
+        } finally {
+            viewStateEmitter.postValue(ViewState.Idle)
         }
     }
 
@@ -30,6 +37,11 @@ class HomeViewModel @Inject constructor(private val gameRepository: GameReposito
 
     fun handleProfileButton() {
         viewEventEmitter.value = ViewEvent.NavigateToProfile
+    }
+
+    sealed class ViewState {
+        object Loading : ViewState()
+        object Idle : ViewState()
     }
 
     sealed class ViewEvent {

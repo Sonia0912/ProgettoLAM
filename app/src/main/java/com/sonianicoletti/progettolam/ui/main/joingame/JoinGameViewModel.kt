@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam.ui.main.joingame
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Player
@@ -18,12 +19,16 @@ class JoinGameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
 ) : ViewModel() {
 
+    private val viewStateEmitter = MutableLiveData<ViewState>(ViewState.Idle)
+    val viewState: LiveData<ViewState> = viewStateEmitter
+
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
     fun joinGame(gameID: String) {
         viewModelScope.launch {
             try {
+                viewStateEmitter.postValue(ViewState.Loading)
                 validateGameId(gameID)
                 checkIsAlreadyInGame(gameID)
                 checkGameAvailability(gameID)
@@ -44,6 +49,8 @@ class JoinGameViewModel @Inject constructor(
                 viewEventEmitter.postValue(ViewEvent.ShowUserNotLoggedInAlert)
             } catch (e: Exception) {
                 viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorAlert)
+            } finally {
+                viewStateEmitter.postValue(ViewState.Idle)
             }
         }
     }
@@ -72,6 +79,11 @@ class JoinGameViewModel @Inject constructor(
     private suspend fun addCurrentPlayerToGame(gameID: String) {
         val user = authService.getUser() ?: throw UserNotLoggedInException()
         gameRepository.addPlayer(gameID, Player.fromUser(user))
+    }
+
+    sealed class ViewState {
+        object Loading : ViewState()
+        object Idle : ViewState()
     }
 
     sealed class ViewEvent {

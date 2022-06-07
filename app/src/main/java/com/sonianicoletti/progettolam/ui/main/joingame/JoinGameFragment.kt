@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,6 +36,7 @@ class JoinGameFragment : Fragment() {
     ): View {
         binding = FragmentJoinGameBinding.inflate(inflater)
         setClickListeners()
+        observeViewState()
         observeViewEvents()
         return binding.root
     }
@@ -58,6 +60,10 @@ class JoinGameFragment : Fragment() {
     private fun launchQRCodeScanner() {
         val intent = Intent(requireContext(), QRCodeScannerActivity::class.java)
         qrCodeScannerLauncher.launch(intent)
+    }
+
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        binding.progressLayout.isVisible = state == JoinGameViewModel.ViewState.Loading
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {

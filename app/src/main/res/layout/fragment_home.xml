@@ -61,5 +61,18 @@
         app:layout_constraintStart_toStartOf="@id/create_game_button"
         app:layout_constraintTop_toBottomOf="@+id/create_game_button" />
 
+    <FrameLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#88FFFFFF"
+        android:translationZ="5dp">
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
