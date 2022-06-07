@@ -1,14 +1,11 @@
-package com.sonianicoletti.progettolam.ui.main.lobby
+package com.sonianicoletti.progettolam.ui.game.lobby
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,9 +15,8 @@ import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentLobbyBinding
-import com.sonianicoletti.progettolam.ui.auth.AuthActivity
-import com.sonianicoletti.progettolam.ui.game.GameActivity
-import com.sonianicoletti.progettolam.ui.main.lobby.LobbyViewModel.ViewEvent.*
+import com.sonianicoletti.progettolam.ui.game.GameViewModel
+import com.sonianicoletti.progettolam.ui.game.lobby.LobbyViewModel.ViewEvent.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +24,7 @@ class LobbyFragment : Fragment() {
 
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: LobbyViewModel by viewModels()
+    private val gameViewModel: GameViewModel by viewModels()
 
     private val playerList = mutableListOf<Player>()
     private var playersAdapter = PlayersAdapter(playerList)
@@ -37,20 +34,11 @@ class LobbyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLobbyBinding.inflate(inflater)
-
-        initActionBar()
         initPlayersList()
         setClickListeners()
         observeGameState()
         observeViewEvents()
         return binding.root
-    }
-
-    private fun initActionBar() {
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolBar)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-        }
     }
 
     private fun initPlayersList() {
@@ -59,10 +47,6 @@ class LobbyFragment : Fragment() {
     }
 
     private fun setClickListeners() {
-        binding.imageViewExit.setOnClickListener {
-            showLeaveGameDialog()
-        }
-
         binding.editTextAddPlayer.setOnEditorActionListener { textView, actionId, _ ->
             // quando clicca enter
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -78,26 +62,14 @@ class LobbyFragment : Fragment() {
         }
     }
 
-    private fun showLeaveGameDialog() {
-        // Se context non e' nullo continua, il context diventa "it" e anche se cambia
-        // si continua ad usare il context usato per la verifica
-        context?.let {
-            MaterialAlertDialogBuilder(it)
-                .setMessage(getString(R.string.dialog_leave_message))
-                .setPositiveButton("Yes") { _, _ -> viewModel.handleLeaveGameButton() } // il secondo parametro e' una funzione callback di default
-                .setNegativeButton("No") { _, _ -> }
-                .show()
-        }
-    }
-
-    private fun observeGameState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+    private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) { state ->
         updatePlayersList(state.game.players)
         updateHostPrivileges(state.isHost)
         showGameID(state.game.id)
         viewModel.generateQrCode(state.game.id)
 
         if (state.game.status == GameStatus.CHARACTER_SELECT) {
-            navigateToGame()
+            navigateToCharacterSelect()
         }
     }
 
@@ -124,11 +96,6 @@ class LobbyFragment : Fragment() {
             ShowUserNotFoundAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
-            ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
-            ShowGameNotRunningToast -> showGameNotRunningToast()
-            NavigateToGame -> navigateToGame()
-            NavigateUp -> navigateUp()
-            NavigateToAuth -> navigateToAuth()
             is SetQRCode -> setQRCode(event.qrCodeBitmap)
         }
     }
@@ -158,28 +125,8 @@ class LobbyFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
     }
 
-    private fun showUserNotLoggedInToast() {
-        Toast.makeText(requireContext(), getString(R.string.user_not_logged_in_toast), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showGameNotRunningToast() {
-        Toast.makeText(requireContext(), getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun navigateToGame() {
-        val intent = Intent(requireContext(), GameActivity::class.java)
-        context?.startActivity(intent)
-        activity?.finish()
-    }
-
-    private fun navigateToAuth() {
-        val intent = Intent(requireContext(), AuthActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-    }
-
-    private fun navigateUp() {
-        findNavController().navigateUp()
+    private fun navigateToCharacterSelect() {
+        findNavController().navigate(R.id.charactersFragment)
     }
 
     private fun setQRCode(qrCodeBitmap: Bitmap) {

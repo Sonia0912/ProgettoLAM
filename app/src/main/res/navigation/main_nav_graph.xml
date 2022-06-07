@@ -11,9 +11,6 @@
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_lobbyFragment"
-            app:destination="@id/lobbyFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
@@ -22,23 +19,15 @@
     </fragment>
 
     <fragment
-        android:id="@+id/lobbyFragment"
-        android:name="com.sonianicoletti.progettolam.ui.main.lobby.LobbyFragment"
-        android:label="fragment_lobby"
-        tools:layout="@layout/fragment_lobby" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.sonianicoletti.progettolam.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile"/>
+
     <fragment
         android:id="@+id/joingameFragment"
         android:name="com.sonianicoletti.progettolam.ui.main.joingame.JoinGameFragment"
         android:label="fragment_joingame"
-        tools:layout="@layout/fragment_join_game">
-        <action
-            android:id="@+id/action_joingameFragment_to_lobbyFragment"
-            app:destination="@id/lobbyFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_join_game" />
 
 </navigation>

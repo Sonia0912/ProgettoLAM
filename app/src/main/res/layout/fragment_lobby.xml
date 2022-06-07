@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.lobby.LobbyFragment">
+    tools:context=".ui.game.lobby.LobbyFragment">
 
     <TextView
         android:id="@+id/textView"
@@ -42,39 +42,6 @@
         tools:listitem="@layout/list_item_player"
         tools:itemCount="4" />
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:theme="@style/ToolbarTheme">
-
-        <ImageView
-            android:id="@+id/imageViewExit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_exit"
-            android:layout_gravity="start"
-            android:layout_marginStart="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/lobby"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
-
-        <ImageView
-            android:id="@+id/imageViewQr"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_qr" />
-    </com.google.android.material.appbar.MaterialToolbar>
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -83,7 +50,7 @@
         android:text="Game ID:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/gameQRCode"

@@ -15,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentJoinGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
+import com.sonianicoletti.progettolam.ui.game.GameActivity
 import com.sonianicoletti.progettolam.ui.main.joingame.JoinGameViewModel.ViewEvent.*
 import com.sonianicoletti.zxing.QRCodeScannerActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +73,8 @@ class JoinGameFragment : Fragment() {
     }
 
     private fun navigateToLobby() {
-        findNavController().navigate(R.id.lobbyFragment)
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showGameNotFoundAlert() {

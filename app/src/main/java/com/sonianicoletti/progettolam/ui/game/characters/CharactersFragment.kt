@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
+import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
 import com.sonianicoletti.progettolam.util.ItemOffsetDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +21,7 @@ class CharactersFragment : Fragment() {
 
     private lateinit var binding: FragmentCharactersBinding
     private val viewModel: CharactersViewModel by viewModels()
+    private val gameViewModel: GameViewModel by viewModels()
 
     private lateinit var adapter: CharactersAdapter
 
@@ -29,6 +31,7 @@ class CharactersFragment : Fragment() {
     ): View {
         binding = FragmentCharactersBinding.inflate(inflater)
         initCharacterGrid()
+        observeGameState()
         observeViewEvents()
         return binding.root
     }
@@ -43,6 +46,10 @@ class CharactersFragment : Fragment() {
 
     private fun observeCharacterItems() = viewModel.selectedCharacters.observe(viewLifecycleOwner) { characterItems ->
         adapter.updateItems(characterItems)
+    }
+
+    private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) { state ->
+        viewModel.handleGameUpdate(state.game)
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->

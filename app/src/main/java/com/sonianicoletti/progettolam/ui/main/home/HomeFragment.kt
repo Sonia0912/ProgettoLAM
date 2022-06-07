@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam.ui.main.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentHomeBinding
+import com.sonianicoletti.progettolam.ui.game.GameActivity
 import com.sonianicoletti.progettolam.ui.main.home.HomeViewModel.ViewEvent.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,9 +43,14 @@ class HomeFragment : Fragment() {
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
         when (event) {
-            NavigateToLobby -> findNavController().navigate(R.id.action_homeFragment_to_lobbyFragment)
+            NavigateToLobby -> navigateToLobby()
             NavigateToJoinGame -> findNavController().navigate(R.id.action_homeFragment_to_joingameFragment)
             NavigateToProfile -> findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
         }
+    }
+
+    private fun navigateToLobby() {
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        startActivity(intent)
     }
 }

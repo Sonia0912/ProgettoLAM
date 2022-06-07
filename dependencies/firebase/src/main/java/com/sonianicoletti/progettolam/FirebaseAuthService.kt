@@ -31,8 +31,6 @@ class FirebaseAuthService @Inject constructor(
         )
     }
 
-    override fun signOut() = firebaseAuth.signOut()
-
     override suspend fun register(email: String, password: String, displayName: String): User {
         val createUserResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         val firebaseUser = createUserResult.user ?: throw NullPointerException("user is null during register")
@@ -41,7 +39,7 @@ class FirebaseAuthService @Inject constructor(
             id = firebaseUser.uid,
             email = firebaseUser.email.orEmpty(),
             // nel caso non abbia un nome viene mostrata l'email
-            displayName = displayName ?: firebaseUser.email.orEmpty()
+            displayName = displayName
         )
     }
 
@@ -65,4 +63,6 @@ class FirebaseAuthService @Inject constructor(
             User(it.uid, email, user.displayName)
         }
     }
+
+    override fun signOut() = firebaseAuth.signOut()
 }

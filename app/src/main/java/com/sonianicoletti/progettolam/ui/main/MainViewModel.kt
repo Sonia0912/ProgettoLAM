@@ -7,9 +7,7 @@ import com.sonianicoletti.progettolam.ui.main.MainViewModel.ViewEvent.NavigateTo
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,10 +23,6 @@ class MainViewModel @Inject constructor(
         if (user == null) {
             viewEventEmitter.postValue(NavigateToAuth)
         }
-    }
-
-    private suspend fun handleUserNotLoggedIn() = withContext(Dispatchers.Main) {
-        viewEventEmitter.value = NavigateToAuth
     }
 
     sealed class ViewEvent {

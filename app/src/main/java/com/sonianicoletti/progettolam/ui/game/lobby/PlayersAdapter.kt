@@ -1,4 +1,4 @@
-package com.sonianicoletti.progettolam.ui.main.lobby
+package com.sonianicoletti.progettolam.ui.game.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

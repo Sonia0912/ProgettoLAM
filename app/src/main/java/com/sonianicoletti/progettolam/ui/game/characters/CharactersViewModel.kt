@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Character
 import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
@@ -29,19 +28,7 @@ class CharactersViewModel @Inject constructor(
     private val selectedCharactersEmitter = MutableLiveData<List<SelectCharacterItem>>(createCharacterItems())
     val selectedCharacters: LiveData<List<SelectCharacterItem>> = selectedCharactersEmitter
 
-    init {
-        observeGameUpdates()
-    }
-
-    private fun observeGameUpdates() = viewModelScope.launch {
-        try {
-            gameRepository.getOngoingGameUpdates().collect { game -> handleGameUpdate(game) }
-        } catch (e: GameNotRunningException) {
-            handleGameNotRunning()
-        }
-    }
-
-    private fun handleGameUpdate(game: Game) {
+    fun handleGameUpdate(game: Game) {
         assignPlayersSelectedCharacters(game)
         selectedCharactersEmitter.emit()
     }
@@ -53,23 +40,8 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    private fun handleGameNotRunning() = viewModelScope.launch {
-        viewEventEmitter.value = ShowGameNotRunningToast
-        gameRepository.leaveGame()
-        viewEventEmitter.value = NavigateToMain
-    }
-
     fun selectCharacter(character: Character) = viewModelScope.launch {
-        try {
-            handleSelectedCharacter(character)
-        } catch (e: UserNotFoundException) {
-            handleUserNotLoggedIn()
-        }
-    }
-
-    private fun handleUserNotLoggedIn() {
-        viewEventEmitter.value = ShowUserNotLoggedInToast
-        viewEventEmitter.value = NavigateToAuth
+        handleSelectedCharacter(character)
     }
 
     private suspend fun handleSelectedCharacter(character: Character) {

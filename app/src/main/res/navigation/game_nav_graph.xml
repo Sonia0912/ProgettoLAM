@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/game_nav_graph"
-    app:startDestination="@id/charactersFragment">
+    app:startDestination="@id/lobbyFragment">
+
+    <fragment
+        android:id="@+id/lobbyFragment"
+        android:name="com.sonianicoletti.progettolam.ui.game.lobby.LobbyFragment"
+        android:label="fragment_lobby"
+        tools:layout="@layout/fragment_lobby" />
 
     <fragment
         android:id="@+id/charactersFragment"
