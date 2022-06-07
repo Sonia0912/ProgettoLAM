@@ -42,6 +42,8 @@ class JoinGameViewModel @Inject constructor(
                 viewEventEmitter.postValue(ViewEvent.ShowGameNotFoundAlert)
             } catch (e: UserNotLoggedInException) {
                 viewEventEmitter.postValue(ViewEvent.ShowUserNotLoggedInAlert)
+            } catch (e: Exception) {
+                viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorAlert)
             }
         }
     }
@@ -77,6 +79,7 @@ class JoinGameViewModel @Inject constructor(
         object ShowUserNotLoggedInAlert : ViewEvent()
         object ShowUserAlreadyInGameAlert : ViewEvent()
         object ShowUnableToJoinGameAlert : ViewEvent()
+        object ShowGeneralErrorAlert : ViewEvent()
         object ShowBlankFieldError : ViewEvent()
         object ShowMinCharsNotAddedError : ViewEvent()
         data class NavigateToLobby(val gameID: String) : ViewEvent()

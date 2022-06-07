@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentHomeBinding
 import com.sonianicoletti.progettolam.ui.game.GameActivity
@@ -46,11 +47,19 @@ class HomeFragment : Fragment() {
             NavigateToLobby -> navigateToLobby()
             NavigateToJoinGame -> findNavController().navigate(R.id.action_homeFragment_to_joingameFragment)
             NavigateToProfile -> findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+            ShowGeneralErrorDialog -> showGeneralErrorDialog()
         }
     }
 
     private fun navigateToLobby() {
         val intent = Intent(requireContext(), GameActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showGeneralErrorDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.general_error_message))
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
     }
 }

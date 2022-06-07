@@ -88,6 +88,10 @@ class LobbyFragment : Fragment() {
         binding.gameID.text = id
     }
 
+    private fun navigateToCharacterSelect() {
+        findNavController().navigate(R.id.charactersFragment)
+    }
+
     // it e' l'evento
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
         when (event) {
@@ -96,6 +100,7 @@ class LobbyFragment : Fragment() {
             ShowUserNotFoundAlert -> showUserNotFoundDialog()
             DuplicatePlayerAlert -> showDuplicatePlayerDialog()
             NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
+            GeneralErrorAlert -> showGeneralErrorDialog()
             is SetQRCode -> setQRCode(event.qrCodeBitmap)
         }
     }
@@ -105,12 +110,10 @@ class LobbyFragment : Fragment() {
     }
 
     private fun showMaxPlayersDialog() {
-        context?.let {
-            MaterialAlertDialogBuilder(it)
-                .setMessage(getString(R.string.max_players_message))
-                .setPositiveButton("OK") { _, _ -> }
-                .show()
-        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.max_players_message))
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
     }
 
     private fun showUserNotFoundDialog() {
@@ -125,8 +128,11 @@ class LobbyFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext()).setMessage("At least 3 players to start").show()
     }
 
-    private fun navigateToCharacterSelect() {
-        findNavController().navigate(R.id.charactersFragment)
+    private fun showGeneralErrorDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.general_error_message))
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
     }
 
     private fun setQRCode(qrCodeBitmap: Bitmap) {

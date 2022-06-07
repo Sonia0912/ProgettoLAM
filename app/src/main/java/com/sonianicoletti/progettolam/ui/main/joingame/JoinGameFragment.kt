@@ -66,6 +66,7 @@ class JoinGameFragment : Fragment() {
             ShowGameNotFoundAlert -> showGameNotFoundAlert()
             ShowBlankFieldError -> binding.editTextGameID.error = getString(R.string.join_game_error_blank_field)
             ShowMinCharsNotAddedError -> binding.editTextGameID.error = getString(R.string.join_game_error_invalid_id)
+            ShowGeneralErrorAlert -> showGeneralErrorAlert()
             ShowUnableToJoinGameAlert -> showUnableToJoinGameAlert()
             ShowUserNotLoggedInAlert -> showUserNotFoundAlert()
             ShowUserAlreadyInGameAlert -> showUserAlreadyInGameAlert()
@@ -80,6 +81,13 @@ class JoinGameFragment : Fragment() {
     private fun showGameNotFoundAlert() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.join_game_error_game_not_found))
+            .show()
+    }
+
+    private fun showGeneralErrorAlert() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.general_error_message))
+            .setPositiveButton("OK") { _, _ -> }
             .show()
     }
 

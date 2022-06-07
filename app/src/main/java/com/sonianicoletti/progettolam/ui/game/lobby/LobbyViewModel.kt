@@ -41,6 +41,8 @@ class LobbyViewModel @Inject constructor(
             viewEventEmitter.postValue(ViewEvent.ShowMaxPlayersAlert)
         } catch (e: DuplicatePlayerException) {
             viewEventEmitter.postValue(ViewEvent.DuplicatePlayerAlert)
+        } catch (e: Exception) {
+            viewEventEmitter.postValue(ViewEvent.GeneralErrorAlert)
         }
     }
 
@@ -61,11 +63,19 @@ class LobbyViewModel @Inject constructor(
 
     fun startGame() {
         viewModelScope.launch {
-            if(gameRepository.getOngoingGame().hasMinimumPlayers()) {
-                gameRepository.updateGameStatus(GameStatus.CHARACTER_SELECT)
-            } else {
-                viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
+            try {
+                attemptStartGame()
+            } catch (e: Exception) {
+                viewEventEmitter.postValue(ViewEvent.GeneralErrorAlert)
             }
+        }
+    }
+
+    private suspend fun attemptStartGame() {
+        if (gameRepository.getOngoingGame().hasMinimumPlayers()) {
+            gameRepository.updateGameStatus(GameStatus.CHARACTER_SELECT)
+        } else {
+            viewEventEmitter.postValue(ViewEvent.NotEnoughPlayersAlert)
         }
     }
 
@@ -86,6 +96,7 @@ class LobbyViewModel @Inject constructor(
         object ShowUserNotFoundAlert : ViewEvent()
         object DuplicatePlayerAlert : ViewEvent()
         object NotEnoughPlayersAlert : ViewEvent()
+        object GeneralErrorAlert : ViewEvent()
         object ClearText : ViewEvent()
         class SetQRCode(val qrCodeBitmap: Bitmap) : ViewEvent()
     }

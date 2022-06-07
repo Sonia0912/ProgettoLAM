@@ -16,8 +16,12 @@ class HomeViewModel @Inject constructor(private val gameRepository: GameReposito
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
     fun handleCreateGameButton() = viewModelScope.launch {
-        gameRepository.createGame()
-        viewEventEmitter.postValue(ViewEvent.NavigateToLobby)
+        try {
+            gameRepository.createGame()
+            viewEventEmitter.postValue(ViewEvent.NavigateToLobby)
+        } catch (e: Exception) {
+            viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorDialog)
+        }
     }
 
     fun handleJoinGameButton() {
@@ -32,5 +36,6 @@ class HomeViewModel @Inject constructor(private val gameRepository: GameReposito
         object NavigateToLobby : ViewEvent()
         object NavigateToJoinGame : ViewEvent()
         object NavigateToProfile : ViewEvent()
+        object ShowGeneralErrorDialog : ViewEvent()
     }
 }
