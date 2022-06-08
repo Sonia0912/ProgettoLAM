@@ -13,4 +13,6 @@
     <string name="user_not_logged_in_toast">Not logged in</string>
     <string name="user_already_in_game_message">You are already in this game on another device</string>
     <string name="general_error_message">An error has occurred. Please check your network connection and try again</string>
+    <string name="no_network_connection_message">Please check your network connection and try again</string>
+    <string name="invalid_email_message">Please enter a valid email</string>
 </resources>

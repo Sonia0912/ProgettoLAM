@@ -43,6 +43,7 @@ dependencies {
 
     implementation project(path: ':entities')
     implementation project(path: ':usecases')
+    implementation project(path: ':dependencies:android')
     implementation project(path: ':dependencies:firebase')
     implementation project(path: ':dependencies:zxing')
     implementation project(path: ':dataaccess')

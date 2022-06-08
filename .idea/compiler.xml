@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="ProgettoLAM.app" target="11" />
+      <module name="ProgettoLAM.dependencies.android" target="11" />
       <module name="ProgettoLAM.dependencies.firebase" target="11" />
       <module name="ProgettoLAM.dependencies.zxing" target="11" />
     </bytecodeTargetLevel>

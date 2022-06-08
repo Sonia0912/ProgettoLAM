@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/dataaccess" />
             <option value="$PROJECT_DIR$/dependencies" />
+            <option value="$PROJECT_DIR$/dependencies/android" />
             <option value="$PROJECT_DIR$/dependencies/firebase" />
             <option value="$PROJECT_DIR$/dependencies/zxing" />
             <option value="$PROJECT_DIR$/entities" />

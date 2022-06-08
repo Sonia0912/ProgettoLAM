@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,7 @@ class LobbyFragment : Fragment() {
         binding = FragmentLobbyBinding.inflate(inflater)
         initPlayersList()
         setClickListeners()
+        observeViewState()
         observeGameState()
         observeViewEvents()
         return binding.root
@@ -60,6 +62,11 @@ class LobbyFragment : Fragment() {
         binding.buttonStartgame.setOnClickListener {
             viewModel.startGame()
         }
+    }
+
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        binding.progressLayout.isVisible = state == LobbyViewModel.ViewState.Loading
+        binding.editTextAddPlayer.isEnabled = state != LobbyViewModel.ViewState.AddingPlayer
     }
 
     private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) { state ->
@@ -96,17 +103,33 @@ class LobbyFragment : Fragment() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
         when (event) {
             ClearText -> clearText()
+            ShowInvalidEmailAlert -> showInvalidEmailDialog()
+            ShowNoNetworkConnectionAlert -> showNoNetworkConnectionDialog()
             ShowMaxPlayersAlert -> showMaxPlayersDialog()
             ShowUserNotFoundAlert -> showUserNotFoundDialog()
-            DuplicatePlayerAlert -> showDuplicatePlayerDialog()
-            NotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
-            GeneralErrorAlert -> showGeneralErrorDialog()
+            ShowDuplicatePlayerAlert -> showDuplicatePlayerDialog()
+            ShowNotEnoughPlayersAlert -> showNotEnoughPlayersDialog()
+            ShowGeneralErrorAlert -> showGeneralErrorDialog()
             is SetQRCode -> setQRCode(event.qrCodeBitmap)
         }
     }
 
     private fun clearText() {
         binding.editTextAddPlayer.setText("")
+    }
+
+    private fun showInvalidEmailDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.invalid_email_message))
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
+    }
+
+    private fun showNoNetworkConnectionDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.no_network_connection_message))
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
     }
 
     private fun showMaxPlayersDialog() {
