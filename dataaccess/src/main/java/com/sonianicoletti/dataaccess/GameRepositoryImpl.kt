@@ -49,8 +49,14 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getOngoingGameUpdates() = gameFlow?.onEach { game = it }
-        ?.catch { game = null; throw it }
+        ?.catch { cancelGameAndRethrow(it) }
         ?: throw GameNotRunningException()
+
+    private fun cancelGameAndRethrow(throwable: Throwable) {
+        game = null;
+        gameFlow = null;
+        throw throwable
+    }
 
     override suspend fun addPlayer(player: Player) {
         val game = getOngoingGame()
@@ -69,11 +75,10 @@ class GameRepositoryImpl @Inject constructor(
             val game = getOngoingGame()
             val user = authService.getUser() ?: throw UserNotFoundException()
 
-            if (game.host == user.id) {
-                gameService.deleteGame(game.id)
-            } else {
-                game.players.removeAll { it.id == user.id }
-                gameService.updateGame(game)
+            when {
+                game.host == user.id -> gameService.deleteGame(game.id)
+                game.status != GameStatus.LOBBY -> gameService.deleteGame(game.id)
+                else -> game.removePlayer(user.id)
             }
         } catch (e: GameNotRunningException) {
             // do nothing
@@ -81,6 +86,11 @@ class GameRepositoryImpl @Inject constructor(
             gameFlow = null
             this.game = null
         }
+    }
+
+    private suspend fun Game.removePlayer(playerID: String) {
+        players.removeAll { it.id == playerID }
+        gameService.updateGame(this)
     }
 
     override suspend fun updateGameStatus(gameStatus: GameStatus) {

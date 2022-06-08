@@ -33,6 +33,11 @@ class LobbyViewModel @Inject constructor(
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
+    /**
+     * TODO: Add connectivity checks to GameActivity actions
+     *       Implement invites
+     */
+
     fun addPlayer(playerEmail: String) = viewModelScope.launch {
         try {
             validateEmail(playerEmail)
