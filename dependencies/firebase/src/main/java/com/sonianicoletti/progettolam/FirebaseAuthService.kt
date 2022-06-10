@@ -22,14 +22,8 @@ class FirebaseAuthService @Inject constructor(
     // suspend permette di sospendere l'esecuzione della funzione durante operazioni lunghe
     // e' come avere una callback, permette al resto del codice di continuare
     override suspend fun signIn(email: String, password: String): User {
-        val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-        val firebaseUser = authResult.user ?: throw NullPointerException("user is null during login")
-        return User(
-            id = firebaseUser.uid,
-            email = firebaseUser.email.orEmpty(),
-            // nel caso non abbia un nome viene mostrata l'email
-            displayName = firebaseUser.displayName ?: firebaseUser.email.orEmpty()
-        )
+        firebaseAuth.signInWithEmailAndPassword(email, password).await()
+        return userService.getUserByEmail(email)
     }
 
     override suspend fun register(email: String, password: String, displayName: String): User {
@@ -40,7 +34,8 @@ class FirebaseAuthService @Inject constructor(
             id = firebaseUser.uid,
             email = firebaseUser.email.orEmpty(),
             // nel caso non abbia un nome viene mostrata l'email
-            displayName = displayName
+            displayName = displayName,
+            messagingToken = null,
         )
     }
 
@@ -57,12 +52,8 @@ class FirebaseAuthService @Inject constructor(
             .await()
     }
 
-    override suspend fun getUser() = firebaseAuth.currentUser?.let {
-        it.email?.let { email ->
-            val user = userService.getUserByEmail(email)
-            // orEmpty usa una stringa vuota se e' null
-            User(it.uid, email, user.displayName)
-        }
+    override suspend fun getUser() = firebaseAuth.currentUser?.email?.let {
+        userService.getUserByEmail(it)
     }
 
     override suspend fun setNotificationToken(token: String) {

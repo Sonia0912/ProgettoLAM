@@ -36,6 +36,7 @@ class JoinGameFragment : Fragment() {
     ): View {
         binding = FragmentJoinGameBinding.inflate(inflater)
         setClickListeners()
+        handleInvitation()
         observeViewState()
         observeViewEvents()
         return binding.root
@@ -60,6 +61,13 @@ class JoinGameFragment : Fragment() {
     private fun launchQRCodeScanner() {
         val intent = Intent(requireContext(), QRCodeScannerActivity::class.java)
         qrCodeScannerLauncher.launch(intent)
+    }
+
+    private fun handleInvitation() {
+        val invitedGameID = arguments?.getString("GAME_ID")
+        if (invitedGameID != null) {
+            viewModel.joinGame(invitedGameID)
+        }
     }
 
     private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityMainBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
 import com.sonianicoletti.progettolam.ui.main.MainViewModel.ViewEvent.NavigateToAuth
@@ -19,7 +21,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        receiveFirebaseMessage()
         observeViewEvents()
+    }
+
+    private fun receiveFirebaseMessage() {
+        val invitedGameID = intent.extras?.getString("gameID")
+        if (invitedGameID != null) {
+            binding.fragmentContainerView.post {
+                val args = Bundle().apply { putString("GAME_ID", invitedGameID) }
+                findNavController(binding.fragmentContainerView.id).navigate(R.id.joingameFragment, args)
+            }
+        }
     }
 
     override fun onResume() {

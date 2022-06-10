@@ -52,7 +52,7 @@ class LobbyFragment : Fragment() {
         binding.editTextAddPlayer.setOnEditorActionListener { textView, actionId, _ ->
             // quando clicca enter
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.addPlayer(textView.text.toString())
+                viewModel.invitePlayer(textView.text.toString())
                 true
             } else {
                 false

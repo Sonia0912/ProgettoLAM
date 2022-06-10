@@ -19,7 +19,8 @@ class FirebaseUserService @Inject constructor() : UserService {
         return User(
             id = userDocument.id,
             email = email,
-            displayName = userDocument.getString("displayName").orEmpty()
+            displayName = userDocument.getString("displayName").orEmpty(),
+            messagingToken = userDocument.getString("messaging_token")
         )
     }
 }

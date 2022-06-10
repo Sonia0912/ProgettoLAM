@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
-import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.User
-import com.sonianicoletti.entities.exceptions.*
+import com.sonianicoletti.entities.exceptions.DuplicatePlayerException
+import com.sonianicoletti.entities.exceptions.NetworkNotConnectedException
+import com.sonianicoletti.entities.exceptions.NotEnoughPlayersException
+import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
+import com.sonianicoletti.usecases.servives.AuthService
+import com.sonianicoletti.usecases.servives.InvitesService
 import com.sonianicoletti.usecases.servives.NetworkService
 import com.sonianicoletti.usecases.servives.UserService
 import com.sonianicoletti.zxing.QRCodeGenerator
@@ -22,9 +26,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LobbyViewModel @Inject constructor(
     private val userService: UserService,
+    private val authService: AuthService,
     private val qrCodeGenerator: QRCodeGenerator,
     private val gameRepository: GameRepository,
     private val networkService: NetworkService,
+    private val invitesService: InvitesService,
 ) : ViewModel() {
 
     private val viewStateEmitter = MutableLiveData<ViewState>(ViewState.Idle)
@@ -33,35 +39,27 @@ class LobbyViewModel @Inject constructor(
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
-    /**
-     * TODO: Add connectivity checks to GameActivity actions
-     *       Implement invites
-     */
-
-    fun addPlayer(playerEmail: String) = viewModelScope.launch {
+    fun invitePlayer(playerEmail: String) = viewModelScope.launch {
         try {
             validateEmail(playerEmail)
-            viewStateEmitter.postValue(ViewState.AddingPlayer)
             checkNetworkConnectivity()
-            checkPlayerCapacity()
-            val invitedPlayer = userService.getUserByEmail(playerEmail.lowercase())
-            checkDuplicatePlayer(invitedPlayer)
-            addPlayerToGame(Player.fromUser(invitedPlayer))
-        } catch (e: IllegalArgumentException) {
-            viewEventEmitter.postValue(ViewEvent.ShowInvalidEmailAlert)
-        } catch (e: NetworkNotConnectedException) {
-            viewEventEmitter.postValue(ViewEvent.ShowNoNetworkConnectionAlert)
-        } catch (e: UserNotFoundException) {
-            viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
-        } catch (e: MaxPlayersException) {
-            viewEventEmitter.postValue(ViewEvent.ShowMaxPlayersAlert)
-        } catch (e: DuplicatePlayerException) {
-            viewEventEmitter.postValue(ViewEvent.ShowDuplicatePlayerAlert)
+            viewStateEmitter.postValue(ViewState.AddingPlayer)
+            val invitedUser = userService.getUserByEmail(playerEmail.lowercase())
+            checkDuplicatePlayer(invitedUser)
+            inviteUserToGame(invitedUser)
+            clearText()
         } catch (e: Exception) {
+            e.printStackTrace()
             viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorAlert)
         } finally {
             viewStateEmitter.postValue(ViewState.Idle)
         }
+    }
+
+    private suspend fun inviteUserToGame(invitedUser: User) {
+        val game = gameRepository.getOngoingGame()
+        val user = authService.getUser() ?: throw UserNotFoundException()
+        invitesService.sendInvite(game.id, user.displayName, invitedUser)
     }
 
     private fun validateEmail(email: String) {
@@ -81,15 +79,10 @@ class LobbyViewModel @Inject constructor(
         }
     }
 
-    private fun checkPlayerCapacity() {
-        if (gameRepository.getOngoingGame().players.size > 5) {
-            throw MaxPlayersException()
-        }
-    }
-
-    private fun checkDuplicatePlayer(invitedPlayer: User) {
+    private suspend fun checkDuplicatePlayer(invitedPlayer: User) {
         // controllo che non ci sia gia' lo stesso giocatore
-        if (gameRepository.getOngoingGame().players.any { it.id == invitedPlayer.id }) {
+        val game = gameRepository.getOngoingGame()
+        if (gameRepository.isUserInGame(invitedPlayer.id, game.id)) {
             throw DuplicatePlayerException()
         }
     }
@@ -117,8 +110,7 @@ class LobbyViewModel @Inject constructor(
         }
     }
 
-    private suspend fun addPlayerToGame(player: Player) {
-        gameRepository.addPlayer(player)
+    private fun clearText() {
         viewEventEmitter.value = ViewEvent.ClearText
     }
 
