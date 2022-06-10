@@ -3,6 +3,7 @@
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/tableLayoutWeapons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,34 +23,42 @@
                 android:text="" />
 
             <TextView
+                android:id="@+id/Player1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Bob" />
+                tools:text="Bob" />
 
             <TextView
+                android:id="@+id/Player2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="John" />
+                tools:text="John" />
 
             <TextView
+                android:id="@+id/Player3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Thomas" />
+                android:tag="COLUMN_3"
+                tools:text="Thomas" />
 
             <TextView
+                android:id="@+id/Player4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Sarah" />
+                android:tag="COLUMN_4"
+                tools:text="Sarah" />
 
             <TextView
+                android:id="@+id/Player5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Lucy" />
+                android:tag="COLUMN_5"
+                tools:text="Lucy" />
         </TableRow>
 
         <TableRow android:tag="Dagger">

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -20,7 +21,7 @@ class NotesViewModel @Inject constructor(
     var cardsStateEmitter = MutableLiveData<ViewState>()
     var cardsState : LiveData<ViewState> = cardsStateEmitter
 
-    class ViewState(val defaultCards: MutableList<CardItem>)
+    class ViewState(val defaultCards: MutableList<CardItem>, val otherPlayers: MutableList<Player>)
 
     fun handleGameState() {
         viewModelScope.launch {
@@ -30,7 +31,8 @@ class NotesViewModel @Inject constructor(
             var yourCards = currentPlayer?.cards?.map { CardItem.fromCard(it) }.orEmpty().toMutableList()
             var leftoverCards = currentGame.leftoverCards.map { CardItem.fromCard(it) }.toMutableList()
             var defaultCards = yourCards + leftoverCards
-            var viewState = NotesViewModel.ViewState(defaultCards.toMutableList())
+            var otherPlayers = currentGame.players.filter { it.id != currentUser?.id }
+            var viewState = NotesViewModel.ViewState(defaultCards.toMutableList(), otherPlayers.toMutableList())
             cardsStateEmitter.postValue(viewState)
         }
     }
