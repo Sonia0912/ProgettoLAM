@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
@@ -46,14 +47,33 @@ class NotesFragment : Fragment() {
             findNavController().navigate(R.id.cardsFragment)
         }
         // Handle check button (make it stay)
+        val tableCharacters = binding.tableCharacters.root.findCheckboxes()
+        tableCharacters.forEach {
+            it.first.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    gameViewModel.checkedBoxesCharacters.add(it.second to it.third)
+                } else {
+                    gameViewModel.checkedBoxesCharacters.remove(it.second to it.third)
+                }
+            }
+        }
         val tableWeapons = binding.tableWeapons.root.findCheckboxes()
-        val listInGameViewModelThatsAboutTheCheckboxes = mutableListOf<Pair<Int, Int>>()
         tableWeapons.forEach {
             it.first.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    listInGameViewModelThatsAboutTheCheckboxes.add(it.second to it.third)
+                    gameViewModel.checkedBoxesWeapons.add(it.second to it.third)
                 } else {
-                    listInGameViewModelThatsAboutTheCheckboxes.remove(it.second to it.third)
+                    gameViewModel.checkedBoxesWeapons.remove(it.second to it.third)
+                }
+            }
+        }
+        val tableRooms = binding.tableRooms.root.findCheckboxes()
+        tableRooms.forEach {
+            it.first.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    gameViewModel.checkedBoxesRooms.add(it.second to it.third)
+                } else {
+                    gameViewModel.checkedBoxesRooms.remove(it.second to it.third)
                 }
             }
         }
@@ -109,19 +129,38 @@ class NotesFragment : Fragment() {
     }
 
     private fun setPlayersNames(otherPlayers: MutableList<Player>) {
-        binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-        binding.tableRooms.Player1.text = otherPlayers[0].displayName
-        binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-        binding.tableCharacters.Player2.text = otherPlayers[1].displayName
-        binding.tableRooms.Player2.text = otherPlayers[1].displayName
-        binding.tableWeapons.Player2.text = otherPlayers[1].displayName
         when (otherPlayers.size) {
+            1 -> {
+                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+                binding.tableRooms.Player1.text = otherPlayers[0].displayName
+                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+            }
+            2 -> {
+                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+                binding.tableRooms.Player1.text = otherPlayers[0].displayName
+                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+                binding.tableRooms.Player2.text = otherPlayers[1].displayName
+                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
+            }
             3 -> {
+                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+                binding.tableRooms.Player1.text = otherPlayers[0].displayName
+                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+                binding.tableRooms.Player2.text = otherPlayers[1].displayName
+                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName
             }
             4 -> {
+                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+                binding.tableRooms.Player1.text = otherPlayers[0].displayName
+                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+                binding.tableRooms.Player2.text = otherPlayers[1].displayName
+                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName
@@ -130,6 +169,12 @@ class NotesFragment : Fragment() {
                 binding.tableWeapons.Player4.text = otherPlayers[3].displayName
             }
             5 -> {
+                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+                binding.tableRooms.Player1.text = otherPlayers[0].displayName
+                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+                binding.tableRooms.Player2.text = otherPlayers[1].displayName
+                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName

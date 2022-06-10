@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.sonianicoletti.entities.User
 import com.sonianicoletti.progettolam.databinding.FragmentProfileBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,8 +35,13 @@ class ProfileFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        // Cambia il display name e salva le modifiche
-        // TODO
+        // Mostra l'e-mail e lo username dell'utente
+        viewModel.userState.observe(viewLifecycleOwner) {
+            setInformation(it.user)
+        }
+
+        // Salva le modifiche allo username
+
 
         // Logout
         binding.buttonLogOut.setOnClickListener {
@@ -57,6 +63,11 @@ class ProfileFragment : Fragment() {
         when (it) {
             ProfileViewModel.ViewEvent.NavigateToLogin -> navigateToLogin()
         }
+    }
+
+    private fun setInformation(user: User) {
+        binding.textViewUserEmail.text = user.email
+        binding.editTextDisplayName.setText(user.displayName)
     }
 
 }

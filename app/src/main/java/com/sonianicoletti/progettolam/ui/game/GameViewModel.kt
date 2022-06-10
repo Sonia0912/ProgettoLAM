@@ -9,7 +9,6 @@ import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
-import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -27,6 +26,10 @@ class GameViewModel @Inject constructor(
     val gameState: LiveData<GameState> = gameStateEmitter
 
     private val observeGameJob = Job()
+
+    var checkedBoxesCharacters = mutableListOf<Pair<Int, Int>>()
+    var checkedBoxesWeapons = mutableListOf<Pair<Int, Int>>()
+    var checkedBoxesRooms = mutableListOf<Pair<Int, Int>>()
 
     init {
         observeGameUpdates()
