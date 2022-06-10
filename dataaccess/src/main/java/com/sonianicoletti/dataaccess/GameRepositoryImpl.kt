@@ -110,34 +110,9 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun distributeCards() {
         val game = getOngoingGame()
-
-        val characterCards = mutableListOf(
-            Card("Mrs Peacock", "character"),
-            Card("Colonel Mustard", "character"),
-            Card("Reverend Green", "character"),
-            Card("Professor Plum", "character"),
-            Card("Mrs White", "character"),
-            Card("Miss Scarlett", "character")
-        )
-        val weaponCards = mutableListOf(
-            Card("Candlestick", "weapon"),
-            Card("Revolver", "weapon"),
-            Card("Rope", "weapon"),
-            Card("Dagger", "weapon"),
-            Card("Lead Pipe", "weapon"),
-            Card("Wrench", "weapon")
-        )
-        val roomCards = mutableListOf(
-            Card("Kitchen", "room"),
-            Card("Library", "room"),
-            Card("Lounge", "room"),
-            Card("Study", "room"),
-            Card("Ballroom", "room"),
-            Card("Billiard Room", "room"),
-            Card("Conservatory", "room"),
-            Card("Dining Room", "room"),
-            Card("Hall", "room")
-        )
+        val characterCards = Cards.characters.toMutableList()
+        val weaponCards = Cards.weapons.toMutableList()
+        val roomCards = Cards.rooms.toMutableList()
 
         // carte soluzione
         val characterSolution = characterCards.random()

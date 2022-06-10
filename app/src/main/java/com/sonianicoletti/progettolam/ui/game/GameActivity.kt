@@ -69,6 +69,7 @@ class GameActivity : AppCompatActivity() {
         binding.navigationFab.setOnClickListener { viewModel.handleNavigationFabClick() }
         binding.cardsFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment) }
         binding.notesFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment) }
+        binding.accusationFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.accusationFragment) }
     }
 
     private fun prepareNavDestinationListener() {

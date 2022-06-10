@@ -20,6 +20,7 @@
             android:id="@+id/action_charactersFragment_to_cardsFragment"
             app:destination="@id/cardsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/cardsFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.cards.CardsFragment"
@@ -29,6 +30,7 @@
             android:id="@+id/action_cardsFragment_to_notesFragment"
             app:destination="@id/notesFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/notesFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.notes.NotesFragment"
@@ -38,9 +40,17 @@
             android:id="@+id/action_notesFragment_to_cardsFragment"
             app:destination="@id/cardsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/rulesFragment"
         android:name="com.sonianicoletti.progettolam.ui.shared.RulesFragment"
         android:label="fragment_rules"
         tools:layout="@layout/fragment_rules"/>
+
+    <fragment
+        android:id="@+id/accusationFragment"
+        android:name="com.sonianicoletti.progettolam.ui.game.accusation.AccusationFragment"
+        android:label="fragment_accusation"
+        tools:layout="@layout/fragment_accusation" />
+
 </navigation>
