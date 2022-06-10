@@ -2,10 +2,13 @@ package com.sonianicoletti.progettolam.ui.game
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
@@ -24,9 +27,14 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         initActionBar()
         observeViewEvents()
-        setContentView(binding.root)
+        prepareNavDestinationListener()
     }
 
     private fun initActionBar() {
@@ -52,13 +60,13 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun openRulesFragment() {
-        binding.toolBar.isVisible = false
         findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
     }
 
-    override fun onBackPressed() {
-        binding.toolBar.isVisible = true
-        super.onBackPressed()
+    private fun prepareNavDestinationListener() {
+        findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
+            binding.toolBar.isVisible = destination.id != R.id.notesFragment
+        }
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->
@@ -67,7 +75,6 @@ class GameActivity : AppCompatActivity() {
             NavigateToMain -> navigateToMain()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
-            ShowDefaultToolbar -> showDefaultToolbar()
         }
     }
 
@@ -89,9 +96,5 @@ class GameActivity : AppCompatActivity() {
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showDefaultToolbar() {
-        binding.toolBar.isVisible = true
     }
 }

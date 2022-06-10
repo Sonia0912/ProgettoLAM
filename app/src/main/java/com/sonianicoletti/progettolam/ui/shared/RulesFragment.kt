@@ -15,15 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class RulesFragment : Fragment() {
 
     private lateinit var binding: FragmentRulesBinding
-    private val gameViewModel: GameViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentRulesBinding.inflate(inflater)
         binding.imageViewBack.setOnClickListener {
-            gameViewModel.showDefaultToolbar()
             findNavController().navigateUp()
         }
         return binding.root

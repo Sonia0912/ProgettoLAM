@@ -45,7 +45,18 @@ class NotesFragment : Fragment() {
             findNavController().navigate(R.id.cardsFragment)
         }
         // Handle check button (make it stay)
-        // TODO
+        val tableWeapons = binding.tableWeapons.root.findCheckboxes()
+        val listInGameViewModelThatsAboutTheCheckboxes = mutableListOf<Pair<Int, Int>>()
+        tableWeapons.forEach {
+            it.first.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    listInGameViewModelThatsAboutTheCheckboxes.add(it.second to it.third)
+                } else {
+                    listInGameViewModelThatsAboutTheCheckboxes.remove(it.second to it.third)
+                }
+            }
+        }
+
         // Handle types of notes
         binding.buttonCharacters.setOnClickListener {
             binding.tableCharacters.tableLayoutCharacters.isVisible = true
@@ -62,6 +73,7 @@ class NotesFragment : Fragment() {
             binding.tableWeapons.tableLayoutWeapons.visibility = View.GONE
             binding.tableCharacters.tableLayoutCharacters.visibility = View.GONE
         }
+
         return binding.root
     }
 
@@ -107,5 +119,17 @@ class NotesFragment : Fragment() {
             }
         }
         return viewsWithTag
+    }
+
+    private fun ViewGroup.findCheckboxes(): List<Triple<CheckBox, Int, Int>> {
+        val checkboxesIndexed = mutableListOf<Triple<CheckBox, Int, Int>>()
+        children.forEachIndexed { column, tableRow ->
+            (tableRow as? TableRow)?.children?.forEachIndexed { row, tableCell ->
+                if (tableCell is CheckBox) {
+                    checkboxesIndexed.add(Triple(tableCell, column, row))
+                }
+            }
+        }
+        return checkboxesIndexed
     }
 }
