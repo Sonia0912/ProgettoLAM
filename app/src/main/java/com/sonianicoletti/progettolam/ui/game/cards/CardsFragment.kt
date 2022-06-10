@@ -28,8 +28,7 @@ class CardsFragment : Fragment() {
         binding = FragmentCardsBinding.inflate(inflater)
         initCardsAdapters()
         observeGameState()
-        observeCardsState()
-        setClickListeners()
+        observeViewState()
         return binding.root
     }
 
@@ -43,25 +42,19 @@ class CardsFragment : Fragment() {
 
     private fun observeGameState() {
         gameViewModel.gameState.observe(viewLifecycleOwner) {
-            viewModel.handleGameState(it.game)
+            viewModel.handleGameState(it)
         }
     }
 
-    private fun observeCardsState() {
-        viewModel.cardsState.observe(viewLifecycleOwner) {
+    private fun observeViewState() {
+        viewModel.viewState.observe(viewLifecycleOwner) {
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
+            binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
         }
     }
 
     private fun RecyclerView.updateList(cards: List<CardItem>) {
         (adapter as CardsAdapter).updateList(cards)
-    }
-
-    private fun setClickListeners() {
-        // Handle notes button
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.notesFragment)
-        }
     }
 }

@@ -34,4 +34,6 @@ interface GameRepository {
 
     suspend fun distributeCards()
 
+    suspend fun nextTurn()
+
 }

@@ -166,21 +166,16 @@ class GameRepositoryImpl @Inject constructor(
         gameService.updateGame(game)
     }
 
-    private suspend fun saveSolutionCards(solutionCards : List<Card>) {
+    override suspend fun nextTurn() {
         val game = getOngoingGame()
-        game.solutionCards = solutionCards.toMutableList()
-        gameService.updateGame(game)
-    }
+        val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
 
-    private suspend fun assignCardsToPlayer(playerIndex: Int, yourCards : List<Card>) {
-        val game = getOngoingGame()
-        game.players[playerIndex].cards = yourCards
-        gameService.updateGame(game)
-    }
+        game.turnPlayerId = when (turnPlayer) {
+            null -> game.players.first()
+            game.players.last() -> game.players.first()
+            else -> game.players[game.players.indexOf(turnPlayer) + 1]
+        }.id
 
-    private suspend fun saveLeftoverCards(leftoverCards : List<Card>) {
-        val game = getOngoingGame()
-        game.leftoverCards = leftoverCards.toMutableList()
         gameService.updateGame(game)
     }
 }

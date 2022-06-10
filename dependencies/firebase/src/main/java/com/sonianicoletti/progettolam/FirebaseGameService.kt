@@ -32,7 +32,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             status = GameStatus.LOBBY,
             players = mutableListOf(currentPlayer),
             leftoverCards = mutableListOf(),
-            solutionCards = mutableListOf()
+            solutionCards = mutableListOf(),
+            turnPlayerId = ""
         )
     }
 
@@ -69,6 +70,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         PLAYERS to players,
         SOLUTION_CARDS to solutionCards,
         LEFTOVER_CARDS to leftoverCards,
+        TURN_PLAYER to turnPlayerId
     )
 
     override suspend fun getGameByID(gameID: String): Game {
@@ -124,7 +126,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             status = GameStatus.fromValue(getString(STATUS)),
             players = players,
             leftoverCards = leftoverCards,
-            solutionCards = solutionCards
+            solutionCards = solutionCards,
+            turnPlayerId = getString(TURN_PLAYER).orEmpty()
         )
     }
 
@@ -150,5 +153,6 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val PLAYERS = "players"
         private const val SOLUTION_CARDS = "solution_cards"
         private const val LEFTOVER_CARDS = "leftover_cards"
+        private const val TURN_PLAYER = "turn_player"
     }
 }

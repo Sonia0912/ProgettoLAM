@@ -33,6 +33,8 @@ class GameActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         initActionBar()
+        initNavigationFab()
+        observeViewState()
         observeViewEvents()
         prepareNavDestinationListener()
     }
@@ -63,10 +65,23 @@ class GameActivity : AppCompatActivity() {
         findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
     }
 
+    private fun initNavigationFab() {
+        binding.navigationFab.setOnClickListener { viewModel.handleNavigationFabClick() }
+        binding.cardsFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment) }
+        binding.notesFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment) }
+    }
+
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
             binding.toolBar.isVisible = destination.id != R.id.notesFragment
+            binding.navigationFab.isVisible = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
         }
+    }
+
+    private fun observeViewState() = viewModel.viewState.observe(this) { state ->
+        binding.cardsFragmentFab.isVisible = state.navigationFabOpened
+        binding.notesFragmentFab.isVisible = state.navigationFabOpened
+        binding.accusationFragmentFab.isVisible = state.navigationFabOpened
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->

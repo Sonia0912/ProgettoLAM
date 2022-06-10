@@ -6,5 +6,6 @@ data class Game(
     var status: GameStatus,
     val players: MutableList<Player>,
     var leftoverCards: MutableList<Card>,
-    var solutionCards: MutableList<Card>
+    var solutionCards: MutableList<Card>,
+    var turnPlayerId: String,
 )

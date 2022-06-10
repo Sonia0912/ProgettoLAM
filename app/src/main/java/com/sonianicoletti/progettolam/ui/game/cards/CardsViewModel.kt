@@ -6,41 +6,64 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.Player
+import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
+import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(
     private val gameRepository: GameRepository,
-    private val authService: AuthService
+    private val authService: AuthService,
 ) : ViewModel() {
 
-    private val cardsStateEmitter = MutableLiveData<ViewState>()
-    val cardsState : LiveData<ViewState> = cardsStateEmitter
+    private val viewStateEmitter = MutableLiveData<ViewState>()
+    val viewState : LiveData<ViewState> = viewStateEmitter
 
-    fun handleGameState(game: Game) {
+    init {
+        initialiseGame()
+    }
+
+    private fun initialiseGame() {
+        val game = gameRepository.getOngoingGame()
         viewModelScope.launch {
-            prepareCards(game)
+            if (gameRepository.isUserHost(game)) {
+                delay(3000)
+                gameRepository.nextTurn()
+            }
         }
     }
 
-    private suspend fun prepareCards(game: Game) {
+    fun handleGameState(gameState: GameState) = viewModelScope.launch {
+        if (gameRepository.isUserHost(gameState.game)) {
+            prepareViewState(gameState.game)
+        }
+    }
+
+    private suspend fun prepareViewState(game: Game) {
         val currentUser = authService.getUser()
         val currentPlayer = game.players.find { it.id == currentUser?.id }
-
         val yourCards = currentPlayer?.cards.mapToCardItems()
         val leftoverCards = game.leftoverCards.mapToCardItems()
 
-        val viewState = ViewState(yourCards, leftoverCards)
-        cardsStateEmitter.postValue(viewState)
+        val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
+
+        val viewState = ViewState(yourCards, leftoverCards, turnPlayer)
+        viewStateEmitter.postValue(viewState)
     }
 
     private fun List<Card>?.mapToCardItems(): MutableList<CardItem> {
         return orEmpty().map { CardItem.fromCard(it) }.toMutableList()
     }
 
-    class ViewState(val yourCards: MutableList<CardItem>, val leftoverCards: MutableList<CardItem>)
+    data class ViewState(
+        val yourCards: MutableList<CardItem>,
+        val leftoverCards: MutableList<CardItem>,
+        val turnPlayer: Player?,
+    )
 }
