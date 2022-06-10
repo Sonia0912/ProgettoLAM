@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TableRow
 import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -65,10 +66,19 @@ class NotesFragment : Fragment() {
     }
 
     private fun hideNonPlayerColumns(game: Game) {
-        val columnTags = listOf(null, null, null, "COLUMN_3", "COLUMN_4", "COLUMN_5")
-        for (i in 0 until game.players.size) {
-            columnTags[i]?.let { columnTag ->
-                findViewsWithTag(columnTag).forEach { it.isVisible = false }
+        val tables = listOf(binding.tableCharacters, binding.tableRooms, binding.tableWeapons)
+        when (game.players.size) {
+            3 -> {
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_3").forEach { it.isVisible = false } }
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_4").forEach { it.isVisible = false } }
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_5").forEach { it.isVisible = false } }
+            }
+            4 -> {
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_4").forEach { it.isVisible = false } }
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_5").forEach { it.isVisible = false } }
+            }
+            5 -> {
+                tables.forEach { (it.root as ViewGroup).findViewsWithTag("COLUMN_5").forEach { it.isVisible = false } }
             }
         }
     }
@@ -85,5 +95,17 @@ class NotesFragment : Fragment() {
         }
     }
 
-    private fun findViewsWithTag(tag: String) = binding.tableRooms.tableLayoutRooms.children.filter { it.tag == tag }
+    private fun ViewGroup.findViewsWithTag(tag: String): List<View> {
+        val viewsWithTag = mutableListOf<View>()
+        children.forEach {
+            if (it.tag == tag) {
+                viewsWithTag.add(it)
+            }
+
+            if (it is ViewGroup) {
+                viewsWithTag.addAll(it.findViewsWithTag(tag))
+            }
+        }
+        return viewsWithTag
+    }
 }
