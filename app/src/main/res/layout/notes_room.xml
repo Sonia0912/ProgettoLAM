@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tableLayoutRooms"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -20,37 +21,42 @@
             android:text="" />
 
         <TextView
+            android:id="@+id/Player1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
-            android:text="Bob" />
+            tools:text="Bob" />
 
         <TextView
+            android:id="@+id/Player2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
-            android:text="John" />
+            tools:text="John" />
 
         <TextView
+            android:id="@+id/Player3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:tag="COLUMN_3"
-            android:text="Thomas" />
+            tools:text="Thomas" />
 
         <TextView
+            android:id="@+id/Player4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:tag="COLUMN_4"
-            android:text="Sarah" />
+            tools:text="Sarah" />
 
         <TextView
+            android:id="@+id/Player5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:tag="COLUMN_5"
-            android:text="Lucy" />
+            tools:text="Lucy" />
     </TableRow>
 
     <TableRow android:tag="Ballroom">

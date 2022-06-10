@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TableRow
 import androidx.core.view.children
-import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
@@ -32,20 +32,22 @@ class NotesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNotesBinding.inflate(inflater)
-        // Check default notes (your cards + leftover cards)
+        // Set players' names in columns
+        // Check default notes and hide non-player columns (your cards + leftover cards)
         gameViewModel.gameState.observe(viewLifecycleOwner) {
             hideNonPlayerColumns(it.game)
             viewModel.handleGameState()
         }
         viewModel.cardsState.observe(viewLifecycleOwner) {
             disableDefaultNotes(it.defaultCards)
+            setPlayersNames(it.otherPlayers)
         }
         // Handle cards button
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.cardsFragment)
         }
         // Handle check button (make it stay)
-        // TODO
+
         // Handle types of notes
         binding.buttonCharacters.setOnClickListener {
             binding.tableCharacters.tableLayoutCharacters.isVisible = true
@@ -91,6 +93,41 @@ class NotesFragment : Fragment() {
                     isEnabled = false
                     isChecked = true
                 }
+            }
+        }
+    }
+
+    private fun setPlayersNames(otherPlayers: MutableList<Player>) {
+        binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+        binding.tableRooms.Player1.text = otherPlayers[0].displayName
+        binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+        binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+        binding.tableRooms.Player2.text = otherPlayers[1].displayName
+        binding.tableWeapons.Player2.text = otherPlayers[1].displayName
+        when (otherPlayers.size) {
+            3 -> {
+                binding.tableCharacters.Player3.text = otherPlayers[2].displayName
+                binding.tableRooms.Player3.text = otherPlayers[2].displayName
+                binding.tableWeapons.Player3.text = otherPlayers[2].displayName
+            }
+            4 -> {
+                binding.tableCharacters.Player3.text = otherPlayers[2].displayName
+                binding.tableRooms.Player3.text = otherPlayers[2].displayName
+                binding.tableWeapons.Player3.text = otherPlayers[2].displayName
+                binding.tableCharacters.Player4.text = otherPlayers[3].displayName
+                binding.tableRooms.Player4.text = otherPlayers[3].displayName
+                binding.tableWeapons.Player4.text = otherPlayers[3].displayName
+            }
+            5 -> {
+                binding.tableCharacters.Player3.text = otherPlayers[2].displayName
+                binding.tableRooms.Player3.text = otherPlayers[2].displayName
+                binding.tableWeapons.Player3.text = otherPlayers[2].displayName
+                binding.tableCharacters.Player4.text = otherPlayers[3].displayName
+                binding.tableRooms.Player4.text = otherPlayers[3].displayName
+                binding.tableWeapons.Player4.text = otherPlayers[3].displayName
+                binding.tableCharacters.Player5.text = otherPlayers[4].displayName
+                binding.tableRooms.Player5.text = otherPlayers[4].displayName
+                binding.tableWeapons.Player5.text = otherPlayers[4].displayName
             }
         }
     }
