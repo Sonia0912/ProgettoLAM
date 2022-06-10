@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_joingameFragment"
             app:destination="@id/joingameFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_rulesFragment"
+            app:destination="@id/rulesFragment" />
     </fragment>
 
     <fragment
@@ -29,5 +32,10 @@
         android:name="com.sonianicoletti.progettolam.ui.main.joingame.JoinGameFragment"
         android:label="fragment_joingame"
         tools:layout="@layout/fragment_join_game" />
+    <fragment
+        android:id="@+id/rulesFragment"
+        android:name="com.sonianicoletti.progettolam.ui.shared.RulesFragment"
+        android:label="fragment_rules"
+        tools:layout="@layout/fragment_rules"/>
 
 </navigation>

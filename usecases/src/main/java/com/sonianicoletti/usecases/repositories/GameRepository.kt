@@ -29,4 +29,9 @@ interface GameRepository {
     suspend fun updateGameStatus(gameStatus: GameStatus)
 
     suspend fun updateCharacter(userID: String, character: Character)
+
+    suspend fun isUserHost(game: Game): Boolean
+
+    suspend fun distributeCards()
+
 }

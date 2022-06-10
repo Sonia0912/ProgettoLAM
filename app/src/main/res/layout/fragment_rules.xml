@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/textViewPreparation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="Preparation"
+        app:layout_constraintBottom_toTopOf="@+id/scrollViewPreparation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+
+    <ScrollView
+        android:id="@+id/scrollViewPreparation"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewHowToPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPreparation">
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This game can be played by 3 to 6 people. The host of the game can invite people by their e-mail or players can join through game ID or QR code. Once everyone has joined the lobby, the host can start the game. \n If any player leaves the game when it's not finished the game will automatically end. \n The game has 6 character cards, 6 weapon cards and 9 room cards, the objective is for you to guess Who, How and Where the victim was murdered. \n The three solution cards will be kept secret since the beginning of the game, the remaining cards will be mixed and equally distributed to all the players. If there are leftover cards these will be visible to all players." />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textViewHowToPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="How to play"
+        app:layout_constraintBottom_toTopOf="@+id/scrollViewHowToPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollViewPreparation" />
+
+    <ScrollView
+        android:id="@+id/scrollViewHowToPlay"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewVictory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewHowToPlay">
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="During the game you can always switch between your cards and your notes to prepare your strategy. \n At your turn, you'll be able to make one accustion, declaring who, how and where the murder happened. If the other players have a card that can deny your accusation they must hand it to you, you can then proceed to update your notes. \n If it's your turn to deny an accusation and you have more than one card that can deny it, you can choose which one you want to send. Only the two players who are exchanging the card can see it." />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textViewVictory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="Victory"
+        app:layout_constraintTop_toBottomOf="@+id/scrollViewHowToPlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/scrollViewVictory"/>
+
+    <ScrollView
+        android:id="@+id/scrollViewVictory"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVictory"
+        app:layout_constraintVertical_weight="1">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="To win the game you need to guess all the 3 secret cards: the muderer, the weapon and the room. \n When it's your turn you can make an accusation and declare it as final, which means the other players won't try to deny your accusation but you will directly look at the secert cards. If your accusation matches the secret cards, you have won! If not, the game will continue but you won't be allowed to play, but you will still deny accusations whenever it's required." />
+    </ScrollView>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/ToolbarTheme">
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Rules"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

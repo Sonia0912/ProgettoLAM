@@ -44,13 +44,8 @@ class GameViewModel @Inject constructor(
     }
 
     private suspend fun handleGameUpdate(game: Game) {
-        val isHost = isUserHost(game)
+        val isHost = gameRepository.isUserHost(game)
         gameStateEmitter.postValue(GameState(game, isHost))
-    }
-
-    private suspend fun isUserHost(game: Game): Boolean {
-        val user = authService.getUser() ?: throw UserNotLoggedInException()
-        return user.id == game.host
     }
 
     private fun handleGameNotRunning() = viewModelScope.launch {
@@ -72,10 +67,15 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun showDefaultToolbar() {
+        viewEventEmitter.value = ViewEvent.ShowDefaultToolbar
+    }
+
     sealed class ViewEvent {
         object ShowUserNotLoggedInToast : ViewEvent()
         object ShowGameNotRunningToast : ViewEvent()
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
+        object ShowDefaultToolbar : ViewEvent()
     }
 }

@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
@@ -21,7 +23,7 @@ class CharactersFragment : Fragment() {
 
     private lateinit var binding: FragmentCharactersBinding
     private val viewModel: CharactersViewModel by viewModels()
-    private val gameViewModel: GameViewModel by viewModels()
+    private val gameViewModel: GameViewModel by activityViewModels()
 
     private lateinit var adapter: CharactersAdapter
 
@@ -44,7 +46,7 @@ class CharactersFragment : Fragment() {
         observeCharacterItems()
     }
 
-    private fun observeCharacterItems() = viewModel.selectedCharacters.observe(viewLifecycleOwner) { characterItems ->
+    private fun observeCharacterItems() = viewModel.characters.observe(viewLifecycleOwner) { characterItems ->
         adapter.updateItems(characterItems)
     }
 
@@ -57,6 +59,7 @@ class CharactersFragment : Fragment() {
             is ShowCharacterTaken -> Unit // TODO: Implement
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
+            NavigateToCards ->  navigateToCards()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
         }
@@ -72,6 +75,10 @@ class CharactersFragment : Fragment() {
         val intent = Intent(requireContext(), AuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun navigateToCards() {
+        findNavController().navigate(R.id.action_charactersFragment_to_cardsFragment)
     }
 
     private fun showGameNotRunningToast() {

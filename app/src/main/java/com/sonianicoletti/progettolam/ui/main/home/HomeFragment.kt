@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
         binding.createGameButton.setOnClickListener { viewModel.handleCreateGameButton() }
         binding.joinGameButton.setOnClickListener { viewModel.handleJoinGameButton() }
         binding.imageViewPerson.setOnClickListener { viewModel.handleProfileButton() }
+        binding.imageViewRules.setOnClickListener { viewModel.handleRulesButton() }
     }
 
     private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
             NavigateToLobby -> navigateToLobby()
             NavigateToJoinGame -> findNavController().navigate(R.id.action_homeFragment_to_joingameFragment)
             NavigateToProfile -> findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+            NavigateToRules -> findNavController().navigate(R.id.action_homeFragment_to_rulesFragment)
             ShowGeneralErrorDialog -> showGeneralErrorDialog()
         }
     }
