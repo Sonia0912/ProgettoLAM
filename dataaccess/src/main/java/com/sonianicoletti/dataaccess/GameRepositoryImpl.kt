@@ -109,6 +109,8 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun distributeCards() {
+        val game = getOngoingGame()
+
         val characterCards = mutableListOf(
             Card("Mrs Peacock", "character"),
             Card("Colonel Mustard", "character"),
@@ -144,24 +146,24 @@ class GameRepositoryImpl @Inject constructor(
         weaponCards.remove(weaponSolution)
         val roomSolution = roomCards.random()
         roomCards.remove(roomSolution)
-        val solutionCards = listOf(characterSolution, weaponSolution, roomSolution)
-        println("Solution Cards: $solutionCards")
-        saveSolutionCards(solutionCards)
+        val solutionCards = mutableListOf(characterSolution, weaponSolution, roomSolution)
+        game.solutionCards = solutionCards
 
         // carte distribuite tra i giocatori
-//        val allCards = (characterCards + weaponCards + roomCards).toMutableList()
-//        val game = getOngoingGame()
-//        val numberOfCardsEach = (18 / game.players.size)
-//        for(i in 0 until game.players.size) {
-//            var yourCards = allCards.asSequence().shuffled().take(numberOfCardsEach).toList()
-//            yourCards.forEach { allCards.remove(it) }
-//            assignCardsToPlayer(i, yourCards)
-//        }
-//
-//        // carte rimanenti
-//        if (18 % game.players.size != 0) {
-//            saveLeftoverCards(allCards)
-//        }
+        val allCards = (characterCards + weaponCards + roomCards).toMutableList()
+        val numberOfCardsEach = (18 / game.players.size)
+
+        game.players.forEach { player ->
+            val yourCards = allCards.asSequence().shuffled().take(numberOfCardsEach).toList()
+            player.cards = yourCards
+            allCards.removeAll(yourCards)
+        }
+
+        // carte rimanenti
+        if (18 % game.players.size != 0) {
+            game.leftoverCards = allCards
+        }
+        gameService.updateGame(game)
     }
 
     private suspend fun saveSolutionCards(solutionCards : List<Card>) {
@@ -170,7 +172,7 @@ class GameRepositoryImpl @Inject constructor(
         gameService.updateGame(game)
     }
 
-    private suspend fun assignCardsToPlayer(playerIndex : Int, yourCards : List<Card>) {
+    private suspend fun assignCardsToPlayer(playerIndex: Int, yourCards : List<Card>) {
         val game = getOngoingGame()
         game.players[playerIndex].cards = yourCards
         gameService.updateGame(game)

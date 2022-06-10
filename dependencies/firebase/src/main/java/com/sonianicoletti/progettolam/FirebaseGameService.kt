@@ -53,7 +53,6 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         PLAYERS to listOf(currentPlayer)
     )
 
-
     private suspend fun addGameToFirestore(gameData: HashMap<String, Any>, gameID: String) = firestore.collection(GAMES_COLLECTION)
         .document(gameID)
         .set(gameData)
@@ -130,12 +129,12 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     }
 
     private fun getLeftoverCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot["leftoverCards"] as? List<HashMap<String, Any>> ?: emptyList()
+        val cardsMapList = gameSnapshot["leftover_cards"] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
     private fun getSolutionCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot["solutionCards"] as? List<HashMap<String, Any>> ?: emptyList()
+        val cardsMapList = gameSnapshot["solution_cards"] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
