@@ -10,5 +10,5 @@ interface InvitesService {
 
     suspend fun listenForInvites() : Flow<Invitation>
 
-    suspend fun onInviteReceived(invite: Invitation)
+    fun onInviteReceived(invite: Invitation)
 }

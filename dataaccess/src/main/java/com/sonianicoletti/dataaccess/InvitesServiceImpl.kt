@@ -48,8 +48,8 @@ class InvitesServiceImpl @Inject constructor() : InvitesService {
         return invitesFlow
     }
 
-    override suspend fun onInviteReceived(invite: Invitation) {
-        invitesFlow.emit(invite)
+    override fun onInviteReceived(invite: Invitation) {
+        invitesFlow.tryEmit(invite)
     }
 
     companion object {
