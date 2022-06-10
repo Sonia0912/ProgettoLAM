@@ -1,9 +1,12 @@
 package com.sonianicoletti.dataaccess
 
+import com.sonianicoletti.entities.Invitation
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.usecases.servives.InvitesService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -21,6 +24,8 @@ class InvitesServiceImpl @Inject constructor() : InvitesService {
         .build()
         .create<MessagingApi>()
 
+    private val invitesFlow = MutableSharedFlow<Invitation>()
+
     override suspend fun sendInvite(gameID: String, inviter: String, targetUser: User) {
         targetUser.messagingToken?.let { token ->
             val messageBody = MessageRequest(
@@ -29,7 +34,7 @@ class InvitesServiceImpl @Inject constructor() : InvitesService {
                     "$inviter has invited you to a game",
                     "Click here to join"
                 ),
-                data = InviteData(gameID = gameID)
+                data = InviteData(gameID = gameID, inviter = inviter)
             )
 
             messagingApi.send(
@@ -37,6 +42,14 @@ class InvitesServiceImpl @Inject constructor() : InvitesService {
                 body = messageBody
             )
         }
+    }
+
+    override suspend fun listenForInvites(): Flow<Invitation> {
+        return invitesFlow
+    }
+
+    override suspend fun onInviteReceived(invite: Invitation) {
+        invitesFlow.emit(invite)
     }
 
     companion object {

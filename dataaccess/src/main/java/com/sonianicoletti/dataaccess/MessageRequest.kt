@@ -13,4 +13,5 @@ data class NotificationBody(
 
 data class InviteData(
     val gameID: String,
+    val inviter: String
 )

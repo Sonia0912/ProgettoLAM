@@ -1,6 +1,7 @@
 package com.sonianicoletti.progettolam
 
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import com.sonianicoletti.usecases.servives.AuthService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -16,6 +17,16 @@ class FirebaseMessagingServiceImpl: FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        appScope.launch { authService.setNotificationToken(token) }
+        try {
+            appScope.launch { authService.setNotificationToken(token) }
+        } catch (e: Exception) {
+            // do nothing
+        }
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+
+
     }
 }

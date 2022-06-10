@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityMainBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->
         when (event) {
             NavigateToAuth -> navigateToAuth()
+            is MainViewModel.ViewEvent.InvitationReceived -> showInvitationMessage(event.inviter, event.gameID)
         }
     }
 
@@ -50,5 +52,20 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, AuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun showInvitationMessage(inviter: String, gameID: String) {
+        MaterialAlertDialogBuilder(this)
+            .setMessage("$inviter invited you to join the game")
+            .setPositiveButton("Accept") { _, _ ->
+                run {
+                    binding.fragmentContainerView.post {
+                        val args = Bundle().apply { putString("GAME_ID", gameID) }
+                        findNavController(binding.fragmentContainerView.id).navigate(R.id.joingameFragment, args)
+                    }
+                }
+            }
+            .setNegativeButton("Decline") { _, _ -> }
+            .show()
     }
 }

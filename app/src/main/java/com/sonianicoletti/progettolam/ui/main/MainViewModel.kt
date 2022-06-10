@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.progettolam.ui.main.MainViewModel.ViewEvent.NavigateToAuth
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
+import com.sonianicoletti.usecases.servives.InvitesService
 import com.sonianicoletti.usecases.utils.MessagingTokenRefresher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val authService: AuthService,
     private val messagingTokenRefresher: MessagingTokenRefresher,
+    private val inviteService: InvitesService
 ) : ViewModel() {
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
@@ -22,6 +24,7 @@ class MainViewModel @Inject constructor(
 
     init {
         refreshMessagingToken()
+        listenForInvites()
     }
 
     private fun refreshMessagingToken() {
@@ -35,7 +38,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun listenForInvites() = viewModelScope.launch {
+        inviteService.listenForInvites().collect {
+            viewEventEmitter.postValue(ViewEvent.InvitationReceived(it.inviter, it.gameID))
+        }
+    }
+
     sealed class ViewEvent {
         object NavigateToAuth : ViewEvent()
+        data class InvitationReceived(val inviter: String, val gameID: String) : ViewEvent()
     }
 }
