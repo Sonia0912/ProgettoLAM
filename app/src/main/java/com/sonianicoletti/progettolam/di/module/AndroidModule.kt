@@ -14,5 +14,6 @@ import dagger.hilt.components.SingletonComponent
 class AndroidModule {
 
     @Provides
-    fun provideNetworkService(@ApplicationContext applicationContext: Context): NetworkService = NetworkServiceImpl(applicationContext)
+    fun provideNetworkService(@ApplicationContext applicationContext: Context): NetworkService =
+        NetworkServiceImpl(applicationContext)
 }

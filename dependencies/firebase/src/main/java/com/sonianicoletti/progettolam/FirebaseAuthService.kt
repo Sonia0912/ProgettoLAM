@@ -64,5 +64,16 @@ class FirebaseAuthService @Inject constructor(
         }
     }
 
+    override suspend fun setNotificationToken(token: String) {
+        val user = getUser()
+
+        if (user != null) {
+            firestore.collection("users")
+                .document(user.id)
+                .update("messaging_token", token)
+                .await()
+        }
+    }
+
     override fun signOut() = firebaseAuth.signOut()
 }
