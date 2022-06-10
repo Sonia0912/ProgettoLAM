@@ -67,11 +67,14 @@ class GameActivity : AppCompatActivity() {
 
     private fun initNavigationFab() {
         binding.navigationFab.setOnClickListener { viewModel.handleNavigationFabClick() }
+        binding.cardsFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment) }
+        binding.notesFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment) }
     }
 
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
             binding.toolBar.isVisible = destination.id != R.id.notesFragment
+            binding.navigationFab.isVisible = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
         }
     }
 
