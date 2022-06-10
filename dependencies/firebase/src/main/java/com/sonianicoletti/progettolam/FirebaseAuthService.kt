@@ -2,6 +2,7 @@ package com.sonianicoletti.progettolam
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonianicoletti.entities.User
@@ -65,15 +66,25 @@ class FirebaseAuthService @Inject constructor(
     }
 
     override suspend fun setNotificationToken(token: String) {
-        val user = getUser()
+        val user = firebaseAuth.currentUser
 
         if (user != null) {
             firestore.collection("users")
-                .document(user.id)
+                .document(user.uid)
                 .update("messaging_token", token)
                 .await()
         }
     }
 
-    override fun signOut() = firebaseAuth.signOut()
+    override suspend fun signOut() {
+        val user = firebaseAuth.currentUser
+
+        if (user != null) {
+            firestore.collection("users")
+                .document(user.uid)
+                .update("messaging_token", FieldValue.delete())
+                .await()
+            firebaseAuth.signOut()
+        }
+    }
 }

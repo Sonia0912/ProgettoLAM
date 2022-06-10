@@ -12,5 +12,5 @@ interface AuthService {
 
     suspend fun setNotificationToken(token: String)
 
-    fun signOut()
+    suspend fun signOut()
 }
