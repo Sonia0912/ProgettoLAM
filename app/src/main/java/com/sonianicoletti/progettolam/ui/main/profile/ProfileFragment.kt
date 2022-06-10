@@ -55,7 +55,7 @@ class ProfileFragment : Fragment() {
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
-            ProfileViewModel.ViewEvent.navigateToLogin -> navigateToLogin()
+            ProfileViewModel.ViewEvent.NavigateToLogin -> navigateToLogin()
         }
     }
 

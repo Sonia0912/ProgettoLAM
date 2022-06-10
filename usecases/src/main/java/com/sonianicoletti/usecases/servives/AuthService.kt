@@ -10,5 +10,7 @@ interface AuthService {
 
     suspend fun getUser(): User?
 
-    fun signOut()
+    suspend fun setNotificationToken(token: String)
+
+    suspend fun signOut()
 }
