@@ -109,7 +109,7 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun distributeCards() {
-        var characterCards = mutableListOf<Card>(
+        val characterCards = mutableListOf(
             Card("Mrs Peacock", "character"),
             Card("Colonel Mustard", "character"),
             Card("Reverend Green", "character"),
@@ -117,7 +117,7 @@ class GameRepositoryImpl @Inject constructor(
             Card("Mrs White", "character"),
             Card("Miss Scarlett", "character")
         )
-        var weaponCards = mutableListOf<Card>(
+        val weaponCards = mutableListOf(
             Card("Candlestick", "weapon"),
             Card("Revolver", "weapon"),
             Card("Rope", "weapon"),
@@ -125,7 +125,7 @@ class GameRepositoryImpl @Inject constructor(
             Card("Lead Pipe", "weapon"),
             Card("Wrench", "weapon")
         )
-        var roomCards = mutableListOf<Card>(
+        val roomCards = mutableListOf(
             Card("Kitchen", "room"),
             Card("Library", "room"),
             Card("Lounge", "room"),
@@ -144,22 +144,24 @@ class GameRepositoryImpl @Inject constructor(
         weaponCards.remove(weaponSolution)
         val roomSolution = roomCards.random()
         roomCards.remove(roomSolution)
-        saveSolutionCards(listOf<Card>(characterSolution, weaponSolution, roomSolution))
+        val solutionCards = listOf(characterSolution, weaponSolution, roomSolution)
+        println("Solution Cards: $solutionCards")
+        saveSolutionCards(solutionCards)
 
         // carte distribuite tra i giocatori
-        var allCards = (characterCards + weaponCards + roomCards).toMutableList()
-        val game = getOngoingGame()
-        var numberOfCardsEach = (18 / game.players.size).toInt()
-        for(i in 0 until game.players.size) {
-            var yourCards = allCards.asSequence().shuffled().take(numberOfCardsEach).toList()
-            yourCards.forEach { allCards.remove(it) }
-            assignCardsToPlayer(i, yourCards)
-        }
-
-        // carte rimanenti
-        if(18 % game.players.size != 0) {
-            saveLeftoverCards(allCards)
-        }
+//        val allCards = (characterCards + weaponCards + roomCards).toMutableList()
+//        val game = getOngoingGame()
+//        val numberOfCardsEach = (18 / game.players.size)
+//        for(i in 0 until game.players.size) {
+//            var yourCards = allCards.asSequence().shuffled().take(numberOfCardsEach).toList()
+//            yourCards.forEach { allCards.remove(it) }
+//            assignCardsToPlayer(i, yourCards)
+//        }
+//
+//        // carte rimanenti
+//        if (18 % game.players.size != 0) {
+//            saveLeftoverCards(allCards)
+//        }
     }
 
     private suspend fun saveSolutionCards(solutionCards : List<Card>) {

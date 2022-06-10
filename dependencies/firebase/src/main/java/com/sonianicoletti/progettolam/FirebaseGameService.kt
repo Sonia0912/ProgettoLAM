@@ -67,7 +67,9 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     private fun Game.toMap() = mapOf(
         HOST to host,
         STATUS to status,
-        PLAYERS to players
+        PLAYERS to players,
+        SOLUTION_CARDS to solutionCards,
+        LEFTOVER_CARDS to leftoverCards,
     )
 
     override suspend fun getGameByID(gameID: String): Game {
@@ -147,5 +149,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val HOST = "host"
         private const val STATUS = "status"
         private const val PLAYERS = "players"
+        private const val SOLUTION_CARDS = "solution_cards"
+        private const val LEFTOVER_CARDS = "leftover_cards"
     }
 }

@@ -24,11 +24,11 @@ class CardsViewModel @Inject constructor(
 
     fun handleGameState(game: Game) {
         viewModelScope.launch {
-            var currentUser = authService.getUser()
-            var currentPlayer = game.players.find { it.id == currentUser?.id }
-            var yourCards = currentPlayer?.cards?.map { CardItem.fromCard(it) }.orEmpty().toMutableList()
-            var leftoverCards = game.leftoverCards.map { CardItem.fromCard(it) }.toMutableList()
-            var viewState = ViewState(yourCards, leftoverCards)
+            val currentUser = authService.getUser()
+            val currentPlayer = game.players.find { it.id == currentUser?.id }
+            val yourCards = currentPlayer?.cards?.map { CardItem.fromCard(it) }.orEmpty().toMutableList()
+            val leftoverCards = game.leftoverCards.map { CardItem.fromCard(it) }.toMutableList()
+            val viewState = ViewState(yourCards, leftoverCards)
             cardsStateEmitter.postValue(viewState)
         }
     }

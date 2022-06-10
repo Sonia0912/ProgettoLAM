@@ -28,8 +28,8 @@ class CardsFragment : Fragment() {
     ): View {
         binding = FragmentCardsBinding.inflate(inflater)
         // Show the cards
-        var yourCardsAdapter = CardsAdapter(yourCards)
-        var leftoverCardsAdapter = CardsAdapter(leftoverCards)
+        val yourCardsAdapter = CardsAdapter(yourCards)
+        val leftoverCardsAdapter = CardsAdapter(leftoverCards)
         binding.recyclerViewYourCards.adapter = yourCardsAdapter
         binding.recyclerViewLeftoverCards.adapter = leftoverCardsAdapter
         gameViewModel.gameState.observe(viewLifecycleOwner) {
