@@ -72,17 +72,20 @@
             <CheckBox
                 android:id="@+id/checkBoxPeacock3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPeacock4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPeacock5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
 
         <TableRow android:tag="Colonel Mustard">
@@ -106,17 +109,20 @@
             <CheckBox
                 android:id="@+id/checkBoxMustard3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxMustard4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxMustard5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
 
         <TableRow android:tag="Professor Plum">
@@ -140,17 +146,20 @@
             <CheckBox
                 android:id="@+id/checkBoxPlum3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPlum4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPlum5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
 
         <TableRow android:tag="Reverend Green">
@@ -174,17 +183,20 @@
             <CheckBox
                 android:id="@+id/checkBoxGreen3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxGreen4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxGreen5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
 
         <TableRow android:tag="Miss Scarlett">
@@ -208,17 +220,20 @@
             <CheckBox
                 android:id="@+id/checkBoxScarlett3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
 
         <TableRow android:tag="Mrs White">
@@ -242,16 +257,19 @@
             <CheckBox
                 android:id="@+id/checkBoxWhite3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_3"/>
 
             <CheckBox
                 android:id="@+id/checkBoxWhite4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_4"/>
 
             <CheckBox
                 android:id="@+id/checkBoxWhite5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:tag="COLUMN_5"/>
         </TableRow>
     </TableLayout>
