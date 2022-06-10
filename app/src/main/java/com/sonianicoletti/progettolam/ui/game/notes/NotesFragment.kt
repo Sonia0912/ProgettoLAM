@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.sonianicoletti.entities.Game
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
@@ -32,6 +33,7 @@ class NotesFragment : Fragment() {
         binding = FragmentNotesBinding.inflate(inflater)
         // Check default notes (your cards + leftover cards)
         gameViewModel.gameState.observe(viewLifecycleOwner) {
+            hideNonPlayerColumns(it.game)
             viewModel.handleGameState()
         }
         viewModel.cardsState.observe(viewLifecycleOwner) {
@@ -62,6 +64,15 @@ class NotesFragment : Fragment() {
         return binding.root
     }
 
+    private fun hideNonPlayerColumns(game: Game) {
+        val columnTags = listOf(null, null, null, "COLUMN_3", "COLUMN_4", "COLUMN_5")
+        for (i in 0 until game.players.size) {
+            columnTags[i]?.let { columnTag ->
+                findViewsWithTag(columnTag).forEach { it.isVisible = false }
+            }
+        }
+    }
+
     private fun disableDefaultNotes(defaultCards: MutableList<CardItem>) {
         defaultCards.forEach { cardItem ->
             val tableRow = binding.root.findViewWithTag<TableRow>(cardItem.card.name)
@@ -73,4 +84,6 @@ class NotesFragment : Fragment() {
             }
         }
     }
+
+    private fun findViewsWithTag(tag: String) = binding.tableRooms.tableLayoutRooms.children.filter { it.tag == tag }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tableLayoutRooms"
     android:layout_width="wrap_content"
@@ -36,18 +35,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
+            android:tag="COLUMN_3"
             android:text="Thomas" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
+            android:tag="COLUMN_4"
             android:text="Sarah" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
+            android:tag="COLUMN_5"
             android:text="Lucy" />
     </TableRow>
 
@@ -72,17 +74,20 @@
         <CheckBox
             android:id="@+id/checkBoxBallroom3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxBallroom4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxBallroom5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Billiard Room">
@@ -106,17 +111,20 @@
         <CheckBox
             android:id="@+id/checkBoxBilliardRoom3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxBilliardRoom4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxBilliardRoom5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Conservatory">
@@ -140,17 +148,20 @@
         <CheckBox
             android:id="@+id/checkBoxConservatory3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxConservatory4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxConservatory5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Dining Room">
@@ -174,17 +185,20 @@
         <CheckBox
             android:id="@+id/checkBoxDiningRoom3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxDiningRoom4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxDiningRoom5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Hall">
@@ -208,17 +222,20 @@
         <CheckBox
             android:id="@+id/checkBoxHall3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxHall4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxHall5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Kitchen">
@@ -242,17 +259,21 @@
         <CheckBox
             android:id="@+id/checkBoxKitchen3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxKitchen4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxKitchen5"
+
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Library">
@@ -276,17 +297,20 @@
         <CheckBox
             android:id="@+id/checkBoxLibrary3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxLibrary4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxLibrary5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Lounge">
@@ -310,17 +334,20 @@
         <CheckBox
             android:id="@+id/checkBoxLounge3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxLounge4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxLounge5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 
     <TableRow android:tag="Study">
@@ -344,16 +371,19 @@
         <CheckBox
             android:id="@+id/checkBoxStudy3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_3" />
 
         <CheckBox
             android:id="@+id/checkBoxStudy4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_4" />
 
         <CheckBox
             android:id="@+id/checkBoxStudy5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="COLUMN_5" />
     </TableRow>
 </TableLayout>
