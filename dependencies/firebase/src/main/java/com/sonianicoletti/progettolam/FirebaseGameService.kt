@@ -2,7 +2,6 @@ package com.sonianicoletti.progettolam
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonianicoletti.entities.*
@@ -31,7 +30,9 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             id = gameID,
             host = currentUser.id,
             status = GameStatus.LOBBY,
-            players = mutableListOf(currentPlayer)
+            players = mutableListOf(currentPlayer),
+            leftoverCards = mutableListOf(),
+            solutionCards = mutableListOf()
         )
     }
 
@@ -71,14 +72,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     override suspend fun getGameByID(gameID: String): Game {
         val gameSnapshot = getGameRef(gameID)
-        val players = getPlayersFromGameSnapshot(gameSnapshot)
-
-        return Game(
-            id = gameSnapshot.id,
-            host = gameSnapshot.getString("host").orEmpty(),
-            status = GameStatus.fromValue(gameSnapshot.getString("status")),
-            players = players
-        )
+        return gameSnapshot.toGame()
     }
 
     private suspend fun getGameRef(gameID: String): DocumentSnapshot {
@@ -120,13 +114,27 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     private fun DocumentSnapshot.toGame(): Game {
         val players = getPlayersFromGameSnapshot(this)
+        val leftoverCards = getLeftoverCardsFromGameSnapshot(this)
+        val solutionCards = getSolutionCardsFromGameSnapshot(this)
 
         return Game(
             id = id,
             host = getString(HOST).orEmpty(),
             status = GameStatus.fromValue(getString(STATUS)),
-            players = players
+            players = players,
+            leftoverCards = leftoverCards,
+            solutionCards = solutionCards
         )
+    }
+
+    private fun getLeftoverCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
+        val cardsMapList = gameSnapshot["leftoverCards"] as? List<HashMap<String, Any>> ?: emptyList()
+        return cardsMapList.map { it.toCard() }.toMutableList()
+    }
+
+    private fun getSolutionCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
+        val cardsMapList = gameSnapshot["solutionCards"] as? List<HashMap<String, Any>> ?: emptyList()
+        return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
     override suspend fun deleteGame(gameID: String) {

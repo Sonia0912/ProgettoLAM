@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Character
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
 import com.sonianicoletti.progettolam.R
-import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
+import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.ShowCharacterTaken
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -25,16 +26,29 @@ class CharactersViewModel @Inject constructor(
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
-    private val selectedCharactersEmitter = MutableLiveData<List<SelectCharacterItem>>(createCharacterItems())
-    val selectedCharacters: LiveData<List<SelectCharacterItem>> = selectedCharactersEmitter
+    private val charactersEmitter = MutableLiveData<List<SelectCharacterItem>>(createCharacterItems())
+    val characters: LiveData<List<SelectCharacterItem>> = charactersEmitter
 
+    // richiamata ogni volta che un giocatore seleziona un personaggio
     fun handleGameUpdate(game: Game) {
         assignPlayersSelectedCharacters(game)
-        selectedCharactersEmitter.emit()
+        charactersEmitter.emit()
+        viewModelScope.launch {
+            // controllo che sia l'host e se tutti i giocatori hanno un personaggio assegnato
+            if(gameRepository.isUserHost(game) && characters.value?.filter { it.assignedPlayer != null }?.size == game.players.size) {
+                gameRepository.updateGameStatus(GameStatus.ACTIVE) // cambio lo stato del gioco
+                // distribuisce le carte
+                gameRepository.distributeCards()
+            }
+        }
+        // controllo se lo stato del gioco e' Active, in tal caso navigo al prossimo fragment
+        if(game.status == GameStatus.ACTIVE) {
+            viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        }
     }
 
     private fun assignPlayersSelectedCharacters(game: Game) {
-        selectedCharacters.value?.forEach { characterItem ->
+        characters.value?.forEach { characterItem ->
             val player = game.players.find { it.character == characterItem.character }
             characterItem.assignedPlayer = player
         }
@@ -54,10 +68,10 @@ class CharactersViewModel @Inject constructor(
     }
 
     private fun isCharacterSelected(userID: String, character: Character) =
-        selectedCharacters.value?.find { it.assignedPlayer?.id == userID }?.character == character
+        characters.value?.find { it.assignedPlayer?.id == userID }?.character == character
 
     private fun isCharacterTaken(character: Character) =
-        selectedCharacters.value?.find { it.character == character }?.assignedPlayer != null
+        characters.value?.find { it.character == character }?.assignedPlayer != null
 
     private fun MutableLiveData<List<SelectCharacterItem>>.emit() = postValue(value)
 
@@ -76,5 +90,6 @@ class CharactersViewModel @Inject constructor(
         object ShowGameNotRunningToast : ViewEvent()
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
+        object NavigateToCards : ViewEvent()
     }
 }

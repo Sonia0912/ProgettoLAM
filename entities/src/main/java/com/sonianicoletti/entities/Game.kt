@@ -4,5 +4,7 @@ data class Game(
     val id: String,
     val host: String,
     var status: GameStatus,
-    val players: MutableList<Player>
+    val players: MutableList<Player>,
+    var leftoverCards: MutableList<Card>,
+    var solutionCards: MutableList<Card>
 )

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityGameBinding
@@ -34,6 +36,9 @@ class GameActivity : AppCompatActivity() {
         binding.imageViewExit.setOnClickListener {
             showLeaveGameDialog()
         }
+        binding.imageViewRules.setOnClickListener {
+            openRulesFragment()
+        }
     }
 
     private fun showLeaveGameDialog() {
@@ -46,12 +51,23 @@ class GameActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun openRulesFragment() {
+        binding.toolBar.isVisible = false
+        findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
+    }
+
+    override fun onBackPressed() {
+        binding.toolBar.isVisible = true
+        super.onBackPressed()
+    }
+
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->
         when (event) {
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
+            ShowDefaultToolbar -> showDefaultToolbar()
         }
     }
 
@@ -73,5 +89,9 @@ class GameActivity : AppCompatActivity() {
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showDefaultToolbar() {
+        binding.toolBar.isVisible = true
     }
 }

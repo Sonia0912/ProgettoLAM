@@ -1,11 +1,9 @@
 package com.sonianicoletti.dataaccess
 
-import com.sonianicoletti.entities.Character
-import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.GameStatus
-import com.sonianicoletti.entities.Player
+import com.sonianicoletti.entities.*
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
@@ -102,6 +100,83 @@ class GameRepositoryImpl @Inject constructor(
     override suspend fun updateCharacter(userID: String, character: Character) {
         val game = getOngoingGame()
         game.players.find { it.id == userID }?.character = character
+        gameService.updateGame(game)
+    }
+
+    override suspend fun isUserHost(game: Game) : Boolean {
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        return user.id == game.host
+    }
+
+    override suspend fun distributeCards() {
+        var characterCards = mutableListOf<Card>(
+            Card("Mrs Peacock", "character"),
+            Card("Colonel Mustard", "character"),
+            Card("Reverend Green", "character"),
+            Card("Professor Plum", "character"),
+            Card("Mrs White", "character"),
+            Card("Miss Scarlett", "character")
+        )
+        var weaponCards = mutableListOf<Card>(
+            Card("Candlestick", "weapon"),
+            Card("Revolver", "weapon"),
+            Card("Rope", "weapon"),
+            Card("Dagger", "weapon"),
+            Card("Lead Pipe", "weapon"),
+            Card("Wrench", "weapon")
+        )
+        var roomCards = mutableListOf<Card>(
+            Card("Kitchen", "room"),
+            Card("Library", "room"),
+            Card("Lounge", "room"),
+            Card("Study", "room"),
+            Card("Ballroom", "room"),
+            Card("Billiard Room", "room"),
+            Card("Conservatory", "room"),
+            Card("Dining Room", "room"),
+            Card("Hall", "room")
+        )
+
+        // carte soluzione
+        val characterSolution = characterCards.random()
+        characterCards.remove(characterSolution)
+        val weaponSolution = weaponCards.random()
+        weaponCards.remove(weaponSolution)
+        val roomSolution = roomCards.random()
+        roomCards.remove(roomSolution)
+        saveSolutionCards(listOf<Card>(characterSolution, weaponSolution, roomSolution))
+
+        // carte distribuite tra i giocatori
+        var allCards = (characterCards + weaponCards + roomCards).toMutableList()
+        val game = getOngoingGame()
+        var numberOfCardsEach = (18 / game.players.size).toInt()
+        for(i in 0 until game.players.size) {
+            var yourCards = allCards.asSequence().shuffled().take(numberOfCardsEach).toList()
+            yourCards.forEach { allCards.remove(it) }
+            assignCardsToPlayer(i, yourCards)
+        }
+
+        // carte rimanenti
+        if(18 % game.players.size != 0) {
+            saveLeftoverCards(allCards)
+        }
+    }
+
+    private suspend fun saveSolutionCards(solutionCards : List<Card>) {
+        val game = getOngoingGame()
+        game.solutionCards = solutionCards.toMutableList()
+        gameService.updateGame(game)
+    }
+
+    private suspend fun assignCardsToPlayer(playerIndex : Int, yourCards : List<Card>) {
+        val game = getOngoingGame()
+        game.players[playerIndex].cards = yourCards
+        gameService.updateGame(game)
+    }
+
+    private suspend fun saveLeftoverCards(leftoverCards : List<Card>) {
+        val game = getOngoingGame()
+        game.leftoverCards = leftoverCards.toMutableList()
         gameService.updateGame(game)
     }
 }

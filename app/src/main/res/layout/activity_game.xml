@@ -30,12 +30,12 @@
             android:textSize="30sp" />
 
         <ImageView
-            android:id="@+id/imageViewQr"
+            android:id="@+id/imageViewRules"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="end"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_qr" />
+            android:src="@drawable/ic_help" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.fragment.app.FragmentContainerView
