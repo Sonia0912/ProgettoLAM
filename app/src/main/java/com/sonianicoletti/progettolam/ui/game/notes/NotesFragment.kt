@@ -13,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
@@ -47,6 +46,17 @@ class NotesFragment : Fragment() {
             findNavController().navigate(R.id.cardsFragment)
         }
         // Handle check button (make it stay)
+        val tableWeapons = binding.tableWeapons.root.findCheckboxes()
+        val listInGameViewModelThatsAboutTheCheckboxes = mutableListOf<Pair<Int, Int>>()
+        tableWeapons.forEach {
+            it.first.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    listInGameViewModelThatsAboutTheCheckboxes.add(it.second to it.third)
+                } else {
+                    listInGameViewModelThatsAboutTheCheckboxes.remove(it.second to it.third)
+                }
+            }
+        }
 
         // Handle types of notes
         binding.buttonCharacters.setOnClickListener {
@@ -64,6 +74,7 @@ class NotesFragment : Fragment() {
             binding.tableWeapons.tableLayoutWeapons.visibility = View.GONE
             binding.tableCharacters.tableLayoutCharacters.visibility = View.GONE
         }
+
         return binding.root
     }
 
@@ -144,5 +155,17 @@ class NotesFragment : Fragment() {
             }
         }
         return viewsWithTag
+    }
+
+    private fun ViewGroup.findCheckboxes(): List<Triple<CheckBox, Int, Int>> {
+        val checkboxesIndexed = mutableListOf<Triple<CheckBox, Int, Int>>()
+        children.forEachIndexed { column, tableRow ->
+            (tableRow as? TableRow)?.children?.forEachIndexed { row, tableCell ->
+                if (tableCell is CheckBox) {
+                    checkboxesIndexed.add(Triple(tableCell, column, row))
+                }
+            }
+        }
+        return checkboxesIndexed
     }
 }

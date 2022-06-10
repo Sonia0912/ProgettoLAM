@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
-    private val authService: AuthService,
 ) : ViewModel() {
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
@@ -67,15 +66,10 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun showDefaultToolbar() {
-        viewEventEmitter.value = ViewEvent.ShowDefaultToolbar
-    }
-
     sealed class ViewEvent {
         object ShowUserNotLoggedInToast : ViewEvent()
         object ShowGameNotRunningToast : ViewEvent()
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
-        object ShowDefaultToolbar : ViewEvent()
     }
 }
