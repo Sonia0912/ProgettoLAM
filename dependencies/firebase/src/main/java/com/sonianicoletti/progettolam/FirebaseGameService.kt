@@ -147,7 +147,6 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     companion object {
         private const val GAMES_COLLECTION = "games"
-
         private const val HOST = "host"
         private const val STATUS = "status"
         private const val PLAYERS = "players"

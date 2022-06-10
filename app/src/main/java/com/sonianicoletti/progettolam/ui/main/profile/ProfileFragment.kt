@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,7 +42,11 @@ class ProfileFragment : Fragment() {
         }
 
         // Salva le modifiche allo username
-
+        binding.buttonSave.setOnClickListener {
+            if(binding.editTextDisplayName.text.toString().isNotBlank()) {
+                viewModel.saveNewDisplayName(binding.editTextDisplayName.text.toString())
+            }
+        }
 
         // Logout
         binding.buttonLogOut.setOnClickListener {
@@ -59,9 +64,14 @@ class ProfileFragment : Fragment() {
         context?.startActivity(intent)
     }
 
+    private fun showSuccessfulUpdate() {
+        Toast.makeText(context,"Information updated successfully",Toast.LENGTH_SHORT).show()
+    }
+
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
         when (it) {
             ProfileViewModel.ViewEvent.NavigateToLogin -> navigateToLogin()
+            ProfileViewModel.ViewEvent.SuccessfulUpdate -> showSuccessfulUpdate()
         }
     }
 

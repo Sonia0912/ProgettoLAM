@@ -78,4 +78,23 @@ class FirebaseAuthService @Inject constructor(
             firebaseAuth.signOut()
         }
     }
+
+    override suspend fun updateUser(updatedUser: User) {
+        val userRef = firestore.collection(FirebaseAuthService.USERS_COLLECTION).document(updatedUser.id)
+        userRef.update(updatedUser.toMap()).await()
+    }
+
+    private fun User.toMap() = mapOf(
+        FirebaseAuthService.DISPLAY_NAME to displayName,
+        FirebaseAuthService.EMAIL to email,
+        FirebaseAuthService.MESSAGING_TOKEN to messagingToken,
+    )
+
+    companion object {
+        private const val USERS_COLLECTION = "users"
+        private const val DISPLAY_NAME = "displayName"
+        private const val EMAIL = "email"
+        private const val MESSAGING_TOKEN = "messaging_token"
+    }
+
 }

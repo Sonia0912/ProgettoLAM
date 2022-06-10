@@ -33,7 +33,7 @@ class ProfileViewModel @Inject constructor(private val authService: AuthService)
         }
     }
 
-    fun handleUserState() {
+    private fun handleUserState() {
         viewModelScope.launch {
             val currentUser = authService.getUser()
             val viewState = currentUser?.let { ProfileViewModel.ViewState(it) }
@@ -41,8 +41,22 @@ class ProfileViewModel @Inject constructor(private val authService: AuthService)
         }
     }
 
+    fun saveNewDisplayName(newDisplayName: String) {
+        viewModelScope.launch {
+            val currentUser = authService.getUser()
+            if(newDisplayName != currentUser?.displayName) {
+                currentUser?.displayName = newDisplayName
+                if (currentUser != null) {
+                    authService.updateUser(currentUser)
+                    viewEventEmitter.postValue(ViewEvent.SuccessfulUpdate)
+                }
+            }
+        }
+    }
+
     sealed class ViewEvent {
         object NavigateToLogin : ProfileViewModel.ViewEvent()
+        object SuccessfulUpdate : ProfileViewModel.ViewEvent()
     }
 
 }
