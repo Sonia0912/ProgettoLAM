@@ -33,7 +33,6 @@ class CardsViewModel @Inject constructor(
         val game = gameRepository.getOngoingGame()
         viewModelScope.launch {
             if (gameRepository.isUserHost(game)) {
-                prepareCards(game)
                 delay(3000)
                 gameRepository.nextTurn()
             }
@@ -41,7 +40,6 @@ class CardsViewModel @Inject constructor(
     }
 
     fun handleGameState(gameState: GameState) = viewModelScope.launch {
-        val user = authService.getUser() ?: throw UserNotLoggedInException()
         if (gameRepository.isUserHost(gameState.game)) {
             prepareViewState(gameState.game)
         }
@@ -53,7 +51,7 @@ class CardsViewModel @Inject constructor(
         val yourCards = currentPlayer?.cards.mapToCardItems()
         val leftoverCards = game.leftoverCards.mapToCardItems()
 
-        val turnPlayer = game.players.first { it.id == game.turnPlayerId }
+        val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
 
         val viewState = ViewState(yourCards, leftoverCards, turnPlayer)
         viewStateEmitter.postValue(viewState)
@@ -66,6 +64,6 @@ class CardsViewModel @Inject constructor(
     data class ViewState(
         val yourCards: MutableList<CardItem>,
         val leftoverCards: MutableList<CardItem>,
-        val turnPlayer: Player,
+        val turnPlayer: Player?,
     )
 }

@@ -48,4 +48,53 @@
         app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/navigationFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_notes" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/cardsFragmentFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/navigationFab"
+        app:layout_constraintStart_toStartOf="@id/navigationFab"
+        app:layout_constraintEnd_toEndOf="@id/navigationFab"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_notes" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/notesFragmentFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/cardsFragmentFab"
+        app:layout_constraintStart_toStartOf="@id/navigationFab"
+        app:layout_constraintEnd_toEndOf="@id/navigationFab"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_notes" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/accusationFragmentFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/notesFragmentFab"
+        app:layout_constraintStart_toStartOf="@id/navigationFab"
+        app:layout_constraintEnd_toEndOf="@id/navigationFab"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_notes" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

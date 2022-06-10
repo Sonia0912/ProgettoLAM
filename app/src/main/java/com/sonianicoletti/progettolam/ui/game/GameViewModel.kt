@@ -23,6 +23,9 @@ class GameViewModel @Inject constructor(
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
     val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
+    private val viewStateEmitter = MutableLiveData(ViewState())
+    val viewState: LiveData<ViewState> = viewStateEmitter
+
     private val gameStateEmitter = MutableLiveData<GameState>()
     val gameState: LiveData<GameState> = gameStateEmitter
 
@@ -58,6 +61,12 @@ class GameViewModel @Inject constructor(
         viewEventEmitter.value = ViewEvent.NavigateToAuth
     }
 
+    fun handleNavigationFabClick() {
+        val viewState = viewState.value
+        val newViewState = ViewState(navigationFabOpened = viewState?.navigationFabOpened?.not() ?: false)
+        viewStateEmitter.postValue(newViewState)
+    }
+
     fun leaveGame() {
         observeGameJob.cancel()
         viewModelScope.launch {
@@ -65,6 +74,10 @@ class GameViewModel @Inject constructor(
             viewEventEmitter.value = ViewEvent.NavigateToMain
         }
     }
+
+    data class ViewState(
+        val navigationFabOpened: Boolean = false
+    )
 
     sealed class ViewEvent {
         object ShowUserNotLoggedInToast : ViewEvent()

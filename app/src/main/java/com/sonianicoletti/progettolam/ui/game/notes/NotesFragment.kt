@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
