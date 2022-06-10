@@ -53,7 +53,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-    fun navigateToLogin() {
+    private fun navigateToLogin() {
         val intent = Intent(requireContext(), AuthActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
         context?.startActivity(intent)

@@ -27,6 +27,8 @@ class NotesFragment : Fragment() {
     private val viewModel: NotesViewModel by viewModels()
     private val gameViewModel: GameViewModel by activityViewModels()
 
+    var checkSet = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,44 +40,17 @@ class NotesFragment : Fragment() {
             hideNonPlayerColumns(it.game)
             viewModel.handleGameState()
         }
+        gameViewModel.viewState.observe(viewLifecycleOwner) {
+            setCheckboxes(it.checkedBoxesCharacters, it.checkedBoxesWeapons, it.checkedBoxesRooms)
+        }
         viewModel.cardsState.observe(viewLifecycleOwner) {
             disableDefaultNotes(it.defaultCards)
             setPlayersNames(it.otherPlayers)
         }
+
         // Handle cards button
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.cardsFragment)
-        }
-        // Handle check button (make it stay)
-        val tableCharacters = binding.tableCharacters.root.findCheckboxes()
-        tableCharacters.forEach {
-            it.first.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    gameViewModel.checkedBoxesCharacters.add(it.second to it.third)
-                } else {
-                    gameViewModel.checkedBoxesCharacters.remove(it.second to it.third)
-                }
-            }
-        }
-        val tableWeapons = binding.tableWeapons.root.findCheckboxes()
-        tableWeapons.forEach {
-            it.first.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    gameViewModel.checkedBoxesWeapons.add(it.second to it.third)
-                } else {
-                    gameViewModel.checkedBoxesWeapons.remove(it.second to it.third)
-                }
-            }
-        }
-        val tableRooms = binding.tableRooms.root.findCheckboxes()
-        tableRooms.forEach {
-            it.first.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    gameViewModel.checkedBoxesRooms.add(it.second to it.third)
-                } else {
-                    gameViewModel.checkedBoxesRooms.remove(it.second to it.third)
-                }
-            }
         }
 
         // Handle types of notes
@@ -123,6 +98,40 @@ class NotesFragment : Fragment() {
                 (child as? CheckBox)?.apply {
                     isEnabled = false
                     isChecked = true
+                }
+            }
+        }
+    }
+
+    private fun setCheckboxes(charactersList: MutableList<Pair<Int, Int>>, weaponsList: MutableList<Pair<Int, Int>>, roomsList: MutableList<Pair<Int, Int>>) {
+        if(!checkSet) {
+            charactersList.forEach {
+                ((binding.tableCharacters.root.children.elementAt(it.first) as ViewGroup).children.elementAt(it.second) as CheckBox).isChecked = true
+            }
+            weaponsList.forEach {
+                ((binding.tableWeapons.root.children.elementAt(it.first) as ViewGroup).children.elementAt(it.second) as CheckBox).isChecked = true
+            }
+            roomsList.forEach {
+                ((binding.tableRooms.root.children.elementAt(it.first) as ViewGroup).children.elementAt(it.second) as CheckBox).isChecked = true
+            }
+            checkSet = true
+
+            val tableCharacters = binding.tableCharacters.root.findCheckboxes()
+            tableCharacters.forEach {
+                it.first.setOnCheckedChangeListener { _, isChecked ->
+                    gameViewModel.updateCheckBoxCharacters(it.second, it.third, isChecked)
+                }
+            }
+            val tableWeapons = binding.tableWeapons.root.findCheckboxes()
+            tableWeapons.forEach {
+                it.first.setOnCheckedChangeListener { _, isChecked ->
+                    gameViewModel.updateCheckBoxWeapons(it.second, it.third, isChecked)
+                }
+            }
+            val tableRooms = binding.tableRooms.root.findCheckboxes()
+            tableRooms.forEach {
+                it.first.setOnCheckedChangeListener { _, isChecked ->
+                    gameViewModel.updateCheckBoxRooms(it.second, it.third, isChecked)
                 }
             }
         }

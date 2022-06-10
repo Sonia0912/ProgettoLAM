@@ -17,6 +17,10 @@ class ProfileViewModel @Inject constructor(private val authService: AuthService)
     private val viewEventEmitter = MutableSingleLiveEvent<ProfileViewModel.ViewEvent>()
     val viewEvent: LiveData<ProfileViewModel.ViewEvent> = viewEventEmitter
 
+    init {
+        handleUserState()
+    }
+
     var userStateEmitter = MutableLiveData<ViewState>()
     var userState : LiveData<ViewState> = userStateEmitter
 
@@ -32,11 +36,8 @@ class ProfileViewModel @Inject constructor(private val authService: AuthService)
     fun handleUserState() {
         viewModelScope.launch {
             val currentUser = authService.getUser()
-            val testUser = User("123", "myemail", "myname", "token")
-            val viewState = ProfileViewModel.ViewState(testUser)
-            userStateEmitter.postValue(viewState)
-            //val viewState = currentUser?.let { ProfileViewModel.ViewState(it) }
-            //userStateEmitter.postValue(viewState!!)
+            val viewState = currentUser?.let { ProfileViewModel.ViewState(it) }
+            userStateEmitter.postValue(viewState!!)
         }
     }
 

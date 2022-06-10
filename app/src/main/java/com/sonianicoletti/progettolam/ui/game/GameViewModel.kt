@@ -30,10 +30,6 @@ class GameViewModel @Inject constructor(
 
     private val observeGameJob = Job()
 
-    var checkedBoxesCharacters = mutableListOf<Pair<Int, Int>>()
-    var checkedBoxesWeapons = mutableListOf<Pair<Int, Int>>()
-    var checkedBoxesRooms = mutableListOf<Pair<Int, Int>>()
-
     init {
         observeGameUpdates()
     }
@@ -78,8 +74,38 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun updateCheckBoxCharacters(column: Int, row: Int, toAdd: Boolean) {
+        if(toAdd) {
+            viewState.value?.checkedBoxesCharacters?.add(column to row)
+        } else {
+            viewState.value?.checkedBoxesCharacters?.remove(column to row)
+        }
+        viewStateEmitter.postValue(viewState.value)
+    }
+
+    fun updateCheckBoxWeapons(column: Int, row: Int, toAdd: Boolean) {
+        if(toAdd) {
+            viewState.value?.checkedBoxesWeapons?.add(column to row)
+        } else {
+            viewState.value?.checkedBoxesWeapons?.remove(column to row)
+        }
+        viewStateEmitter.postValue(viewState.value)
+    }
+
+    fun updateCheckBoxRooms(column: Int, row: Int, toAdd: Boolean) {
+        if(toAdd) {
+            viewState.value?.checkedBoxesRooms?.add(column to row)
+        } else {
+            viewState.value?.checkedBoxesRooms?.remove(column to row)
+        }
+        viewStateEmitter.postValue(viewState.value)
+    }
+
     data class ViewState(
-        val navigationFabOpened: Boolean = false
+        val navigationFabOpened: Boolean = false,
+        val checkedBoxesCharacters: MutableList<Pair<Int, Int>> = mutableListOf(),
+        val checkedBoxesWeapons: MutableList<Pair<Int, Int>> = mutableListOf(),
+        val checkedBoxesRooms: MutableList<Pair<Int, Int>> = mutableListOf()
     )
 
     sealed class ViewEvent {
