@@ -35,7 +35,7 @@ class CharactersViewModel @Inject constructor(
         charactersEmitter.emit()
         viewModelScope.launch {
             // controllo che sia l'host e se tutti i giocatori hanno un personaggio assegnato
-            if(gameRepository.isUserHost(game) && characters.value?.filter { it.assignedPlayer != null }?.size == game.players.size) {
+            if(gameRepository.isUserHost(game) && characters.value?.filter { it.assignedPlayer != null }?.size == game.players.size && game.status == GameStatus.CHARACTER_SELECT) {
                 gameRepository.updateGameStatus(GameStatus.ACTIVE) // cambio lo stato del gioco
                 // distribuisce le carte
                 gameRepository.distributeCards()

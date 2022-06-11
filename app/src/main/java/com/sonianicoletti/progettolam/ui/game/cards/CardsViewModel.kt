@@ -40,9 +40,7 @@ class CardsViewModel @Inject constructor(
     }
 
     fun handleGameState(gameState: GameState) = viewModelScope.launch {
-        if (gameRepository.isUserHost(gameState.game)) {
-            prepareViewState(gameState.game)
-        }
+        prepareViewState(gameState.game)
     }
 
     private suspend fun prepareViewState(game: Game) {
