@@ -42,7 +42,7 @@ class CharactersFragment : Fragment() {
         adapter = CharactersAdapter { viewModel.selectCharacter(it) }
         val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
         binding.characterGrid.adapter = adapter
-        binding.characterGrid.addItemDecoration(itemOffsetDecoration)
+        //binding.characterGrid.addItemDecoration(itemOffsetDecoration)
         observeCharacterItems()
     }
 

@@ -34,9 +34,7 @@
         style="@style/ButtonTextView"
         app:layout_constraintHorizontal_weight="1"
         android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:drawableStart="@drawable/ic_qr"
-        android:paddingStart="48dp"/>
+        android:layout_marginEnd="64dp"/>
 
     <EditText
         android:id="@+id/editTextGameID"
@@ -64,7 +62,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextGameID"
-        android:background="@drawable/rounded_pink_button"
+        android:background="@drawable/rounded_yellow_button"
+        android:textColor="@color/russian_violet"
         style="@style/ButtonTextView"/>
 
     <TextView

@@ -14,7 +14,7 @@ class CharactersAdapter(
     private val characterItems = mutableListOf<SelectCharacterItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ListItemCharacterBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ListItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

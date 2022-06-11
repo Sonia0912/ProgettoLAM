@@ -15,7 +15,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="30dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
         android:background="@drawable/rounded_light_purple">
         <TableRow
             android:layout_marginBottom="20dp">
@@ -44,17 +47,17 @@
                 android:layout_height="wrap_content"
                 android:text="Username:"
                 style="@style/DefaultTextView"
-                android:layout_marginEnd="24dp"/>
+                android:layout_marginEnd="12dp"/>
 
             <EditText
                 android:id="@+id/editTextDisplayName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="5"
                 android:inputType="textPersonName"
                 android:hint="username"
                 android:background="@drawable/rounded_liliac"
-                android:padding="6dp"
+                android:padding="4dp"
                 style="@style/DefaultTextView"
                 android:textColorHint="@color/light_grey"
                 android:textAlignment="textEnd"/>
