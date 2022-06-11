@@ -69,7 +69,7 @@ class CardsViewModel @Inject constructor(
         return orEmpty().map { CardItem.fromCard(it) }.toMutableList()
     }
 
-    fun deny() = viewModelScope.launch {
+    fun skipAccusation() = viewModelScope.launch {
         gameRepository.nextAccusationResponder()
     }
 

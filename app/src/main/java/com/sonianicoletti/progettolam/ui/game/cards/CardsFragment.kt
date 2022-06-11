@@ -32,7 +32,7 @@ class CardsFragment : Fragment() {
         observeViewState()
 
         binding.denyButton.setOnClickListener {
-            viewModel.deny()
+            viewModel.skipAccusation()
         }
 
         return binding.root
