@@ -136,17 +136,17 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     }
 
     private fun getLeftoverCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot["leftover_cards"] as? List<HashMap<String, Any>> ?: emptyList()
+        val cardsMapList = gameSnapshot[LEFTOVER_CARDS] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
     private fun getSolutionCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot["solution_cards"] as? List<HashMap<String, Any>> ?: emptyList()
+        val cardsMapList = gameSnapshot[SOLUTION_CARDS] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
     private fun getAccusationFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot["ccusation"] as? List<HashMap<String, Any>> ?: emptyList()
+        val cardsMapList = gameSnapshot[ACCUSATION] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 

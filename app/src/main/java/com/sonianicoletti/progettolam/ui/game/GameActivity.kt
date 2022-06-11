@@ -2,13 +2,10 @@ package com.sonianicoletti.progettolam.ui.game
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
@@ -66,10 +63,20 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initNavigationFab() {
-        binding.navigationFab.setOnClickListener { viewModel.handleNavigationFabClick() }
-        binding.cardsFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment) }
-        binding.notesFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment) }
-        binding.accusationFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.accusationFragment) }
+        binding.navigationFab.setOnClickListener { viewModel.toggleNavigationFab() }
+        binding.blackScreenOverlay.setOnClickListener { viewModel.toggleNavigationFab() }
+        binding.cardsFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment)
+            viewModel.toggleNavigationFab()
+        }
+        binding.notesFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment)
+            viewModel.toggleNavigationFab()
+        }
+        binding.accusationFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.accusationFragment)
+            viewModel.toggleNavigationFab()
+        }
     }
 
     private fun prepareNavDestinationListener() {
@@ -83,6 +90,7 @@ class GameActivity : AppCompatActivity() {
         binding.cardsFragmentFab.isVisible = state.navigationFabOpened
         binding.notesFragmentFab.isVisible = state.navigationFabOpened
         binding.accusationFragmentFab.isVisible = state.navigationFabOpened
+        binding.blackScreenOverlay.isVisible = state.navigationFabOpened
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->

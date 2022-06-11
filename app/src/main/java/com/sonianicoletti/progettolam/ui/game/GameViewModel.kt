@@ -64,7 +64,7 @@ class GameViewModel @Inject constructor(
         viewEventEmitter.value = ViewEvent.NavigateToAuth
     }
 
-    fun handleNavigationFabClick() {
+    fun toggleNavigationFab() {
         val viewState = viewState.value
         val newViewState = ViewState(navigationFabOpened = viewState?.navigationFabOpened?.not() ?: false)
         viewStateEmitter.postValue(newViewState)
