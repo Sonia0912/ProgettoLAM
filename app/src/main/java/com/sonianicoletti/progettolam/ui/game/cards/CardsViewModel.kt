@@ -51,8 +51,9 @@ class CardsViewModel @Inject constructor(
         val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
         val accusingPlayer = game.players.firstOrNull { it.id == game.accusation?.responder }
         val accusationCards = game.accusation?.cards.mapToCardItems()
+        val canDeny = !yourCards.any { it in accusationCards }
 
-        val viewState = ViewState(yourCards, leftoverCards, turnPlayer, accusingPlayer, accusationCards)
+        val viewState = ViewState(yourCards, leftoverCards, turnPlayer, accusingPlayer, accusationCards, canDeny)
         viewStateEmitter.postValue(viewState)
     }
 
@@ -65,6 +66,7 @@ class CardsViewModel @Inject constructor(
         val leftoverCards: MutableList<CardItem>,
         val turnPlayer: Player?,
         val respondingPlayer: Player?,
-        val accusationCards: MutableList<CardItem>
+        val accusationCards: MutableList<CardItem>,
+        val canDeny: Boolean,
     )
 }

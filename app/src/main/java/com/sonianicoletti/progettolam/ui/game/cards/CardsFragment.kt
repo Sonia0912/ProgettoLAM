@@ -61,10 +61,12 @@ class CardsFragment : Fragment() {
                 binding.accusationWeaponText.text = it.accusationCards[1].card.name
                 binding.accusationRoomCard.cardImage.setImageResource(it.accusationCards[2].imageRes)
                 binding.accusationRoomText.text = it.accusationCards[2].card.name
-
+                binding.denyButton.isVisible = true
+                binding.denyButton.isEnabled = it.canDeny
             } else {
                 binding.accusingPlayerText.isVisible = false
                 binding.accusationCardsLayout.isVisible = false
+                binding.denyButton.isVisible = false
             }
         }
     }
