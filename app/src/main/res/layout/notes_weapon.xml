@@ -10,7 +10,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+    android:background="@drawable/rounded_liliac"
+    android:padding="12dp">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -27,14 +29,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                tools:text="Bob" />
+                tools:text="Bob"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                tools:text="John" />
+                tools:text="John"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player3"
@@ -42,7 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_3"
-                tools:text="Thomas" />
+                tools:text="Thomas"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player4"
@@ -50,7 +58,9 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_4"
-                tools:text="Sarah" />
+                tools:text="Sarah"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player5"
@@ -58,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_5"
-                tools:text="Lucy" />
+                tools:text="Lucy"
+                android:textColor="@color/white"/>
         </TableRow>
 
         <TableRow android:tag="Dagger">
@@ -67,35 +78,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Dagger" />
+                android:text="Dagger"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxDagger1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxDagger2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxDagger3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxDagger4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxDagger5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Rope">
@@ -104,35 +121,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Rope" />
+                android:text="Rope"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxRope1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRope2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRope3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRope4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRope5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Candlestick">
@@ -141,35 +164,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Candlestick" />
+                android:text="Candlestick"
+                android:textColor="@color/white"
+                android:layout_marginEnd="8dp"/>
 
             <CheckBox
                 android:id="@+id/checkBoxCandlestick1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxCandlestick2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxCandlestick3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxCandlestick4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxCandlestick5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Wrench">
@@ -178,35 +208,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Wrench" />
+                android:text="Wrench"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxWrench1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWrench2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWrench3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWrench4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWrench5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Lead Pipe">
@@ -215,35 +251,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Lead Pipe" />
+                android:text="Lead Pipe"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxLeadPipe1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxLeadPipe2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxLeadPipe3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxLeadPipe4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxLeadPipe5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Revolver">
@@ -252,34 +294,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Revolver" />
+                android:text="Revolver"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoRevolver1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRevolver2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRevolver3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxRevolver4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWRevolver5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
     </TableLayout>

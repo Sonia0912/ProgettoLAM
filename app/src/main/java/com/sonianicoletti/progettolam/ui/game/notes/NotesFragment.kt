@@ -11,10 +11,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.Player
-import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentNotesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
@@ -46,11 +44,6 @@ class NotesFragment : Fragment() {
         viewModel.cardsState.observe(viewLifecycleOwner) {
             disableDefaultNotes(it.defaultCards)
             setPlayersNames(it.otherPlayers)
-        }
-
-        // Handle cards button
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.cardsFragment)
         }
 
         // Handle types of notes

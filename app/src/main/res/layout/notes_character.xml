@@ -9,7 +9,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/rounded_liliac"
+        android:padding="12dp">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -26,14 +28,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                tools:text="Bob" />
+                tools:text="Bob"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                tools:text="John" />
+                tools:text="John"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player3"
@@ -41,7 +47,9 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_3"
-                tools:text="Thomas" />
+                tools:text="Thomas"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player4"
@@ -49,7 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_4"
-                tools:text="Sarah" />
+                tools:text="Sarah"
+                android:textColor="@color/white"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/Player5"
@@ -57,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:tag="COLUMN_5"
-                tools:text="Lucy" />
+                tools:text="Lucy"
+                android:textColor="@color/white"/>
         </TableRow>
 
         <TableRow android:tag="Mrs Peacock">
@@ -66,17 +77,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Peacock" />
+                android:text="Peacock"
+                android:textColor="@color/white"
+                android:layout_marginEnd="8dp"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPeacock1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxPeacock2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPeacock3"
@@ -94,7 +108,8 @@
                 android:id="@+id/checkBoxPeacock5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Colonel Mustard">
@@ -103,35 +118,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Mustard" />
+                android:text="Mustard"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxMustard1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxMustard2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxMustard3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxMustard4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxMustard5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Professor Plum">
@@ -140,35 +161,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Plum" />
+                android:text="Plum"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxPlum1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxPlum2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxPlum3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxPlum4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxPlum5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Reverend Green">
@@ -177,35 +204,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Green" />
+                android:text="Green"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxGreen1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxGreen2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxGreen3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxGreen4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxGreen5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Miss Scarlett">
@@ -214,35 +247,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="Scarlett" />
+                android:text="Scarlett"
+                android:textColor="@color/white"/>
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxScarlett5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
 
         <TableRow android:tag="Mrs White">
@@ -251,34 +290,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:text="White" />
+                android:text="White"
+                android:textColor="@color/white"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoWhite1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWhite2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWhite3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_3"/>
+                android:tag="COLUMN_3"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWhite4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_4"/>
+                android:tag="COLUMN_4"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxWhite5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="COLUMN_5"/>
+                android:tag="COLUMN_5"
+                />
         </TableRow>
     </TableLayout>

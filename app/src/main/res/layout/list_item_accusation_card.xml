@@ -11,11 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:cardBackgroundColor="#FFF59D">
+        android:backgroundTint="#00FFFFFF">
 
         <FrameLayout
             android:layout_width="80dp"
-            android:layout_height="100dp">
+            android:layout_height="80dp"
+            android:background="@drawable/rounded_pink_card">
 
             <ImageView
                 android:id="@+id/card_image"
