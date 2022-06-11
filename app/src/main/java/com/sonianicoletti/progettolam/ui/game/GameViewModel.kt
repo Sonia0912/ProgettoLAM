@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
@@ -48,8 +49,12 @@ class GameViewModel @Inject constructor(
         val isHost = gameRepository.isHost()
         gameStateEmitter.postValue(GameState(game, isHost))
 
-        if (game.accusation != null && !gameRepository.isTurnPlayer()) {
+        if (game.accusation != null && !gameRepository.isTurnPlayer() && game.status != GameStatus.SHOW_CARD) {
             viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        }
+
+        if (game.status == GameStatus.SHOW_CARD && gameRepository.isTurnPlayer()) {
+            viewEventEmitter.postValue(ViewEvent.NavigateToShowCard)
         }
     }
 
@@ -118,5 +123,6 @@ class GameViewModel @Inject constructor(
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
         object NavigateToCards : ViewEvent()
+        object NavigateToShowCard : ViewEvent()
     }
 }
