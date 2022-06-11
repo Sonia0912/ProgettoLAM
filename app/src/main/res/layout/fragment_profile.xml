@@ -3,60 +3,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
 
-    <TextView
-        android:id="@+id/textViewEmail"
+    <TableLayout
+        android:id="@+id/table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="E-mail:"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textViewUserEmail"
-        app:layout_constraintVertical_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/textViewUserEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="mario@mail.com"
-        app:layout_constraintBottom_toTopOf="@+id/textViewDisplayName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
-
-    <TextView
-        android:id="@+id/textViewDisplayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Display name:"
-        app:layout_constraintBottom_toTopOf="@+id/editTextDisplayName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserEmail" />
-
-    <EditText
-        android:id="@+id/editTextDisplayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Your username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDisplayName"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSave"/>
-
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDisplayName"/>
+        android:padding="20dp"
+        android:background="@drawable/rounded_blue">
+        <TableRow
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-mail:"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <TextView
+                android:id="@+id/textViewUserEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="mario@mail.com"
+                android:textColor="@color/white"
+                android:textAlignment="textEnd"
+                android:textSize="17dp"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:id="@+id/textViewDisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Display name:"
+                android:textSize="17dp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="15dp"/>
+
+            <EditText
+                android:id="@+id/editTextDisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="8"
+                android:inputType="textPersonName"
+                android:hint="Your username"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white"
+                android:textColorHint="@color/light_grey"
+                android:textAlignment="textEnd"/>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:layout_gravity="center"
+                android:layout_span="2"
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_pink_button"/>
+        </TableRow>
+
+    </TableLayout>
 
     <Button
         android:id="@+id/buttonLogOut"
@@ -66,23 +81,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSave" />
+        app:layout_constraintTop_toBottomOf="@+id/table"
+        android:background="@drawable/rounded_red_button"/>
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/dark_russian_violet"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ToolbarTheme">
 
         <ImageView
             android:id="@+id/imageViewBack"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_arrow_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_left_arrow"
             android:layout_gravity="start"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,6 +106,7 @@
             android:layout_gravity="center"
             android:text="Profile"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:fontFamily="@font/agrandir_grand_heavy"/>
     </com.google.android.material.appbar.MaterialToolbar>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,4 +13,25 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Button.RussianViolet" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/russian_violet</item>
+    </style>
+
+    <style name="Button.SkyMagenta" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/sky_magenta</item>
+    </style>
+
+    <style name="Button.BluePigment" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/blue_pigment</item>
+    </style>
+
+    <style name="Button.GoldWebGolden" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/gold_web_golden</item>
+    </style>
+
+    <style name="Button.VividSkyBlue" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/vivid_sky_blue</item>
+    </style>
+
 </resources>

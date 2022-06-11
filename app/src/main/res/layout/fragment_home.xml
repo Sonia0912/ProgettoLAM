@@ -5,14 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.home.HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo_background"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="67dp" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="?attr/colorPrimary" >
+        android:background="@color/dark_russian_violet" >
 
         <ImageView
             android:id="@+id/imageViewPerson"
@@ -20,7 +29,7 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_person"
             android:layout_gravity="start"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,39 +37,51 @@
             android:text="Cluedo"
             android:textSize="30sp"
             android:textColor="@color/white"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:fontFamily="@font/agrandir_grand_heavy"/>
 
         <ImageView
             android:id="@+id/imageViewRules"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_help"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_rules"
             android:layout_gravity="end"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="16dp"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/create_game_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        app:layout_constraintVertical_bias="1"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/rounded_red_button"
+        android:backgroundTintMode="add"
         android:text="Create game"
         app:layout_constraintBottom_toTopOf="@+id/join_game_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textColor="@color/white"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/join_game_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="64dp"
         android:text="Join game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/create_game_button"
         app:layout_constraintStart_toStartOf="@id/create_game_button"
-        app:layout_constraintTop_toBottomOf="@+id/create_game_button" />
+        app:layout_constraintTop_toBottomOf="@+id/create_game_button"
+        android:background="@drawable/rounded_blue_button"
+        app:layout_constraintHorizontal_weight="1"
+        android:textColor="@color/white"/>
 
     <FrameLayout
         android:id="@+id/progress_layout"
