@@ -1,5 +1,6 @@
 package com.sonianicoletti.progettolam.ui.game
 
+import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
 
 data class GameState(

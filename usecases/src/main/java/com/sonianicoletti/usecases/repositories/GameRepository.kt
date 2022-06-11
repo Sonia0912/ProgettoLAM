@@ -1,9 +1,6 @@
 package com.sonianicoletti.usecases.repositories
 
-import com.sonianicoletti.entities.Character
-import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.GameStatus
-import com.sonianicoletti.entities.Player
+import com.sonianicoletti.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {
@@ -30,10 +27,13 @@ interface GameRepository {
 
     suspend fun updateCharacter(userID: String, character: Character)
 
-    suspend fun isUserHost(game: Game): Boolean
+    suspend fun isHost(): Boolean
+
+    suspend fun isTurnPlayer(): Boolean
 
     suspend fun distributeCards()
 
     suspend fun nextTurn()
 
+    suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card)
 }

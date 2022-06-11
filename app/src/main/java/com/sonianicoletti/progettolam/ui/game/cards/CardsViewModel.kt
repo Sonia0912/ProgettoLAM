@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.Player
-import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -30,9 +29,8 @@ class CardsViewModel @Inject constructor(
     }
 
     private fun initialiseGame() {
-        val game = gameRepository.getOngoingGame()
         viewModelScope.launch {
-            if (gameRepository.isUserHost(game)) {
+            if (gameRepository.isHost()) {
                 delay(3000)
                 gameRepository.nextTurn()
             }

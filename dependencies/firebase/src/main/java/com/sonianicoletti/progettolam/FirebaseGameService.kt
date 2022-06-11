@@ -33,7 +33,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             players = mutableListOf(currentPlayer),
             leftoverCards = mutableListOf(),
             solutionCards = mutableListOf(),
-            turnPlayerId = ""
+            turnPlayerId = "",
+            accusation = mutableListOf(),
         )
     }
 
@@ -70,7 +71,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         PLAYERS to players,
         SOLUTION_CARDS to solutionCards,
         LEFTOVER_CARDS to leftoverCards,
-        TURN_PLAYER to turnPlayerId
+        TURN_PLAYER to turnPlayerId,
+        ACCUSATION to accusation,
     )
 
     override suspend fun getGameByID(gameID: String): Game {
@@ -119,6 +121,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         val players = getPlayersFromGameSnapshot(this)
         val leftoverCards = getLeftoverCardsFromGameSnapshot(this)
         val solutionCards = getSolutionCardsFromGameSnapshot(this)
+        val accusation = getAccusationFromGameSnapshot(this)
 
         return Game(
             id = id,
@@ -127,7 +130,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             players = players,
             leftoverCards = leftoverCards,
             solutionCards = solutionCards,
-            turnPlayerId = getString(TURN_PLAYER).orEmpty()
+            turnPlayerId = getString(TURN_PLAYER).orEmpty(),
+            accusation = accusation,
         )
     }
 
@@ -138,6 +142,11 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
 
     private fun getSolutionCardsFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
         val cardsMapList = gameSnapshot["solution_cards"] as? List<HashMap<String, Any>> ?: emptyList()
+        return cardsMapList.map { it.toCard() }.toMutableList()
+    }
+
+    private fun getAccusationFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
+        val cardsMapList = gameSnapshot["ccusation"] as? List<HashMap<String, Any>> ?: emptyList()
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
@@ -153,5 +162,6 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val SOLUTION_CARDS = "solution_cards"
         private const val LEFTOVER_CARDS = "leftover_cards"
         private const val TURN_PLAYER = "turn_player"
+        private const val ACCUSATION = "accusation"
     }
 }

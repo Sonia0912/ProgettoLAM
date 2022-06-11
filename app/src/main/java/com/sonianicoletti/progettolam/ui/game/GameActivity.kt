@@ -89,6 +89,7 @@ class GameActivity : AppCompatActivity() {
         when (event) {
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
+            NavigateToCards -> navigateToCards()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
         }
@@ -104,6 +105,10 @@ class GameActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun navigateToCards() {
+        findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment)
     }
 
     private fun showUserNotLoggedInToast() {
