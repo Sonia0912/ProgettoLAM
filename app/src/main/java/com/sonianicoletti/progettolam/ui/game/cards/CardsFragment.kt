@@ -20,6 +20,8 @@ class CardsFragment : Fragment() {
     private val viewModel: CardsViewModel by viewModels()
     private val gameViewModel: GameViewModel by activityViewModels()
 
+    private lateinit var yourCardsAdapter: CardsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +35,7 @@ class CardsFragment : Fragment() {
 
     private fun initCardsAdapters() {
         // Show the cards
-        val yourCardsAdapter = CardsAdapter()
+        yourCardsAdapter = CardsAdapter()
         val leftoverCardsAdapter = CardsAdapter()
         binding.recyclerViewYourCards.adapter = yourCardsAdapter
         binding.recyclerViewLeftoverCards.adapter = leftoverCardsAdapter
@@ -63,6 +65,7 @@ class CardsFragment : Fragment() {
                 binding.accusationRoomText.text = it.accusationCards[2].card.name
                 binding.denyButton.isVisible = true
                 binding.denyButton.isEnabled = it.canDeny
+                yourCardsAdapter.setAccusationCards(it.accusationCards)
             } else {
                 binding.accusingPlayerText.isVisible = false
                 binding.accusationCardsLayout.isVisible = false
