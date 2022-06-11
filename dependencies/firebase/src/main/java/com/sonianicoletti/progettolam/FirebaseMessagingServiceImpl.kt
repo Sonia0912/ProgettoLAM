@@ -5,10 +5,12 @@ import com.google.firebase.messaging.RemoteMessage
 import com.sonianicoletti.entities.Invitation
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.InvitesService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class FirebaseMessagingServiceImpl: FirebaseMessagingService() {
 
     @Inject

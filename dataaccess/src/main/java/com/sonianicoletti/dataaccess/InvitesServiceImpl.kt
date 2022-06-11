@@ -5,13 +5,19 @@ import com.sonianicoletti.entities.User
 import com.sonianicoletti.usecases.servives.InvitesService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class InvitesServiceImpl @Inject constructor() : InvitesService {
 
     private val moshi = Moshi.Builder()
@@ -24,7 +30,7 @@ class InvitesServiceImpl @Inject constructor() : InvitesService {
         .build()
         .create<MessagingApi>()
 
-    private val invitesFlow = MutableSharedFlow<Invitation>()
+    private val invitesFlow = MutableSharedFlow<Invitation>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override suspend fun sendInvite(gameID: String, inviter: String, targetUser: User) {
         targetUser.messagingToken?.let { token ->
