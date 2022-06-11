@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sonianicoletti.entities.Accusation
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.Player
-import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -30,9 +30,8 @@ class CardsViewModel @Inject constructor(
     }
 
     private fun initialiseGame() {
-        val game = gameRepository.getOngoingGame()
         viewModelScope.launch {
-            if (gameRepository.isUserHost(game)) {
+            if (gameRepository.isHost() && gameRepository.getOngoingGame().turnPlayerId.isEmpty()) {
                 delay(3000)
                 gameRepository.nextTurn()
             }
@@ -40,9 +39,7 @@ class CardsViewModel @Inject constructor(
     }
 
     fun handleGameState(gameState: GameState) = viewModelScope.launch {
-        if (gameRepository.isUserHost(gameState.game)) {
-            prepareViewState(gameState.game)
-        }
+        prepareViewState(gameState.game)
     }
 
     private suspend fun prepareViewState(game: Game) {
@@ -52,8 +49,11 @@ class CardsViewModel @Inject constructor(
         val leftoverCards = game.leftoverCards.mapToCardItems()
 
         val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
+        val accusingPlayer = game.players.firstOrNull { it.id == game.accusation?.responder }
+        val accusationCards = game.accusation?.cards.mapToCardItems()
+        val canDeny = !yourCards.any { it in accusationCards }
 
-        val viewState = ViewState(yourCards, leftoverCards, turnPlayer)
+        val viewState = ViewState(yourCards, leftoverCards, turnPlayer, accusingPlayer, accusationCards, canDeny)
         viewStateEmitter.postValue(viewState)
     }
 
@@ -65,5 +65,8 @@ class CardsViewModel @Inject constructor(
         val yourCards: MutableList<CardItem>,
         val leftoverCards: MutableList<CardItem>,
         val turnPlayer: Player?,
+        val respondingPlayer: Player?,
+        val accusationCards: MutableList<CardItem>,
+        val canDeny: Boolean,
     )
 }

@@ -2,13 +2,10 @@ package com.sonianicoletti.progettolam.ui.game
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
@@ -24,6 +21,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private val viewModel: GameViewModel by viewModels()
 
+    private var isAccusationStage = false
+    private var shouldFabShowInDestination = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
@@ -35,6 +35,7 @@ class GameActivity : AppCompatActivity() {
         initActionBar()
         initNavigationFab()
         observeViewState()
+        observeGameState()
         observeViewEvents()
         prepareNavDestinationListener()
     }
@@ -66,29 +67,51 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initNavigationFab() {
-        binding.navigationFab.setOnClickListener { viewModel.handleNavigationFabClick() }
-        binding.cardsFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment) }
-        binding.notesFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment) }
-        binding.accusationFragmentFab.setOnClickListener { findNavController(R.id.fragment_container_view).navigate(R.id.accusationFragment) }
+        binding.navigationFab.setOnClickListener { viewModel.toggleNavigationFab() }
+        binding.blackScreenOverlay.setOnClickListener { viewModel.toggleNavigationFab() }
+        binding.cardsFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment)
+            viewModel.toggleNavigationFab()
+        }
+        binding.notesFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.notesFragment)
+            viewModel.toggleNavigationFab()
+        }
+        binding.accusationFragmentFab.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.accusationFragment)
+            viewModel.toggleNavigationFab()
+        }
     }
 
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
             binding.toolBar.isVisible = destination.id != R.id.notesFragment
-            binding.navigationFab.isVisible = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            handleNavigationFabVisibility()
         }
+    }
+
+    private fun handleNavigationFabVisibility() {
+        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationStage
     }
 
     private fun observeViewState() = viewModel.viewState.observe(this) { state ->
         binding.cardsFragmentFab.isVisible = state.navigationFabOpened
         binding.notesFragmentFab.isVisible = state.navigationFabOpened
         binding.accusationFragmentFab.isVisible = state.navigationFabOpened
+        binding.blackScreenOverlay.isVisible = state.navigationFabOpened
+    }
+
+    private fun observeGameState() = viewModel.gameState.observe(this) { state ->
+        isAccusationStage = state.game.accusation != null
+        handleNavigationFabVisibility()
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->
         when (event) {
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
+            NavigateToCards -> navigateToCards()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
         }
@@ -106,11 +129,25 @@ class GameActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun navigateToCards() {
+        findNavController(R.id.fragment_container_view).apply {
+            if (currentDestination?.id != R.id.cardsFragment) {
+                navigate(R.id.cardsFragment)
+            }
+        }
+    }
+
     private fun showUserNotLoggedInToast() {
         Toast.makeText(this, getString(R.string.user_not_logged_in_toast), Toast.LENGTH_SHORT).show()
     }
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onBackPressed() {
+        if (!isAccusationStage) {
+            super.onBackPressed()
+        }
     }
 }

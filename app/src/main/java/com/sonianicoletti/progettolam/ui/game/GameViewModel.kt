@@ -45,8 +45,12 @@ class GameViewModel @Inject constructor(
     }
 
     private suspend fun handleGameUpdate(game: Game) {
-        val isHost = gameRepository.isUserHost(game)
+        val isHost = gameRepository.isHost()
         gameStateEmitter.postValue(GameState(game, isHost))
+
+        if (game.accusation != null && !gameRepository.isTurnPlayer()) {
+            viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        }
     }
 
     private fun handleGameNotRunning() = viewModelScope.launch {
@@ -60,7 +64,7 @@ class GameViewModel @Inject constructor(
         viewEventEmitter.value = ViewEvent.NavigateToAuth
     }
 
-    fun handleNavigationFabClick() {
+    fun toggleNavigationFab() {
         val viewState = viewState.value
         val newViewState = ViewState(navigationFabOpened = viewState?.navigationFabOpened?.not() ?: false)
         viewStateEmitter.postValue(newViewState)
@@ -105,7 +109,7 @@ class GameViewModel @Inject constructor(
         val navigationFabOpened: Boolean = false,
         val checkedBoxesCharacters: MutableList<Pair<Int, Int>> = mutableListOf(),
         val checkedBoxesWeapons: MutableList<Pair<Int, Int>> = mutableListOf(),
-        val checkedBoxesRooms: MutableList<Pair<Int, Int>> = mutableListOf()
+        val checkedBoxesRooms: MutableList<Pair<Int, Int>> = mutableListOf(),
     )
 
     sealed class ViewEvent {
@@ -113,5 +117,6 @@ class GameViewModel @Inject constructor(
         object ShowGameNotRunningToast : ViewEvent()
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
+        object NavigateToCards : ViewEvent()
     }
 }

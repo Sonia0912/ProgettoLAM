@@ -8,4 +8,5 @@ data class Game(
     var leftoverCards: MutableList<Card>,
     var solutionCards: MutableList<Card>,
     var turnPlayerId: String,
+    var accusation: Accusation?,
 )

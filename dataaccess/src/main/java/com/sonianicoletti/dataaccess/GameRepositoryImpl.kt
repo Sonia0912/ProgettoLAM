@@ -103,9 +103,16 @@ class GameRepositoryImpl @Inject constructor(
         gameService.updateGame(game)
     }
 
-    override suspend fun isUserHost(game: Game) : Boolean {
+    override suspend fun isHost() : Boolean {
+        val game = getOngoingGame()
         val user = authService.getUser() ?: throw UserNotLoggedInException()
         return user.id == game.host
+    }
+
+    override suspend fun isTurnPlayer(): Boolean {
+        val game = getOngoingGame()
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        return game.turnPlayerId == user.id
     }
 
     override suspend fun distributeCards() {
@@ -151,6 +158,14 @@ class GameRepositoryImpl @Inject constructor(
             else -> game.players[game.players.indexOf(turnPlayer) + 1]
         }.id
 
+        gameService.updateGame(game)
+    }
+
+    override suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card) {
+        val game = getOngoingGame()
+        val currentPlayerIndex = game.players.indexOf(game.players.first { it.id == authService.getUser()?.id })
+        val nextPlayerId = (if (currentPlayerIndex == game.players.lastIndex) game.players[0] else game.players[currentPlayerIndex + 1]).id
+        game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
         gameService.updateGame(game)
     }
 }
