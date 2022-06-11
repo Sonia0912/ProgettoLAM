@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/gameQRCode"
         app:layout_constraintVertical_bias="0.1"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
@@ -34,7 +34,6 @@
         android:imeOptions="actionDone"
         android:background="@drawable/rounded_liliac"
         android:padding="12dp"
-        android:textColor="@color/white"
         android:textColorHint="@color/light_grey"
         style="@style/DefaultTextView"/>
 
@@ -58,6 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/DefaultTextView"
+        android:textColor="@color/gold_web_golden"
         android:textSize="55dp"
         tools:text="123456"/>
 
@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_list"
         android:background="@drawable/rounded_red_button"
-        android:textColor="@color/white"
+        style="@style/ButtonTextView"
         app:layout_constraintHorizontal_weight="1"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"

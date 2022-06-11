@@ -87,8 +87,9 @@ class LobbyFragment : Fragment() {
     }
 
     private fun updateHostPrivileges(isHost: Boolean) {
-        binding.editTextAddPlayer.isEnabled = isHost
-        binding.buttonStartgame.isEnabled = isHost
+        binding.editTextAddPlayer.isVisible = isHost
+        binding.buttonStartgame.isVisible = isHost
+        binding.textView.isVisible = isHost
     }
 
     private fun showGameID(id: String) {
@@ -99,7 +100,6 @@ class LobbyFragment : Fragment() {
         findNavController().navigate(R.id.charactersFragment)
     }
 
-    // it e' l'evento
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
         when (event) {
             ClearText -> clearText()

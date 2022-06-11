@@ -50,6 +50,21 @@ class GameActivity : AppCompatActivity() {
         binding.imageViewRules.setOnClickListener {
             openRulesFragment()
         }
+
+        findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.rulesFragment -> displayRulesToolbar()
+                R.id.lobbyFragment -> displayDefaultToolbar("Lobby")
+                R.id.cardsFragment -> displayDefaultToolbar("Cards")
+                R.id.notesFragment -> displayDefaultToolbar("Notes")
+                R.id.accusationFragment -> displayDefaultToolbar("Accusation")
+                else -> displayDefaultToolbar("Game")
+            }
+        }
+
+        binding.imageViewBack.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigateUp()
+        }
     }
 
     private fun showLeaveGameDialog() {
@@ -64,6 +79,20 @@ class GameActivity : AppCompatActivity() {
 
     private fun openRulesFragment() {
         findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
+    }
+
+    private fun displayRulesToolbar() {
+        binding.titleToolbar.text = "Rules"
+        binding.imageViewExit.isVisible = false
+        binding.imageViewBack.isVisible = true
+        binding.imageViewRules.isVisible = false
+    }
+
+    private fun displayDefaultToolbar(title: String) {
+        binding.titleToolbar.text = title
+        binding.imageViewExit.isVisible = true
+        binding.imageViewBack.isVisible = false
+        binding.imageViewRules.isVisible = true
     }
 
     private fun initNavigationFab() {
@@ -85,8 +114,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
-            binding.toolBar.isVisible = destination.id != R.id.notesFragment
-            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment && destination.id != R.id.rulesFragment
             handleNavigationFabVisibility()
         }
     }

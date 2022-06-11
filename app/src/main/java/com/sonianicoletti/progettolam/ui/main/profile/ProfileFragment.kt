@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.sonianicoletti.entities.User
 import com.sonianicoletti.progettolam.databinding.FragmentProfileBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
@@ -26,15 +25,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater)
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolBar)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-        }
-
-        // Torna alla schermata principale
-        binding.imageViewBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        (activity as AppCompatActivity).apply {}
 
         // Mostra l'e-mail e lo username dell'utente
         viewModel.userState.observe(viewLifecycleOwner) {

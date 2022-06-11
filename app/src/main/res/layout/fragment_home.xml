@@ -14,38 +14,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/logo_background" />
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/dark_russian_violet" >
-
-        <ImageView
-            android:id="@+id/imageViewPerson"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_person"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"/>
-
-        <TextView
-            style="@style/AgrandirTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cluedo"
-            android:layout_gravity="center" />
-
-        <ImageView
-            android:id="@+id/imageViewRules"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_help"
-            android:layout_gravity="end"
-            android:layout_marginEnd="16dp"/>
-
-    </com.google.android.material.appbar.MaterialToolbar>
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/create_game_button"
         android:layout_width="0dp"
@@ -59,9 +27,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:textColor="@color/white"/>
+        style="@style/ButtonTextView"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/join_game_button"
@@ -76,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/create_game_button"
         android:background="@drawable/rounded_blue_button"
         app:layout_constraintHorizontal_weight="1"
-        android:textColor="@color/white"/>
+        style="@style/ButtonTextView"/>
 
     <FrameLayout
         android:id="@+id/progress_layout"

@@ -16,4 +16,11 @@
     <string name="no_network_connection_message">Please check your network connection and try again</string>
     <string name="invalid_email_message">Please enter a valid email</string>
     <string name="register"><u>Register</u></string>
+    <string name="preparation"><b>Preparation</b></string>
+    <string name="how_to_play"><b>How to play</b></string>
+    <string name="victory"><b>Victory</b></string>
+    <string name="how_to_play_description">During the game you can always switch between your cards and your notes to prepare your strategy. \n\nAt your turn, you\'ll be able to make one accusation, declaring by who, how and where the murder happened. If the other players have a card that can deny your accusation they must hand it to you, you can then proceed to update your notes. \n\nIf it\'s your turn to deny an accusation and you have more than one card that can deny it, you can choose which one you want to send. Only the two players who are exchanging the card can see it.</string>
+    <string name="preparation_description">This game can be played by 3 to 6 people. The host of the game can invite people by their e-mail or players can join through game ID or QR code. Once everyone has joined the lobby, the host can start the game. \n\nIf any player leaves the game when it\'s not finished the game will automatically end. \n\nThe game has 6 character cards, 6 weapon cards and 9 room cards, the objective is for you to guess Who, How and Where the victim was murdered. \n\nThe three solution cards will be kept secret since the beginning of the game, the remaining cards will be mixed and equally distributed to all the players. If there are leftover cards these will be visible to all players.</string>
+    <string name="victory_description">To win the game you need to guess all the 3 secret cards: the murderer, the weapon and the room. \n\nWhen it\'s your turn you can make an accusation and declare it as final, which means the other players won\'t try to deny your accusation but you will directly look at the secret cards. If your accusation matches the secret cards, you have won! If not, the game will continue and you won\'t be allowed to play, but you will still deny accusations whenever it\'s required.</string>
+    <string name="make_it_a_final_accusation">Make it a <b>final</b> accusation</string>
 </resources>

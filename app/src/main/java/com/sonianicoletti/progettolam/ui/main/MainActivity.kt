@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonianicoletti.progettolam.R
@@ -24,6 +25,65 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         receiveFirebaseMessage()
         observeViewEvents()
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        initActionBar()
+    }
+
+    private fun initActionBar() {
+        setSupportActionBar(binding.toolBar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        binding.imageViewPerson.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.profileFragment)
+        }
+        binding.imageViewRules.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
+        }
+
+        binding.imageViewBack.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigateUp()
+        }
+
+        findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.rulesFragment -> displayRulesToolbar()
+                R.id.profileFragment -> displayProfileToolbar()
+                R.id.joingameFragment -> displayJoingameToolbar()
+                else -> displayDefaultToolbar()
+            }
+        }
+
+    }
+
+    private fun displayRulesToolbar() {
+        binding.titleToolbar.text = "Rules"
+        binding.imageViewPerson.isVisible = false
+        binding.imageViewBack.isVisible = true
+        binding.imageViewRules.isVisible = false
+    }
+
+    private fun displayProfileToolbar() {
+        binding.titleToolbar.text = "Profile"
+        binding.imageViewPerson.isVisible = false
+        binding.imageViewBack.isVisible = true
+        binding.imageViewRules.isVisible = false
+    }
+
+    private fun displayJoingameToolbar() {
+        binding.titleToolbar.text = "Join game"
+        binding.imageViewPerson.isVisible = false
+        binding.imageViewBack.isVisible = true
+        binding.imageViewRules.isVisible = false
+    }
+
+    private fun displayDefaultToolbar() {
+        binding.titleToolbar.text = "CLUEDO"
+        binding.imageViewPerson.isVisible = true
+        binding.imageViewBack.isVisible = false
+        binding.imageViewRules.isVisible = true
     }
 
     private fun receiveFirebaseMessage() {
