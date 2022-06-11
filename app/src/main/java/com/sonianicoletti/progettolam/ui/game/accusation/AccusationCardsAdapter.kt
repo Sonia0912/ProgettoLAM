@@ -8,7 +8,8 @@ import com.sonianicoletti.progettolam.databinding.ListItemAccusationCardBinding
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 
 class AccusationCardsAdapter(
-    private val cardItems: List<CardItem>
+    private val cardItems: List<CardItem>,
+    private val onCardSelected: (CardItem) -> Unit
 ) : RecyclerView.Adapter<AccusationCardsAdapter.ViewHolder>() {
 
     private var selectedCard: CardItem? = null
@@ -34,7 +35,10 @@ class AccusationCardsAdapter(
         fun bind(cardItem: CardItem) {
             binding.cardImage.setImageResource(cardItem.imageRes)
             binding.selectedView.isVisible = selectedCard == cardItem
-            binding.card.setOnClickListener { setSelectedCard(cardItem) }
+            binding.card.setOnClickListener {
+                setSelectedCard(cardItem)
+                onCardSelected(cardItem)
+            }
         }
     }
 }
