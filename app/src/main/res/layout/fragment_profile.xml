@@ -60,12 +60,14 @@
                 android:textAlignment="textEnd"/>
         </TableRow>
         <TableRow>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_gravity="center"
                 android:layout_span="2"
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
                 android:text="Save"
                 android:textColor="@color/white"
                 android:background="@drawable/rounded_pink_button"/>
@@ -73,16 +75,22 @@
 
     </TableLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLogOut"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="1"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintHorizontal_weight="1"
         android:text="Log out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/table"
-        android:background="@drawable/rounded_red_button"/>
+        android:background="@drawable/rounded_red_button"
+        android:textColor="@color/white"/>
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolBar"
