@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.GameStatus
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
+import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,7 @@ class GameViewModel @Inject constructor(
     val gameState: LiveData<GameState> = gameStateEmitter
 
     private val observeGameJob = Job()
+    private var isCurrentTurn: Boolean = false
 
     init {
         observeGameUpdates()
@@ -49,13 +51,23 @@ class GameViewModel @Inject constructor(
         val isHost = gameRepository.isHost()
         gameStateEmitter.postValue(GameState(game, isHost))
 
-        if (game.accusation != null && !gameRepository.isTurnPlayer() && game.status != GameStatus.SHOW_CARD) {
+        if (isCurrentTurn && !gameRepository.isCurrentTurn()) {
+            isCurrentTurn = false
+            viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        }
+        isCurrentTurn = gameRepository.isCurrentTurn()
+
+        if (game.accusation != null && !gameRepository.isCurrentTurn()) {
             viewEventEmitter.postValue(ViewEvent.NavigateToCards)
         }
 
-        if (game.status == GameStatus.SHOW_CARD && gameRepository.isTurnPlayer()) {
-            viewEventEmitter.postValue(ViewEvent.NavigateToShowCard)
-        }
+        game.accusation?.displayCard?.let { displayCard ->
+            if (gameRepository.isCurrentTurn()) {
+                viewEventEmitter.postValue(ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), true, gameRepository.getTurnPlayer().displayName))
+            } else if (gameRepository.isAccusationResponder()) {
+                viewEventEmitter.postValue(ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), false, gameRepository.getTurnPlayer().displayName))
+            }
+        } ?: viewEventEmitter.postValue(ViewEvent.HideDisplayCard)
     }
 
     private fun handleGameNotRunning() = viewModelScope.launch {
@@ -110,11 +122,18 @@ class GameViewModel @Inject constructor(
         viewStateEmitter.postValue(viewState.value)
     }
 
+    fun onDisplayCardButtonClicked() = viewModelScope.launch {
+        gameRepository.nextTurn()
+    }
+
     data class ViewState(
         val navigationFabOpened: Boolean = false,
         val checkedBoxesCharacters: MutableList<Pair<Int, Int>> = mutableListOf(),
         val checkedBoxesWeapons: MutableList<Pair<Int, Int>> = mutableListOf(),
         val checkedBoxesRooms: MutableList<Pair<Int, Int>> = mutableListOf(),
+        val displayCard: CardItem? = null,
+        val turnPlayer: Player? = null,
+        val isTurnPlayer: Boolean? = false,
     )
 
     sealed class ViewEvent {
@@ -123,6 +142,7 @@ class GameViewModel @Inject constructor(
         object NavigateToAuth : ViewEvent()
         object NavigateToMain : ViewEvent()
         object NavigateToCards : ViewEvent()
-        object NavigateToShowCard : ViewEvent()
+        class ShowDisplayCard(val cardItem: CardItem, val isTurnPlayer: Boolean, val turnPlayerName: String) : ViewEvent()
+        object HideDisplayCard : ViewEvent()
     }
 }

@@ -2,6 +2,9 @@ package com.sonianicoletti.progettolam.ui.game
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,7 @@ import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
 import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.*
+import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.progettolam.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,6 +42,8 @@ class GameActivity : AppCompatActivity() {
         observeGameState()
         observeViewEvents()
         prepareNavDestinationListener()
+
+        binding.displayCardButton.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
     }
 
     private fun initActionBar() {
@@ -112,9 +118,10 @@ class GameActivity : AppCompatActivity() {
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
             NavigateToCards -> navigateToCards()
-            NavigateToShowCard -> navigateToShowCard()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
+            is ShowDisplayCard -> showDisplayCard(event.cardItem, event.isTurnPlayer, event.turnPlayerName)
+            HideDisplayCard -> hideDisplayCard()
         }
     }
 
@@ -138,20 +145,39 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToShowCard() {
-        findNavController(R.id.fragment_container_view).apply {
-            if (currentDestination?.id != R.id.showCardFragment) {
-                navigate(R.id.showCardFragment)
-            }
-        }
-    }
-
     private fun showUserNotLoggedInToast() {
         Toast.makeText(this, getString(R.string.user_not_logged_in_toast), Toast.LENGTH_SHORT).show()
     }
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showDisplayCard(cardItem: CardItem, isTurnPlayer: Boolean, turnPlayerName: String) {
+        binding.displayCardLayout.visibility = View.INVISIBLE
+        binding.displayCardImage.setImageResource(cardItem.imageRes)
+        binding.displayCardName.text = cardItem.card.name
+        binding.displayCardButton.isVisible = isTurnPlayer
+        binding.displayCardSubtitle.text = "Showing card to $turnPlayerName"
+        binding.displayCardSubtitle.isVisible = !isTurnPlayer
+
+        binding.displayCard.post {
+            binding.displayCardLayout.isVisible = true
+            val cardY = binding.displayCard.y + binding.displayCard.height
+            binding.displayCard.y = 0F - binding.displayCard.height
+            binding.displayCardLayout.alpha = 0F
+            binding.displayCardButton.alpha = 0F
+            binding.displayCardSubtitle.alpha = 0F
+
+            binding.displayCardLayout.animate().alpha(1F).setDuration(500).start()
+            binding.displayCard.animate().yBy(cardY).setDuration(500).setStartDelay(100).setInterpolator(DecelerateInterpolator()).start()
+            binding.displayCardButton.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
+            binding.displayCardSubtitle.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
+        }
+    }
+
+    private fun hideDisplayCard() {
+        binding.displayCardLayout.isVisible = false
     }
 
     override fun onBackPressed() {

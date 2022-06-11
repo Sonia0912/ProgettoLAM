@@ -116,4 +116,71 @@
         app:srcCompat="@drawable/ic_accusation"
         tools:visibility="visible"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/display_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#EE000000">
+
+        <LinearLayout
+            android:id="@+id/display_card"
+            android:layout_width="175dp"
+            android:layout_height="250dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/rounded_liliac_card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/display_card_button"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/display_card_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:src="@sample/cards" />
+
+            <TextView
+                android:id="@+id/display_card_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="22sp"
+                android:layout_marginTop="24dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                tools:text="Card Name" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/display_card_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/display_card"
+            app:layout_constraintBottom_toTopOf="@id/display_card_subtitle"
+            android:text="Ok" />
+
+        <TextView
+            android:id="@+id/display_card_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/display_card_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:text="Showing card to accuser" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

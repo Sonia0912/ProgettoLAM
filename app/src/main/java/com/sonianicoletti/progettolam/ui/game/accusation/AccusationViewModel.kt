@@ -23,7 +23,7 @@ class AccusationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            viewStateEmitter.postValue(ViewState(isTurnPlayer = gameRepository.isTurnPlayer()))
+            viewStateEmitter.postValue(ViewState(isTurnPlayer = gameRepository.isCurrentTurn()))
         }
     }
 
@@ -48,7 +48,7 @@ class AccusationViewModel @Inject constructor(
 
     fun handleGameState(gameState: GameState) {
         viewModelScope.launch {
-            viewState.value?.isTurnPlayer = gameRepository.isTurnPlayer()
+            viewState.value?.isTurnPlayer = gameRepository.isCurrentTurn()
             viewState.value?.respondingPlayer = gameState.game.players.firstOrNull { it.id == gameState.game.accusation?.responder }
             viewStateEmitter.emit()
         }

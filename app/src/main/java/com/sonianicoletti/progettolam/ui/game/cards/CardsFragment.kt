@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCardsBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
-import com.sonianicoletti.progettolam.ui.game.showcard.ShowCardFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,9 +45,7 @@ class CardsFragment : Fragment() {
         yourCardsAdapter = CardsAdapter()
         val leftoverCardsAdapter = CardsAdapter()
         yourCardsAdapter.setOnAccusationCardClickListener {
-            viewModel.onAccusationCardClicked()
-            val arguments = Bundle().apply { putSerializable(ShowCardFragment.KEY_CARD, it) }
-            findNavController().navigate(R.id.showCardFragment, arguments)
+            viewModel.onAccusationCardClicked(it)
         }
         binding.recyclerViewYourCards.adapter = yourCardsAdapter
         binding.recyclerViewLeftoverCards.adapter = leftoverCardsAdapter
@@ -77,7 +74,6 @@ class CardsFragment : Fragment() {
                     yourCardsAdapter.setAccusationCards(it.accusationCards)
                 } else {
                     binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
-                    yourCardsAdapter.setAccusationCards(null)
                 }
 
                 binding.accusingPlayerText.isVisible = true
@@ -94,6 +90,7 @@ class CardsFragment : Fragment() {
                 binding.accusingPlayerText.isVisible = false
                 binding.accusationCardsLayout.isVisible = false
                 binding.skipButton.isVisible = false
+                yourCardsAdapter.setAccusationCards(null)
             }
         }
     }
