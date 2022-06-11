@@ -149,7 +149,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         val accusationMap = gameSnapshot[ACCUSATION] as? HashMap<String, Any> ?: return null
         val cardsMapList = accusationMap[ACCUSATION_CARDS] as? List<HashMap<String, Any>> ?: emptyList()
         val accusationCards = cardsMapList.map { it.toCard() }.toMutableList()
-        val responder = (accusationMap[ACCUSATION_RESPONSES].toString())
+        val responder = (accusationMap[ACCUSATION_RESPONDER].toString())
         return Accusation(accusationCards, responder)
     }
 
@@ -167,6 +167,6 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val TURN_PLAYER = "turn_player"
         private const val ACCUSATION = "accusation"
         private const val ACCUSATION_CARDS = "cards"
-        private const val ACCUSATION_RESPONSES = "responses"
+        private const val ACCUSATION_RESPONDER = "responder"
     }
 }

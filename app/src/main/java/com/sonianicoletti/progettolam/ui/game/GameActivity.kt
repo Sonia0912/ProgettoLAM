@@ -21,6 +21,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private val viewModel: GameViewModel by viewModels()
 
+    private var isAccusationStage = false
+    private var shouldFabShowInDestination = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
@@ -32,6 +35,7 @@ class GameActivity : AppCompatActivity() {
         initActionBar()
         initNavigationFab()
         observeViewState()
+        observeGameState()
         observeViewEvents()
         prepareNavDestinationListener()
     }
@@ -82,8 +86,13 @@ class GameActivity : AppCompatActivity() {
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
             binding.toolBar.isVisible = destination.id != R.id.notesFragment
-            binding.navigationFab.isVisible = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            handleNavigationFabVisibility()
         }
+    }
+
+    private fun handleNavigationFabVisibility() {
+        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationStage
     }
 
     private fun observeViewState() = viewModel.viewState.observe(this) { state ->
@@ -91,6 +100,11 @@ class GameActivity : AppCompatActivity() {
         binding.notesFragmentFab.isVisible = state.navigationFabOpened
         binding.accusationFragmentFab.isVisible = state.navigationFabOpened
         binding.blackScreenOverlay.isVisible = state.navigationFabOpened
+    }
+
+    private fun observeGameState() = viewModel.gameState.observe(this) { state ->
+        isAccusationStage = state.game.accusation != null
+        handleNavigationFabVisibility()
     }
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(this) { event ->
@@ -116,7 +130,11 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun navigateToCards() {
-        findNavController(R.id.fragment_container_view).navigate(R.id.cardsFragment)
+        findNavController(R.id.fragment_container_view).apply {
+            if (currentDestination?.id != R.id.cardsFragment) {
+                navigate(R.id.cardsFragment)
+            }
+        }
     }
 
     private fun showUserNotLoggedInToast() {
@@ -125,5 +143,11 @@ class GameActivity : AppCompatActivity() {
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onBackPressed() {
+        if (!isAccusationStage) {
+            super.onBackPressed()
+        }
     }
 }

@@ -51,6 +51,16 @@ class AccusationFragment : Fragment() {
             return@observe
         }
 
+        binding.accuseButton.isEnabled = state.respondingPlayer == null
+
+        if (state.respondingPlayer != null) {
+            binding.waitingForResponderOverlay.isVisible = true
+            binding.waitingForResponderText.text = "Waiting for ${state.respondingPlayer?.displayName} to respond"
+        } else {
+            binding.waitingForResponderOverlay.isVisible = false
+        }
+
+
         state.selectedCharacterCard?.let {
             charactersAdapter.setSelectedCard(it)
             binding.accusationCharacterCard.cardImage.setImageResource(it.imageRes)

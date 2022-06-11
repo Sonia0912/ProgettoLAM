@@ -21,7 +21,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
         val options = ScanOptions()
             .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
             .setBeepEnabled(false)
-            .setOrientationLocked(false)
         qrCodeScannerLauncher.launch(options) // apre la fotocamera
     }
 

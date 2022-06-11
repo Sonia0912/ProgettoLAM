@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,71 +12,71 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="48dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="48dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:textSize="16sp"
+                android:text="Character"
                 android:textColor="#1A1A1A"
-                android:text="Character" />
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/character_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/list_item_accusation_card"
-                android:layout_marginTop="16dp" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_accusation_card" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:textSize="16sp"
+                android:text="Weapon"
                 android:textColor="#1A1A1A"
-                android:text="Weapon" />
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weapon_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/list_item_accusation_card"
-                android:layout_marginTop="16dp" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_accusation_card" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:textSize="16sp"
+                android:text="Room"
                 android:textColor="#1A1A1A"
-                android:text="Room" />
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/room_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/list_item_accusation_card"
-                android:layout_marginTop="16dp" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_accusation_card" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:text="Accusation"
-                android:layout_marginStart="16dp"
-                android:textSize="18sp"
-                android:textColor="#1A1A1A" />
+                android:textColor="#1A1A1A"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -88,14 +88,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <include
                         android:id="@+id/accusation_character_card"
                         layout="@layout/list_item_accusation_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"
                         android:layout_gravity="center_horizontal"
+                        android:visibility="invisible"
                         tools:visibility="visible" />
+
                     <TextView
                         android:id="@+id/accusation_character_text"
                         android:layout_width="wrap_content"
@@ -109,14 +111,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <include
                         android:id="@+id/accusation_weapon_card"
                         layout="@layout/list_item_accusation_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"
                         android:layout_gravity="center_horizontal"
+                        android:visibility="invisible"
                         tools:visibility="visible" />
+
                     <TextView
                         android:id="@+id/accusation_weapon_text"
                         android:layout_width="wrap_content"
@@ -130,14 +134,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <include
                         android:id="@+id/accusation_room_card"
                         layout="@layout/list_item_accusation_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"
                         android:layout_gravity="center_horizontal"
+                        android:visibility="invisible"
                         tools:visibility="visible" />
+
                     <TextView
                         android:id="@+id/accusation_room_text"
                         android:layout_width="wrap_content"
@@ -152,9 +158,9 @@
                 android:id="@+id/accuse_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="24dp"
-                android:text="Accuse"
-                android:layout_gravity="center_horizontal" />
+                android:text="Accuse" />
 
         </LinearLayout>
 
@@ -163,25 +169,52 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/not_turn_player_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#AAFFFFFF"
             android:clickable="true"
-            android:focusableInTouchMode="false"
-            android:background="#AAFFFFFF" />
+            android:focusable="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Not your turn"
-            android:textSize="20sp"
             android:textColor="#1A1A1A"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/waiting_for_responder_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#AAFFFFFF"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/waiting_for_responder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1A1A1A"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            tools:text="Waiting for Pablo to respond" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
