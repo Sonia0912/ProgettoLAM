@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         <FrameLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:background="@drawable/rounded_liliac_card">
+            android:background="@drawable/rounded_pink_card">
 
             <ImageView
                 android:id="@+id/card_image"
@@ -35,6 +35,6 @@
 
         </FrameLayout>
 
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

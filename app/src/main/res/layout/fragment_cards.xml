@@ -54,7 +54,7 @@
 
                 <include
                     android:id="@+id/accusation_character_card"
-                    layout="@layout/list_item_accusation_card"
+                    layout="@layout/list_item_accusation_card_received"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal" />
@@ -77,7 +77,7 @@
 
                 <include
                     android:id="@+id/accusation_weapon_card"
-                    layout="@layout/list_item_accusation_card"
+                    layout="@layout/list_item_accusation_card_received"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -101,7 +101,7 @@
 
                 <include
                     android:id="@+id/accusation_room_card"
-                    layout="@layout/list_item_accusation_card"
+                    layout="@layout/list_item_accusation_card_received"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal" />

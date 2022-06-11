@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,8 +22,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Character"
-                android:textColor="#1A1A1A"
-                android:textSize="16sp" />
+                android:textColor="@color/gold_web_golden"
+                style="@style/AgrandirTextView"
+                android:textSize="20sp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/character_cards"
@@ -39,8 +41,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Weapon"
-                android:textColor="#1A1A1A"
-                android:textSize="16sp" />
+                android:textColor="@color/gold_web_golden"
+                style="@style/AgrandirTextView"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weapon_cards"
@@ -57,8 +60,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Room"
-                android:textColor="#1A1A1A"
-                android:textSize="16sp" />
+                android:textColor="@color/gold_web_golden"
+                style="@style/AgrandirTextView"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/room_cards"
@@ -75,8 +79,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:text="Accusation"
-                android:textColor="#1A1A1A"
-                android:textSize="18sp" />
+                android:textColor="@color/red_sky_magenta"
+                style="@style/AgrandirTextView"
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,7 +108,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Plum" />
+                        tools:text="Plum"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -126,7 +133,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Knife" />
+                        tools:text="Knife"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,18 +158,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Kitchen" />
+                        tools:text="Kitchen"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/accuse_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="24dp"
-                android:text="Accuse" />
+                android:paddingStart="64dp"
+                android:paddingEnd="64dp"
+                android:text="Accuse"
+                android:background="@drawable/rounded_red_button"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
