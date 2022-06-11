@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCardsBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +50,22 @@ class CardsFragment : Fragment() {
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
             binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
+
+            if (it.respondingPlayer != null) {
+                binding.accusingPlayerText.isVisible = true
+                binding.accusationCardsLayout.isVisible = true
+                binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
+                binding.accusationCharacterCard.cardImage.setImageResource(it.accusationCards[0].imageRes)
+                binding.accusationCharacterText.text = it.accusationCards[0].card.name
+                binding.accusationWeaponCard.cardImage.setImageResource(it.accusationCards[1].imageRes)
+                binding.accusationWeaponText.text = it.accusationCards[1].card.name
+                binding.accusationRoomCard.cardImage.setImageResource(it.accusationCards[2].imageRes)
+                binding.accusationRoomText.text = it.accusationCards[2].card.name
+
+            } else {
+                binding.accusingPlayerText.isVisible = false
+                binding.accusationCardsLayout.isVisible = false
+            }
         }
     }
 

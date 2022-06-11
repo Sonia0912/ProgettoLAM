@@ -195,6 +195,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/waiting_for_responder_overlay"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <View
