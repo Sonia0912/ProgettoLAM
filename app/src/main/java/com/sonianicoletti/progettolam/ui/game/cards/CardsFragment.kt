@@ -20,6 +20,8 @@ class CardsFragment : Fragment() {
     private val viewModel: CardsViewModel by viewModels()
     private val gameViewModel: GameViewModel by activityViewModels()
 
+    private lateinit var yourCardsAdapter: CardsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,12 +30,17 @@ class CardsFragment : Fragment() {
         initCardsAdapters()
         observeGameState()
         observeViewState()
+
+        binding.denyButton.setOnClickListener {
+            viewModel.deny()
+        }
+
         return binding.root
     }
 
     private fun initCardsAdapters() {
         // Show the cards
-        val yourCardsAdapter = CardsAdapter()
+        yourCardsAdapter = CardsAdapter()
         val leftoverCardsAdapter = CardsAdapter()
         binding.recyclerViewYourCards.adapter = yourCardsAdapter
         binding.recyclerViewLeftoverCards.adapter = leftoverCardsAdapter
@@ -49,12 +56,24 @@ class CardsFragment : Fragment() {
         viewModel.viewState.observe(viewLifecycleOwner) {
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
-            binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
+
+            if (it.currentUserId == it.turnPlayer?.id) {
+                binding.turnPlayerText.text = "Your turn"
+            } else {
+                binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
+            }
 
             if (it.respondingPlayer != null) {
+                if (it.currentUserId == it.respondingPlayer.id) {
+                    binding.accusingPlayerText.text = "You must now respond to the accusation"
+                    yourCardsAdapter.setAccusationCards(it.accusationCards)
+                } else {
+                    binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
+                    yourCardsAdapter.setAccusationCards(null)
+                }
+
                 binding.accusingPlayerText.isVisible = true
                 binding.accusationCardsLayout.isVisible = true
-                binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
                 binding.accusationCharacterCard.cardImage.setImageResource(it.accusationCards[0].imageRes)
                 binding.accusationCharacterText.text = it.accusationCards[0].card.name
                 binding.accusationWeaponCard.cardImage.setImageResource(it.accusationCards[1].imageRes)

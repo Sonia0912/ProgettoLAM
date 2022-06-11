@@ -66,7 +66,7 @@ class GameViewModel @Inject constructor(
 
     fun toggleNavigationFab() {
         val viewState = viewState.value
-        val newViewState = ViewState(navigationFabOpened = viewState?.navigationFabOpened?.not() ?: false)
+        val newViewState = viewState?.copy(navigationFabOpened = viewState.navigationFabOpened.not())
         viewStateEmitter.postValue(newViewState)
     }
 
