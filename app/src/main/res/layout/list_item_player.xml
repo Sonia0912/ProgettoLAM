@@ -2,21 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView android:id="@+id/username"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Player"
-        android:paddingStart="5dp"
-        android:textSize="20sp"/>
-    <TextView android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="E-mail"
-        android:padding="5dp"/>
+        android:textSize="20sp"
+        android:background="@drawable/rounded_light_purple"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/white"
+        style="@style/DefaultTextView"
+        android:drawableStart="@drawable/ic_person"
+        android:drawablePadding="10dp"/>
 
 </LinearLayout>
 

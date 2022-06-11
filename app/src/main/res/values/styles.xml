@@ -2,7 +2,21 @@
 <resources>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textViewStyle">@style/AgrandirTextView</item>
         <item name="colorControlNormal">#FFF</item>
+        <item name="backgroundTint">@color/dark_russian_violet</item>
+    </style>
+
+    <style name="DefaultTextView">
+        <item name="android:fontFamily">@font/neue_haas_unica_pro_medium</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AgrandirTextView">
+        <item name="android:fontFamily">@font/agrandir_grand_heavy</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

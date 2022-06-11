@@ -3,9 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:ignore="UseCompoundDrawables">
+    android:gravity="center_horizontal|center_vertical"
+    tools:ignore="UseCompoundDrawables"
+    android:layout_margin="12dp"
+    android:background="@drawable/rounded_liliac_card"
+    android:padding="12dp">
 
     <ImageView
         android:id="@+id/avatar"
@@ -19,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        tools:text="@tools:sample/first_names" />
+        tools:text="@tools:sample/first_names"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

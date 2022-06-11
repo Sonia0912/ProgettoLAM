@@ -11,12 +11,13 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
-        app:theme="@style/ToolbarTheme">
+        app:theme="@style/ToolbarTheme"
+        android:backgroundTint="@color/dark_russian_violet">
 
         <ImageView
             android:id="@+id/imageViewExit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_exit"
             android:layout_gravity="start"
             android:layout_marginStart="10dp"/>
@@ -27,15 +28,16 @@
             android:layout_gravity="center"
             android:text="Game"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            style="@style/AgrandirTextView"/>
 
         <ImageView
             android:id="@+id/imageViewRules"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_help"
             android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_help" />
+            android:layout_marginEnd="16dp" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.fragment.app.FragmentContainerView
@@ -56,6 +58,7 @@
         android:importantForAccessibility="no"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="@color/vivid_sky_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_fab_menu"
         tools:visibility="visible" />
@@ -71,8 +74,9 @@
         app:layout_constraintStart_toStartOf="@id/navigationFab"
         app:layout_constraintEnd_toEndOf="@id/navigationFab"
         app:fabSize="mini"
+        app:backgroundTint="@color/vivid_sky_blue"
         app:srcCompat="@drawable/ic_cards"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/notesFragmentFab"
@@ -85,8 +89,9 @@
         app:layout_constraintStart_toStartOf="@id/navigationFab"
         app:layout_constraintEnd_toEndOf="@id/navigationFab"
         app:fabSize="mini"
+        app:backgroundTint="@color/vivid_sky_blue"
         app:srcCompat="@drawable/ic_notes"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/accusationFragmentFab"
@@ -99,7 +104,8 @@
         app:layout_constraintStart_toStartOf="@id/navigationFab"
         app:layout_constraintEnd_toEndOf="@id/navigationFab"
         app:fabSize="mini"
+        app:backgroundTint="@color/vivid_sky_blue"
         app:srcCompat="@drawable/ic_accusation"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

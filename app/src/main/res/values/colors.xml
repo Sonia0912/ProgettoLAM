@@ -12,10 +12,13 @@
 
     <color name="russian_violet">#2F1856</color>
     <color name="sky_magenta">#ee4d9b</color>
-    <color name="blue_pigment">#31358E</color>
+    <color name="blue_pigment">#3137A6</color>
     <color name="gold_web_golden">#FAD519</color>
     <color name="vivid_sky_blue">#5ECBF6</color>
     <color name="dark_russian_violet">#200F3E</color>
+    <color name="light_russian_violet">#55378A</color>
+    <color name="liliac">#6F51A3</color>
     <color name="red_sky_magenta">#bd2450</color>
+    <color name="light_blue_pigment">#454AAC</color>
 
 </resources>

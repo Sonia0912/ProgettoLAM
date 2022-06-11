@@ -12,10 +12,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        app:layout_constraintVertical_bias="0.2"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="20dp"
-        android:background="@drawable/rounded_blue">
+        android:padding="30dp"
+        android:background="@drawable/rounded_light_purple">
         <TableRow
             android:layout_marginBottom="20dp">
             <TextView
@@ -34,7 +35,8 @@
                 tools:text="mario@mail.com"
                 android:textColor="@color/white"
                 android:textAlignment="textEnd"
-                android:textSize="17dp"/>
+                android:textSize="17dp"
+                android:layout_marginEnd="5dp"/>
         </TableRow>
         <TableRow
             android:layout_marginBottom="20dp">
@@ -45,52 +47,54 @@
                 android:text="Display name:"
                 android:textSize="17dp"
                 android:textColor="@color/white"
-                android:layout_marginEnd="15dp"/>
+                android:layout_marginEnd="24dp"/>
 
             <EditText
                 android:id="@+id/editTextDisplayName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="8"
+                android:ems="7"
                 android:inputType="textPersonName"
                 android:hint="Your username"
-                android:backgroundTint="@color/white"
+                android:background="@drawable/rounded_liliac"
+                android:padding="6dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/light_grey"
                 android:textAlignment="textEnd"/>
         </TableRow>
-        <TableRow>
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_gravity="center"
-                android:layout_span="2"
-                android:id="@+id/buttonSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:text="Save"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_pink_button"/>
-        </TableRow>
-
     </TableLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonLogOut"
+        android:id="@+id/buttonSave"
         android:layout_width="0dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_pink_button"
+        android:text="Save changes"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogOut"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="1"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolBar"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonLogOut"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
         app:layout_constraintHorizontal_weight="1"
         android:text="Log out"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table"
+        app:layout_constraintEnd_toEndOf="@id/buttonSave"
+        app:layout_constraintStart_toStartOf="@id/buttonSave"
+        app:layout_constraintTop_toBottomOf="@id/buttonSave"
         android:background="@drawable/rounded_red_button"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolBar"
@@ -104,17 +108,17 @@
             android:id="@+id/imageViewBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_left_arrow"
+            android:src="@drawable/ic_back_arrow"
             android:layout_gravity="start"
             android:layout_marginStart="8dp"/>
 
         <TextView
+            style="@style/AgrandirTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Profile"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:fontFamily="@font/agrandir_grand_heavy"/>
+            android:textSize="30sp" />
     </com.google.android.material.appbar.MaterialToolbar>
 </androidx.constraintlayout.widget.ConstraintLayout>

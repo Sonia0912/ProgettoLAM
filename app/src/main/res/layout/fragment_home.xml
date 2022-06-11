@@ -12,9 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo_background"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="67dp" />
+        android:src="@drawable/logo_background" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolBar"
@@ -32,19 +30,17 @@
             android:layout_marginStart="8dp"/>
 
         <TextView
+            style="@style/AgrandirTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cluedo"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:fontFamily="@font/agrandir_grand_heavy"/>
+            android:layout_gravity="center" />
 
         <ImageView
             android:id="@+id/imageViewRules"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_rules"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_help"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"/>
 
@@ -58,7 +54,6 @@
         app:layout_constraintVertical_bias="1"
         android:layout_marginEnd="30dp"
         android:background="@drawable/rounded_red_button"
-        android:backgroundTintMode="add"
         android:text="Create game"
         app:layout_constraintBottom_toTopOf="@+id/join_game_button"
         app:layout_constraintEnd_toEndOf="parent"

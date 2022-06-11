@@ -16,7 +16,8 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan|adjustResize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +26,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.auth.AuthActivity" />
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
 
-        <activity android:name=".ui.game.GameActivity" />
+        <activity
+            android:name=".ui.game.GameActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
         
         <service android:name=".FirebaseMessagingServiceImpl"
             android:exported="false">

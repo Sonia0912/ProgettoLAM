@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
 
     <TextView
         android:id="@+id/turn_player_text"
@@ -13,7 +14,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Turn Player: Pablo" />
+        tools:text="Turn Player: Pablo"
+        style="@style/DefaultTextView"
+        android:textColor="@color/gold_web_golden"/>
 
     <TextView
         android:id="@+id/your_hand_text"
@@ -23,11 +26,12 @@
         android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/turn_player_text" />
+        app:layout_constraintTop_toBottomOf="@id/turn_player_text"
+        style="@style/DefaultTextView"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewYourCards"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
@@ -49,7 +53,8 @@
         android:text="Leftover cards"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards"
+        style="@style/DefaultTextView"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewLeftoverCards"

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
 
     <TextView
         android:id="@+id/header"
@@ -14,7 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.15"
+        style="@style/AgrandirTextView"
+        android:textAlignment="center"
+        android:textColor="@color/gold_web_golden"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/character_grid"

@@ -9,7 +9,7 @@ import com.sonianicoletti.progettolam.databinding.ListItemPlayerBinding
 class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayersAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ListItemPlayerBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ListItemPlayerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
