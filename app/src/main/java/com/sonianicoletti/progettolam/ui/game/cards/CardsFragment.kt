@@ -30,6 +30,11 @@ class CardsFragment : Fragment() {
         initCardsAdapters()
         observeGameState()
         observeViewState()
+
+        binding.denyButton.setOnClickListener {
+            viewModel.deny()
+        }
+
         return binding.root
     }
 
@@ -51,12 +56,24 @@ class CardsFragment : Fragment() {
         viewModel.viewState.observe(viewLifecycleOwner) {
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
-            binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
+
+            if (it.currentUserId == it.turnPlayer?.id) {
+                binding.turnPlayerText.text = "Your turn"
+            } else {
+                binding.turnPlayerText.text = "Turn player: ${it.turnPlayer?.displayName.orEmpty()}"
+            }
 
             if (it.respondingPlayer != null) {
+                if (it.currentUserId == it.respondingPlayer.id) {
+                    binding.accusingPlayerText.text = "You must now respond to the accusation"
+                    yourCardsAdapter.setAccusationCards(it.accusationCards)
+                } else {
+                    binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
+                    yourCardsAdapter.setAccusationCards(null)
+                }
+
                 binding.accusingPlayerText.isVisible = true
                 binding.accusationCardsLayout.isVisible = true
-                binding.accusingPlayerText.text = "${it.respondingPlayer.displayName} is responding to the accusation"
                 binding.accusationCharacterCard.cardImage.setImageResource(it.accusationCards[0].imageRes)
                 binding.accusationCharacterText.text = it.accusationCards[0].card.name
                 binding.accusationWeaponCard.cardImage.setImageResource(it.accusationCards[1].imageRes)
@@ -65,7 +82,6 @@ class CardsFragment : Fragment() {
                 binding.accusationRoomText.text = it.accusationCards[2].card.name
                 binding.denyButton.isVisible = true
                 binding.denyButton.isEnabled = it.canDeny
-                yourCardsAdapter.setAccusationCards(it.accusationCards)
             } else {
                 binding.accusingPlayerText.isVisible = false
                 binding.accusationCardsLayout.isVisible = false

@@ -35,10 +35,10 @@ class CardsAdapter : RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun setAccusationCards(cards: List<CardItem>) {
+    fun setAccusationCards(cards: List<CardItem>?) {
         this.accusationCards.apply {
             clear()
-            addAll(cards)
+            cards?.let { addAll(cards) }
             notifyDataSetChanged()
         }
     }

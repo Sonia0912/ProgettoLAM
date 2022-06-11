@@ -168,4 +168,19 @@ class GameRepositoryImpl @Inject constructor(
         game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
         gameService.updateGame(game)
     }
+
+    override suspend fun nextAccusationResponder() {
+        val game = getOngoingGame()
+        val currentResponderIndex = game.players.indexOf(game.players.first { it.id == game.accusation?.responder })
+        val nextPlayerId = (if (currentResponderIndex == game.players.lastIndex) game.players[0] else game.players[currentResponderIndex + 1]).id
+
+        if (nextPlayerId == game.turnPlayerId) {
+            game.accusation = null
+            nextTurn()
+        } else {
+            game.accusation?.responder = nextPlayerId
+        }
+
+        gameService.updateGame(game)
+    }
 }
