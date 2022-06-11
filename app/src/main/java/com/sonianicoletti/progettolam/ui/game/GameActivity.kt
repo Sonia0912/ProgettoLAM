@@ -1,10 +1,12 @@
 package com.sonianicoletti.progettolam.ui.game
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +34,16 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        changeStatusBarColour()
+    }
+
+    private fun changeStatusBarColour() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = this.resources.getColor(R.color.dark_russian_violet)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -56,6 +68,21 @@ class GameActivity : AppCompatActivity() {
         binding.imageViewRules.setOnClickListener {
             openRulesFragment()
         }
+
+        findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.rulesFragment -> displayRulesToolbar()
+                R.id.lobbyFragment -> displayDefaultToolbar("Lobby")
+                R.id.cardsFragment -> displayDefaultToolbar("Cards")
+                R.id.notesFragment -> displayDefaultToolbar("Notes")
+                R.id.accusationFragment -> displayDefaultToolbar("Accusation")
+                else -> displayDefaultToolbar("Game")
+            }
+        }
+
+        binding.imageViewBack.setOnClickListener {
+            findNavController(R.id.fragment_container_view).navigateUp()
+        }
     }
 
     private fun showLeaveGameDialog() {
@@ -70,6 +97,20 @@ class GameActivity : AppCompatActivity() {
 
     private fun openRulesFragment() {
         findNavController(R.id.fragment_container_view).navigate(R.id.rulesFragment)
+    }
+
+    private fun displayRulesToolbar() {
+        binding.titleToolbar.text = "Rules"
+        binding.imageViewExit.isVisible = false
+        binding.imageViewBack.isVisible = true
+        binding.imageViewRules.isVisible = false
+    }
+
+    private fun displayDefaultToolbar(title: String) {
+        binding.titleToolbar.text = title
+        binding.imageViewExit.isVisible = true
+        binding.imageViewBack.isVisible = false
+        binding.imageViewRules.isVisible = true
     }
 
     private fun initNavigationFab() {
@@ -91,8 +132,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
-            binding.toolBar.isVisible = destination.id != R.id.notesFragment
-            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment
+            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment && destination.id != R.id.rulesFragment
             handleNavigationFabVisibility()
         }
     }

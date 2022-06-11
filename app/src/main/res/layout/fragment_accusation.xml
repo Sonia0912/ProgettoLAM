@@ -22,9 +22,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Character"
-                android:textColor="@color/gold_web_golden"
-                style="@style/AgrandirTextView"
-                android:textSize="20sp"/>
+                style="@style/AgrandirTextViewSmall"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/character_cards"
@@ -41,9 +39,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Weapon"
-                android:textColor="@color/gold_web_golden"
-                style="@style/AgrandirTextView"
-                android:textSize="20sp" />
+                style="@style/AgrandirTextViewSmall"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weapon_cards"
@@ -60,9 +56,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Room"
-                android:textColor="@color/gold_web_golden"
-                style="@style/AgrandirTextView"
-                android:textSize="20sp" />
+                style="@style/AgrandirTextViewSmall" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/room_cards"
@@ -71,7 +65,9 @@
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/list_item_accusation_card" />
+                tools:listitem="@layout/list_item_accusation_card" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -80,8 +76,7 @@
                 android:layout_marginTop="32dp"
                 android:text="Accusation"
                 android:textColor="@color/red_sky_magenta"
-                style="@style/AgrandirTextView"
-                android:textSize="20sp" />
+                style="@style/AgrandirTextViewSmall" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -175,7 +170,17 @@
                 android:paddingEnd="64dp"
                 android:text="Accuse"
                 android:background="@drawable/rounded_red_button"
-                android:textColor="@color/white"/>
+                style="@style/ButtonTextView"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/make_it_a_final_accusation"
+                style="@style/DefaultTextView"
+                android:layout_gravity="center"
+                android:buttonTint="@color/white"
+                android:layout_marginTop="4dp"/>
 
         </LinearLayout>
 

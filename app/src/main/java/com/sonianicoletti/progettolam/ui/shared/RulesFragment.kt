@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.viewModels
 import com.sonianicoletti.progettolam.databinding.FragmentRulesBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,12 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class RulesFragment : Fragment() {
 
     private lateinit var binding: FragmentRulesBinding
+    private val gameViewModel: GameViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentRulesBinding.inflate(inflater)
-        binding.imageViewBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
         return binding.root
     }
 }

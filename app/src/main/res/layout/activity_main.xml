@@ -1,11 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+<androidx.fragment.app.FragmentContainerView
     android:id="@+id/fragment_container_view"
     android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dp"
     app:defaultNavHost="true"
     app:navGraph="@navigation/main_nav_graph"
-    tools:context=".ui.main.MainActivity" />
+    tools:context=".ui.main.MainActivity"
+    app:layout_constraintTop_toBottomOf="@+id/toolBar"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/ToolbarTheme"
+        android:backgroundTint="@color/dark_russian_violet">
+
+        <ImageView
+            android:id="@+id/imageViewPerson"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_person"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_back_arrow"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/titleToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CLUEDO"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            style="@style/AgrandirTextView"/>
+
+        <ImageView
+            android:id="@+id/imageViewRules"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_help"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

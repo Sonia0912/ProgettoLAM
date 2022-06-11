@@ -8,15 +8,27 @@
     </style>
 
     <style name="DefaultTextView">
-        <item name="android:fontFamily">@font/neue_haas_unica_pro_medium</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/prompt_light</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ButtonTextView">
+        <item name="android:fontFamily">@font/worksans_variablefont_wght</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="AgrandirTextView">
         <item name="android:fontFamily">@font/agrandir_grand_heavy</item>
-        <item name="android:textSize">30dp</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AgrandirTextViewSmall">
+        <item name="android:fontFamily">@font/agrandir_grand_heavy</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/gold_web_golden</item>
     </style>
 
 </resources>

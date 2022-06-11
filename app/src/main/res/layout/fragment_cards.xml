@@ -13,11 +13,10 @@
 
         <TextView
             android:id="@+id/turn_player_text"
-            style="@style/DefaultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:textColor="@color/gold_web_golden"
+            style="@style/AgrandirTextViewSmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -120,14 +119,15 @@
 
         <TextView
             android:id="@+id/your_hand_text"
-            style="@style/DefaultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="Your hand"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accusation_cards_layout" />
+            app:layout_constraintTop_toBottomOf="@id/accusation_cards_layout"
+            style="@style/AgrandirTextViewSmall"
+            android:textColor="@color/white"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewYourCards"
@@ -147,14 +147,15 @@
 
         <TextView
             android:id="@+id/leftover_cards_text"
-            style="@style/DefaultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="Leftover cards"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards"
+            style="@style/AgrandirTextViewSmall"
+            android:textColor="@color/white"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewLeftoverCards"
@@ -172,7 +173,7 @@
             tools:itemCount="3"
             tools:listitem="@layout/list_item_card" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/skip_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -180,7 +181,10 @@
             android:text="Skip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewLeftoverCards" />
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewLeftoverCards"
+            android:textColor="@color/russian_violet"
+            android:background="@drawable/rounded_yellow_button"
+            style="@style/ButtonTextView"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

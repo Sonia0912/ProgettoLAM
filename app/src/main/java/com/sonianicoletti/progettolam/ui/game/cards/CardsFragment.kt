@@ -62,6 +62,10 @@ class CardsFragment : Fragment() {
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
 
+            if (it.leftoverCards.size == 0) {
+                binding.leftoverCardsText.isVisible = false
+            }
+
             if (it.currentUserId == it.turnPlayer?.id) {
                 binding.turnPlayerText.text = "Your turn"
             } else {

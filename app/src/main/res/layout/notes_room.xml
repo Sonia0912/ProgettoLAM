@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tableLayoutRooms"
@@ -9,7 +11,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:background="@drawable/rounded_liliac"
+    android:background="@drawable/rounded_light_purple"
     android:padding="12dp">
 
     <TableRow
@@ -459,3 +461,4 @@
             />
     </TableRow>
 </TableLayout>
+

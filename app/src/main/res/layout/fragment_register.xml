@@ -83,8 +83,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        android:background="@drawable/rounded_red_button"
-        android:textColor="@color/white"
+        android:background="@drawable/rounded_blue_button"
+        style="@style/ButtonTextView"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:layout_marginTop="32dp"/>

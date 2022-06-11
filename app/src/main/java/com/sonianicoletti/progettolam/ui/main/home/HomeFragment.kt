@@ -28,10 +28,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater)
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolBar)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-        }
+        (activity as AppCompatActivity).apply {}
         setClickListeners()
         observeViewState()
         observeViewEvents()
@@ -41,8 +38,6 @@ class HomeFragment : Fragment() {
     private fun setClickListeners() {
         binding.createGameButton.setOnClickListener { viewModel.handleCreateGameButton() }
         binding.joinGameButton.setOnClickListener { viewModel.handleJoinGameButton() }
-        binding.imageViewPerson.setOnClickListener { viewModel.handleProfileButton() }
-        binding.imageViewRules.setOnClickListener { viewModel.handleRulesButton() }
     }
 
     private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
@@ -54,7 +49,7 @@ class HomeFragment : Fragment() {
             NavigateToLobby -> navigateToLobby()
             NavigateToJoinGame -> findNavController().navigate(R.id.action_homeFragment_to_joingameFragment)
             NavigateToProfile -> findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
-            NavigateToRules -> findNavController().navigate(R.id.action_homeFragment_to_rulesFragment)
+            NavigateToRules -> navigateToRules()
             ShowGeneralErrorDialog -> showGeneralErrorDialog()
         }
     }
@@ -62,6 +57,11 @@ class HomeFragment : Fragment() {
     private fun navigateToLobby() {
         val intent = Intent(requireContext(), GameActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun navigateToRules() {
+
+        findNavController().navigate(R.id.action_homeFragment_to_rulesFragment)
     }
 
     private fun showGeneralErrorDialog() {
