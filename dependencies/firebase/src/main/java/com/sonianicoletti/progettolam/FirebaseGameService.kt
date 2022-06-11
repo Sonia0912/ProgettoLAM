@@ -34,7 +34,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             leftoverCards = mutableListOf(),
             solutionCards = mutableListOf(),
             turnPlayerId = "",
-            accusation = mutableListOf(),
+            accusation = null,
         )
     }
 
@@ -145,9 +145,12 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         return cardsMapList.map { it.toCard() }.toMutableList()
     }
 
-    private fun getAccusationFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Card> {
-        val cardsMapList = gameSnapshot[ACCUSATION] as? List<HashMap<String, Any>> ?: emptyList()
-        return cardsMapList.map { it.toCard() }.toMutableList()
+    private fun getAccusationFromGameSnapshot(gameSnapshot: DocumentSnapshot): Accusation? {
+        val accusationMap = gameSnapshot[ACCUSATION] as? HashMap<String, Any> ?: return null
+        val cardsMapList = accusationMap[ACCUSATION_CARDS] as? List<HashMap<String, Any>> ?: emptyList()
+        val accusationCards = cardsMapList.map { it.toCard() }.toMutableList()
+        val responder = (accusationMap[ACCUSATION_RESPONSES].toString())
+        return Accusation(accusationCards, responder)
     }
 
     override suspend fun deleteGame(gameID: String) {
@@ -163,5 +166,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val LEFTOVER_CARDS = "leftover_cards"
         private const val TURN_PLAYER = "turn_player"
         private const val ACCUSATION = "accusation"
+        private const val ACCUSATION_CARDS = "cards"
+        private const val ACCUSATION_RESPONSES = "responses"
     }
 }

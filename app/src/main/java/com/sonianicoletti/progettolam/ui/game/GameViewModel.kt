@@ -48,7 +48,7 @@ class GameViewModel @Inject constructor(
         val isHost = gameRepository.isHost()
         gameStateEmitter.postValue(GameState(game, isHost))
 
-        if (game.accusation.isNotEmpty() && !gameRepository.isTurnPlayer()) {
+        if (!game.accusation?.cards.isNullOrEmpty() && !gameRepository.isTurnPlayer()) {
             viewEventEmitter.postValue(ViewEvent.NavigateToCards)
         }
     }
