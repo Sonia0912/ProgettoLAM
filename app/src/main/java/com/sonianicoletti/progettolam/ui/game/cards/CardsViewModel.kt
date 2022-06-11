@@ -30,7 +30,7 @@ class CardsViewModel @Inject constructor(
 
     private fun initialiseGame() {
         viewModelScope.launch {
-            if (gameRepository.isHost()) {
+            if (gameRepository.isHost() && gameRepository.getOngoingGame().turnPlayerId.isEmpty()) {
                 delay(3000)
                 gameRepository.nextTurn()
             }

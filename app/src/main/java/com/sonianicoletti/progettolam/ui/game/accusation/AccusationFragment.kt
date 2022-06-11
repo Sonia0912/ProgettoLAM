@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Cards
 import com.sonianicoletti.progettolam.databinding.FragmentAccusationBinding
+import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +20,7 @@ class AccusationFragment : Fragment() {
 
     private lateinit var binding: FragmentAccusationBinding
     private val viewModel: AccusationViewModel by viewModels()
+    private val gameViewModel: GameViewModel by activityViewModels()
 
     private val charactersAdapter = AccusationCardsAdapter(Cards.characters.mapToCardItems()) { viewModel.selectCard(it) }
     private val weaponsAdapter = AccusationCardsAdapter(Cards.weapons.mapToCardItems()) { viewModel.selectCard(it) }
@@ -27,6 +30,7 @@ class AccusationFragment : Fragment() {
         binding = FragmentAccusationBinding.inflate(inflater)
         initCardsLists()
         observeViewState()
+        observeGameState()
         binding.accuseButton.setOnClickListener { viewModel.accuse() }
         return binding.root
     }
@@ -40,6 +44,13 @@ class AccusationFragment : Fragment() {
     private fun List<Card>.mapToCardItems() = map { CardItem.fromCard(it) }
 
     private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        if (state.isTurnPlayer) {
+            binding.notTurnPlayerOverlay.isVisible = false
+        } else {
+            binding.notTurnPlayerOverlay.isVisible = true
+            return@observe
+        }
+
         state.selectedCharacterCard?.let {
             charactersAdapter.setSelectedCard(it)
             binding.accusationCharacterCard.cardImage.setImageResource(it.imageRes)
@@ -60,5 +71,9 @@ class AccusationFragment : Fragment() {
         }
 
         binding.accuseButton.isEnabled = state.selectedCharacterCard != null && state.selectedRoomCard != null && state.selectedWeaponCard != null
+    }
+
+    private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) {
+        viewModel.handleGameState(it)
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.progettolam.extension.emit
+import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.usecases.repositories.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,12 @@ class AccusationViewModel @Inject constructor(
 
     private val viewStateEmitter = MutableLiveData(ViewState())
     val viewState: LiveData<ViewState> = viewStateEmitter
+
+    init {
+        viewModelScope.launch {
+            viewStateEmitter.postValue(ViewState(isTurnPlayer = gameRepository.isTurnPlayer()))
+        }
+    }
 
     fun selectCard(cardItem: CardItem) {
         when (cardItem.card.type) {
@@ -38,7 +45,15 @@ class AccusationViewModel @Inject constructor(
         }
     }
 
+    fun handleGameState(gameState: GameState) {
+        viewModelScope.launch {
+            viewState.value?.isTurnPlayer = gameRepository.isTurnPlayer()
+            viewStateEmitter.emit()
+        }
+    }
+
     data class ViewState(
+        var isTurnPlayer: Boolean = false,
         var selectedCharacterCard: CardItem? = null,
         var selectedWeaponCard: CardItem? = null,
         var selectedRoomCard: CardItem? = null,
