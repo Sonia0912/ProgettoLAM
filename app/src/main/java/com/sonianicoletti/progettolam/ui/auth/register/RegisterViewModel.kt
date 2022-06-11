@@ -1,9 +1,11 @@
 package com.sonianicoletti.progettolam.ui.auth.register
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.sonianicoletti.progettolam.ui.auth.login.LoginViewModel
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,27 +15,35 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(private val authService: AuthService) : ViewModel() {
 
-    private val viewEventEmitter = MutableSingleLiveEvent<RegisterViewModel.ViewEvent>()
-    val viewEvent: LiveData<RegisterViewModel.ViewEvent> = viewEventEmitter
+    private val viewStateEmitter = MutableLiveData<ViewState>(ViewState.Idle)
+    val viewState: LiveData<ViewState> = viewStateEmitter
+
+    private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
+    val viewEvent: LiveData<ViewEvent> = viewEventEmitter
 
     fun handleRegistration(email: String, displayName: String, password: String) {
         viewModelScope.launch {
             try {
+                viewStateEmitter.postValue(ViewState.Idle)
                 authService.register(email, password, displayName)
-                //authService.signIn(email, password)
-                viewEventEmitter.postValue(ViewEvent.navigateToMain)
+                viewEventEmitter.postValue(ViewEvent.NavigateToMain)
             } catch (e: FirebaseAuthWeakPasswordException) {
-                viewEventEmitter.value = RegisterViewModel.ViewEvent.handleTakenUsername(e.reason ?: "Unknow error")
+                viewEventEmitter.value = ViewEvent.HandleTakenUsername(e.reason ?: "Unknow error")
             } catch (e: Exception) {
-                viewEventEmitter.value = RegisterViewModel.ViewEvent.handleTakenUsername(e.message ?: "Unknow error")
+                viewEventEmitter.value = ViewEvent.HandleTakenUsername(e.message ?: "Unknow error")
+            } finally {
+                viewStateEmitter.postValue(ViewState.Idle)
             }
         }
     }
 
-    sealed class ViewEvent {
-        data class handleTakenUsername(val errorMessage: String) : RegisterViewModel.ViewEvent()
-        object navigateToMain: RegisterViewModel.ViewEvent()
+    sealed class ViewState {
+        object Loading : ViewState()
+        object Idle : ViewState()
     }
 
-
+    sealed class ViewEvent {
+        data class HandleTakenUsername(val errorMessage: String) : ViewEvent()
+        object NavigateToMain: ViewEvent()
+    }
 }
