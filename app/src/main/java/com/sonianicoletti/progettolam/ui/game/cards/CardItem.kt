@@ -3,12 +3,13 @@ package com.sonianicoletti.progettolam.ui.game.cards
 import androidx.annotation.DrawableRes
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.progettolam.R
+import java.io.Serializable
 
 // questa classe serve per prendere gli ID delle immagini dal modulo App che altrimenti non sarebbero accessibili
 data class CardItem(
     val card: Card,
     @DrawableRes val imageRes: Int
-) {
+) : Serializable {
     companion object {
         fun fromCard(card: Card) : CardItem {
             val imageRes =

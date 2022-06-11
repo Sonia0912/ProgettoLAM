@@ -140,6 +140,7 @@ class GameActivity : AppCompatActivity() {
             NavigateToAuth -> navigateToAuth()
             NavigateToMain -> navigateToMain()
             NavigateToCards -> navigateToCards()
+            NavigateToShowCard -> navigateToShowCard()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
         }
@@ -161,6 +162,14 @@ class GameActivity : AppCompatActivity() {
         findNavController(R.id.fragment_container_view).apply {
             if (currentDestination?.id != R.id.cardsFragment) {
                 navigate(R.id.cardsFragment)
+            }
+        }
+    }
+
+    private fun navigateToShowCard() {
+        findNavController(R.id.fragment_container_view).apply {
+            if (currentDestination?.id != R.id.showCardFragment) {
+                navigate(R.id.showCardFragment)
             }
         }
     }

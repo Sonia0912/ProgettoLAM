@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sonianicoletti.entities.Accusation
-import com.sonianicoletti.entities.Card
-import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.Player
+import com.sonianicoletti.entities.*
 import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -71,6 +68,10 @@ class CardsViewModel @Inject constructor(
 
     fun skipAccusation() = viewModelScope.launch {
         gameRepository.nextAccusationResponder()
+    }
+
+    fun onAccusationCardClicked() = viewModelScope.launch {
+        gameRepository.updateGameStatus(GameStatus.SHOW_CARD)
     }
 
     data class ViewState(

@@ -8,9 +8,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentCardsBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
+import com.sonianicoletti.progettolam.ui.game.showcard.ShowCardFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +45,11 @@ class CardsFragment : Fragment() {
         // Show the cards
         yourCardsAdapter = CardsAdapter()
         val leftoverCardsAdapter = CardsAdapter()
+        yourCardsAdapter.setOnAccusationCardClickListener {
+            viewModel.onAccusationCardClicked()
+            val arguments = Bundle().apply { putSerializable(ShowCardFragment.KEY_CARD, it) }
+            findNavController().navigate(R.id.showCardFragment, arguments)
+        }
         binding.recyclerViewYourCards.adapter = yourCardsAdapter
         binding.recyclerViewLeftoverCards.adapter = leftoverCardsAdapter
     }

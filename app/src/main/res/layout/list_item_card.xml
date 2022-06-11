@@ -10,11 +10,9 @@
         android:layout_height="150dp"
         android:layout_margin="12dp"
         android:background="@drawable/rounded_liliac_card"
-        android:foreground="@drawable/rounded_white_card"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="12dp"
-        tools:foreground="#00FFFFFF"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView

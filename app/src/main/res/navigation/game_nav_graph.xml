@@ -53,4 +53,10 @@
         android:label="fragment_accusation"
         tools:layout="@layout/fragment_accusation" />
 
+    <fragment
+        android:id="@+id/showCardFragment"
+        android:name="com.sonianicoletti.progettolam.ui.game.showcard.ShowCardFragment"
+        android:label="fragment_show_card"
+        tools:layout="@layout/fragment_show_card" />
+
 </navigation>
