@@ -63,9 +63,7 @@ class CardsFragment : Fragment() {
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
 
             // se non ci sono carte rimanenti
-            if (it.leftoverCards.size == 0) {
-                binding.leftoverCardsText.isVisible = false
-            }
+            binding.leftoverCardsText.isVisible = it.leftoverCards.size > 0
 
             // se e' il proprio turno di fare l'accusa
             if (it.currentUserId == it.turnPlayer?.id) {
