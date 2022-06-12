@@ -286,7 +286,7 @@ class GameActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (!isAccusationResponder) {
             val backstack = findNavController(R.id.fragment_container_view).backQueue
-            if (backstack.size > 2) {
+            if (backstack.size > 2 && !hasGameEnded) {
                 super.onBackPressed()
             } else {
                 showLeaveGameDialog()
