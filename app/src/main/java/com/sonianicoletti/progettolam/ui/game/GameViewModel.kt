@@ -10,7 +10,6 @@ import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
-import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionDefeat
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
@@ -86,6 +85,7 @@ class GameViewModel @Inject constructor(
     private suspend fun resetTurn() {
         isCurrentTurn = gameRepository.isCurrentTurn()
         viewEventEmitter.value = ViewEvent.HideDisplayCard
+        delay(100)
         viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
 
         if (!isCurrentTurn) {
@@ -127,7 +127,7 @@ class GameViewModel @Inject constructor(
 
     private suspend fun showDefeat(game: Game) {
         // Se il giocatore che ha fatto l'ultima accusa ha perso
-        viewEventEmitter.value = NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, null, false, false)
+        viewEventEmitter.value = ViewEvent.NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, null, false, false)
         delay(1)
         gameRepository.nextTurn()
     }
