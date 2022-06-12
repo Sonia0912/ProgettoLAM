@@ -67,7 +67,10 @@ class GameViewModel @Inject constructor(
             game.accusation != null && gameRepository.isAccusationResponder() -> startAccusation()
             game.accusation != null -> viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
             isCurrentTurn != gameRepository.isCurrentTurn() -> resetTurn()
-            else -> viewEventEmitter.value = ViewEvent.HideDisplayCard
+            else -> {
+                viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
+                viewEventEmitter.value = ViewEvent.HideDisplayCard
+            }
         }
 
         if (game.losers.size != losers.size) {
@@ -85,7 +88,6 @@ class GameViewModel @Inject constructor(
     private suspend fun resetTurn() {
         isCurrentTurn = gameRepository.isCurrentTurn()
         viewEventEmitter.value = ViewEvent.HideDisplayCard
-        delay(100)
         viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
 
         if (!isCurrentTurn) {
