@@ -131,38 +131,19 @@ class NotesFragment : Fragment() {
     }
 
     private fun setPlayersNames(otherPlayers: MutableList<Player>) {
+        binding.tableCharacters.Player1.text = otherPlayers[0].displayName
+        binding.tableRooms.Player1.text = otherPlayers[0].displayName
+        binding.tableWeapons.Player1.text = otherPlayers[0].displayName
+        binding.tableCharacters.Player2.text = otherPlayers[1].displayName
+        binding.tableRooms.Player2.text = otherPlayers[1].displayName
+        binding.tableWeapons.Player2.text = otherPlayers[1].displayName
         when (otherPlayers.size) {
-            1 -> {
-                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-                binding.tableRooms.Player1.text = otherPlayers[0].displayName
-                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-            }
-            2 -> {
-                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-                binding.tableRooms.Player1.text = otherPlayers[0].displayName
-                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
-                binding.tableRooms.Player2.text = otherPlayers[1].displayName
-                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
-            }
             3 -> {
-                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-                binding.tableRooms.Player1.text = otherPlayers[0].displayName
-                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
-                binding.tableRooms.Player2.text = otherPlayers[1].displayName
-                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName
             }
             4 -> {
-                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-                binding.tableRooms.Player1.text = otherPlayers[0].displayName
-                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
-                binding.tableRooms.Player2.text = otherPlayers[1].displayName
-                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName
@@ -171,12 +152,6 @@ class NotesFragment : Fragment() {
                 binding.tableWeapons.Player4.text = otherPlayers[3].displayName
             }
             5 -> {
-                binding.tableCharacters.Player1.text = otherPlayers[0].displayName
-                binding.tableRooms.Player1.text = otherPlayers[0].displayName
-                binding.tableWeapons.Player1.text = otherPlayers[0].displayName
-                binding.tableCharacters.Player2.text = otherPlayers[1].displayName
-                binding.tableRooms.Player2.text = otherPlayers[1].displayName
-                binding.tableWeapons.Player2.text = otherPlayers[1].displayName
                 binding.tableCharacters.Player3.text = otherPlayers[2].displayName
                 binding.tableRooms.Player3.text = otherPlayers[2].displayName
                 binding.tableWeapons.Player3.text = otherPlayers[2].displayName

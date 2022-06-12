@@ -26,13 +26,13 @@ class NotesViewModel @Inject constructor(
     fun handleGameState() {
         viewModelScope.launch {
             val currentGame = gameRepository.getOngoingGame()
-            var currentUser = authService.getUser()
-            var currentPlayer = currentGame.players.find { it.id == currentUser?.id }
-            var yourCards = currentPlayer?.cards?.map { CardItem.fromCard(it) }.orEmpty().toMutableList()
-            var leftoverCards = currentGame.leftoverCards.map { CardItem.fromCard(it) }.toMutableList()
-            var defaultCards = yourCards + leftoverCards
-            var otherPlayers = currentGame.players.filter { it.id != currentUser?.id }
-            var viewState = NotesViewModel.ViewState(defaultCards.toMutableList(), otherPlayers.toMutableList())
+            val currentUser = authService.getUser()
+            val currentPlayer = currentGame.players.find { it.id == currentUser?.id }
+            val yourCards = currentPlayer?.cards?.map { CardItem.fromCard(it) }.orEmpty().toMutableList()
+            val leftoverCards = currentGame.leftoverCards.map { CardItem.fromCard(it) }.toMutableList()
+            val defaultCards = yourCards + leftoverCards
+            val otherPlayers = currentGame.players.filter { it.id != currentUser?.id }
+            val viewState = NotesViewModel.ViewState(defaultCards.toMutableList(), otherPlayers.toMutableList())
             cardsStateEmitter.postValue(viewState)
         }
     }

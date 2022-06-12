@@ -92,8 +92,6 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun showLeaveGameDialog() {
-        // Se context non e' nullo continua, il context diventa "it" e anche se cambia
-        // si continua ad usare il context usato per la verifica
         MaterialAlertDialogBuilder(this)
             .setMessage(getString(R.string.dialog_leave_message))
             .setPositiveButton("Yes") { _, _ -> viewModel.leaveGame() } // il secondo parametro e' una funzione callback di default
@@ -205,7 +203,7 @@ class GameActivity : AppCompatActivity() {
         binding.displayCardOverlay.card.image.setImageResource(cardItem.imageRes)
         binding.displayCardOverlay.card.playerName.text = cardItem.card.name
         binding.displayCardOverlay.button.isVisible = isTurnPlayer
-        binding.displayCardOverlay.subtitle.text = "Showing card to $turnPlayerName"
+        binding.displayCardOverlay.subtitle.text = getString(R.string.showing_card_to, turnPlayerName)
         binding.displayCardOverlay.subtitle.isVisible = !isTurnPlayer
 
         binding.displayCardOverlay.root.post {
@@ -249,10 +247,10 @@ class GameActivity : AppCompatActivity() {
         binding.defeatOverlay.weaponCard.playerName.text = solutionCards[1].card.name
         binding.defeatOverlay.roomCard.playerName.text = solutionCards[2].card.name
         binding.defeatOverlay.subtitle.text = when {
-            winnerName != null && lostByAccusation -> "You made the wrong accusation. $winnerName won by default"
-            winnerName != null && wonByNoPlayersRemaining -> "$winnerName won by default"
-            winnerName != null -> "$winnerName made the correct accusation"
-            else -> "You made the wrong accusation\nYou must continue playing by responding to other players' accusations"
+            winnerName != null && lostByAccusation -> getString(R.string.made_wrong_accusation, winnerName)
+            winnerName != null && wonByNoPlayersRemaining -> getString(R.string.won_by_default, winnerName)
+            winnerName != null -> getString(R.string.made_correct_accusation, winnerName)
+            else -> getString(R.string.you_lost_but_continue_playing)
         }
         binding.defeatOverlay.button.text = if (winnerName != null) "View scores" else "Continue"
 

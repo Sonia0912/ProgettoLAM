@@ -62,7 +62,6 @@ class RegisterFragment : Fragment() {
 
     private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
         when (event) {
-            // se e' una classe serve is, se e' un oggetto no
             is RegisterViewModel.ViewEvent.HandleTakenUsername -> handleTakenUsername(event.errorMessage)
             RegisterViewModel.ViewEvent.NavigateToMain -> navigateToMain()
         }

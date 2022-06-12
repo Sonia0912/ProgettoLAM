@@ -29,7 +29,6 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
     }
 
     fun handleLoginButton(email: String, password: String) {
-        // inizio della coroutine
         viewModelScope.launch {
             try {
                 viewStateEmitter.postValue(ViewState.Loading)

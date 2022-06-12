@@ -8,7 +8,6 @@ import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityAuthBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-// entry point e' dove iniziano a essere iniettate le dependency
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 

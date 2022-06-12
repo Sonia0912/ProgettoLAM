@@ -20,10 +20,10 @@
 
             <TextView
                 android:id="@+id/turn_player_text"
+                style="@style/AgrandirTextViewSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                style="@style/AgrandirTextViewSmall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -31,19 +31,19 @@
 
             <TextView
                 android:id="@+id/accusing_player_text"
+                style="@style/DefaultTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textAlignment="center"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/turn_player_text"
                 tools:text="John is responding to the accusation"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textAlignment="center"
-                tools:visibility="visible"
-                style="@style/DefaultTextView"/>
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/accusation_cards_layout"
@@ -73,9 +73,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Plum"
+                        android:layout_marginTop="4dp"
                         android:textColor="@color/white"
-                        android:layout_marginTop="4dp"/>
+                        tools:text="Plum" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,9 +97,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Knife"
+                        android:layout_marginTop="4dp"
                         android:textColor="@color/white"
-                        android:layout_marginTop="4dp"/>
+                        tools:text="Knife" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,24 +120,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        tools:text="Kitchen"
+                        android:layout_marginTop="4dp"
                         android:textColor="@color/white"
-                        android:layout_marginTop="4dp"/>
+                        tools:text="Kitchen" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/your_hand_text"
+                style="@style/AgrandirTextViewSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Your hand"
+                android:text="@string/your_hand"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/accusation_cards_layout"
-                style="@style/AgrandirTextViewSmall"
-                android:textColor="@color/white"/>
+                app:layout_constraintTop_toBottomOf="@id/accusation_cards_layout" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewYourCards"
@@ -157,15 +157,15 @@
 
             <TextView
                 android:id="@+id/leftover_cards_text"
+                style="@style/AgrandirTextViewSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Leftover cards"
+                android:text="@string/leftover_cards"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards"
-                style="@style/AgrandirTextViewSmall"
-                android:textColor="@color/white"/>
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewYourCards" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewLeftoverCards"
@@ -185,16 +185,16 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/skip_button"
+                style="@style/ButtonTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Skip"
+                android:background="@drawable/rounded_yellow_button"
+                android:text="@string/skip"
+                android:textColor="@color/russian_violet"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerViewLeftoverCards"
-                android:textColor="@color/russian_violet"
-                android:background="@drawable/rounded_yellow_button"
-                style="@style/ButtonTextView"/>
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewLeftoverCards" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -204,9 +204,9 @@
         android:id="@+id/progress_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#99000000"
         android:visibility="visible"
-        tools:visibility="gone"
-        android:background="#99000000">
+        tools:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
