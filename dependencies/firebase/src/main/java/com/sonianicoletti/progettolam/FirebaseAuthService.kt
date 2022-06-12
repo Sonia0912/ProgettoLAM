@@ -44,7 +44,8 @@ class FirebaseAuthService @Inject constructor(
         // Create a new user
         val user = hashMapOf(
             "displayName" to username,
-            "email" to firebaseUser.email
+            "email" to firebaseUser.email,
+            "score" to 0L,
         )
         // Add a new document with a generated ID
         firestore.collection("users")
@@ -86,10 +87,10 @@ class FirebaseAuthService @Inject constructor(
     }
 
     private fun User.toMap() = mapOf(
-        FirebaseAuthService.DISPLAY_NAME to displayName,
-        FirebaseAuthService.EMAIL to email,
-        FirebaseAuthService.MESSAGING_TOKEN to messagingToken,
-        FirebaseAuthService.SCORE to score
+        DISPLAY_NAME to displayName,
+        EMAIL to email,
+        MESSAGING_TOKEN to messagingToken,
+        SCORE to score
     )
 
     companion object {

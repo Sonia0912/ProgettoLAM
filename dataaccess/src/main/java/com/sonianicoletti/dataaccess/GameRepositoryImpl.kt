@@ -7,6 +7,7 @@ import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
 import com.sonianicoletti.usecases.servives.GameService
+import com.sonianicoletti.usecases.servives.UserService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
@@ -17,6 +18,7 @@ import javax.inject.Singleton
 class GameRepositoryImpl @Inject constructor(
     private val gameService: GameService,
     private val authService: AuthService,
+    private val userService: UserService,
 ) : GameRepository {
 
     private var game: Game? = null
@@ -180,6 +182,7 @@ class GameRepositoryImpl @Inject constructor(
         val victory = gameService.checkVictory(game.id, characterCard, weaponCard, roomCard)
         if(victory) {
             game.winner = authService.getUser()?.id.toString()
+            userService.addScore(game.winner, 100)
             game.status = GameStatus.FINISHED
             gameService.updateGame(game)
         } else {
@@ -187,6 +190,7 @@ class GameRepositoryImpl @Inject constructor(
             // controllo se e' rimasto un solo giocatore
             if(game.losers.size == (game.players.size - 1)) {
                 game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
+                userService.addScore(game.winner, 100)
                 game.status = GameStatus.FINISHED
             }
             gameService.updateGame(game)
