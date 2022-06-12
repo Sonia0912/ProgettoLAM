@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:text="Sign in"
+        android:text="@string/sign_in"
         android:textColor="@color/gold_web_golden"
         app:layout_constraintBottom_toTopOf="@+id/editTextUsername"
         app:layout_constraintEnd_toEndOf="parent"

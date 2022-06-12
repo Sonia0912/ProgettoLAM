@@ -90,7 +90,7 @@
         android:layout_marginEnd="30dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_blue_button"
-        android:text="Save changes"
+        android:text="@string/save_changes"
         app:layout_constraintBottom_toTopOf="@+id/buttonLogOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="1"

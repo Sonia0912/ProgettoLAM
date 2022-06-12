@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Sign up"
+        android:text="@string/sign_up"
         android:textColor="@color/gold_web_golden"
         app:layout_constraintBottom_toTopOf="@+id/editTextInputUsername"
         app:layout_constraintEnd_toEndOf="parent"

@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Character"
+                android:text="@string/character"
                 style="@style/AgrandirTextViewSmall"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Weapon"
+                android:text="@string/weapon"
                 style="@style/AgrandirTextViewSmall"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Room"
+                android:text="@string/room"
                 style="@style/AgrandirTextViewSmall" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Accusation"
+                android:text="@string/accusation"
                 android:textColor="@color/red_sky_magenta"
                 style="@style/AgrandirTextViewSmall" />
 

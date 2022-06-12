@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Cards
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentAccusationBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
@@ -55,7 +56,7 @@ class AccusationFragment : Fragment() {
 
         if (state.respondingPlayer != null) {
             binding.waitingForResponderOverlay.isVisible = true
-            binding.waitingForResponderText.text = "Waiting for ${state.respondingPlayer?.displayName} to respond"
+            binding.waitingForResponderText.text = getString(R.string.waiting_for_someone_to_respond, state.respondingPlayer?.displayName)
         } else {
             binding.waitingForResponderOverlay.isVisible = false
         }

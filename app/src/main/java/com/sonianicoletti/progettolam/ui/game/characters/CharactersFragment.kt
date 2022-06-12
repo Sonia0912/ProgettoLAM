@@ -18,7 +18,6 @@ import com.sonianicoletti.progettolam.databinding.FragmentCharactersBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.*
-import com.sonianicoletti.progettolam.util.ItemOffsetDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,9 +42,7 @@ class CharactersFragment : Fragment() {
 
     private fun initCharacterGrid() {
         adapter = CharactersAdapter { viewModel.selectCharacter(it) }
-        val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
         binding.characterGrid.adapter = adapter
-        //binding.characterGrid.addItemDecoration(itemOffsetDecoration)
         observeCharacterItems()
     }
 

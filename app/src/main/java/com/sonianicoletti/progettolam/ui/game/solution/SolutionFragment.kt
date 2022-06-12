@@ -40,7 +40,7 @@ class SolutionFragment : Fragment() {
     }
 
     private fun showResult(won: Boolean) {
-        val result = if (won) "You won!" else "You lost!"
+        val result = if (won) getString(R.string.you_won) else getString(R.string.you_lost)
         binding.textViewResult.text = result
     }
 
