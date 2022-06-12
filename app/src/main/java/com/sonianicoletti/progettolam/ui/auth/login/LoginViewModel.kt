@@ -33,7 +33,7 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         viewModelScope.launch {
             try {
                 viewStateEmitter.postValue(ViewState.Loading)
-                authService.signIn(email, password)
+                authService.signIn(email.trim(), password)
                 viewEventEmitter.postValue(ViewEvent.NavigateToMain)
             } catch(e: Exception) {
                 viewEventEmitter.value = ViewEvent.HandleWrongCredentials

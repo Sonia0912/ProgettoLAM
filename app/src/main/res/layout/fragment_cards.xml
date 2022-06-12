@@ -31,7 +31,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/turn_player_text"
-            tools:text="Beluga is responding to the accusation"
+            tools:text="John is responding to the accusation"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textAlignment="center"
             tools:visibility="visible"
             style="@style/DefaultTextView"/>
 

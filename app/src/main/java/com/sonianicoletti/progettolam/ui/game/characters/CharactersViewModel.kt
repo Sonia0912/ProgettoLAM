@@ -8,6 +8,7 @@ import com.sonianicoletti.entities.Character
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.ui.game.characters.CharactersViewModel.ViewEvent.ShowCharacterTaken
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
@@ -44,6 +45,12 @@ class CharactersViewModel @Inject constructor(
         // controllo se lo stato del gioco e' Active, in tal caso navigo al prossimo fragment
         if(game.status == GameStatus.ACTIVE) {
             viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        }
+    }
+
+    fun getCurrentUserID() : String {
+        viewModelScope.launch {
+            return authService.getUser()?.id ?: throw UserNotLoggedInException()
         }
     }
 
