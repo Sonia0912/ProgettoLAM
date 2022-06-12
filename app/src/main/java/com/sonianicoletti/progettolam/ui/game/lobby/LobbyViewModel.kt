@@ -107,7 +107,7 @@ class LobbyViewModel @Inject constructor(
             try {
                 checkNetworkConnectivity()
                 viewStateEmitter.postValue(ViewState.Loading)
-//                gameRepository.getOngoingGame().checkHasMinimumPlayers()
+                gameRepository.getOngoingGame().checkHasMinimumPlayers()
                 gameRepository.updateGameStatus(GameStatus.CHARACTER_SELECT)
             } catch (e: NetworkNotConnectedException) {
                 viewEventEmitter.postValue(ViewEvent.ShowNoNetworkConnectionAlert)
