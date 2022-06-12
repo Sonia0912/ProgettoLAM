@@ -33,7 +33,7 @@
     <string name="made_wrong_accusation">You made the wrong accusation. %1$s won by default</string>
     <string name="won_by_default">%1$s won by default</string>
     <string name="made_correct_accusation">%1$s made the correct accusation</string>
-    <string name="you_lost_but_continue_playing">You made the wrong accusation\nYou must continue playing by responding to other players' accusations</string>
+    <string name="you_lost_but_continue_playing">You made the wrong accusation\nYou must continue playing by responding to other players\' accusations</string>
     <string name="solution">Solution:</string>
     <string name="you_must_continue_playing_by_responding_to_accusations">You must continue playing by responding to accusations</string>
     <string name="character">Character</string>
