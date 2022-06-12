@@ -88,13 +88,14 @@ class GameViewModel @Inject constructor(
     private fun endGame(game: Game, currentUserId: String) {
         // Se il giocatore che ha fatto l'ultima accusa vince o se rimane un solo giocatore
         val winningPlayer = game.players.first { it.id == game.winner }
+        stopObservingGame()
         viewStateEmitter.value = viewState.value?.copy(hasGameEnded = true)
         viewEventEmitter.value = when {
             game.winner == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionVictory(false)
             game.winner == currentUserId -> NavigateToSolutionVictory(true)
-            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true).also { stopObservingGame() }
-            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false).also { stopObservingGame() }
-            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false).also { stopObservingGame() }
+            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
+            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false)
+            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
         }
     }
 
