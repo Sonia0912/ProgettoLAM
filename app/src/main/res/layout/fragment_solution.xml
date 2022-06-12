@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
+
+    <TextView
+        android:id="@+id/textViewTheSolution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The solution"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/solutionCardsContainer"
+        app:layout_constraintVertical_bias="0.3"
+        style="@style/AgrandirTextViewSmall"
+        android:textColor="@color/white"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_margin="12dp"/>
+
+    <LinearLayout
+        android:id="@+id/solutionCardsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTheSolution"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/textViewTheSolution"
+            app:layout_constraintBottom_toTopOf="@+id/textViewResult"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/card2"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_margin="12dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/rounded_liliac">
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="78dp"
+                    android:layout_height="70dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_gravity="center"
+                    tools:src="@sample/cards" />
+                <TextView
+                    android:id="@+id/name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Candlestick"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/textViewTheSolution"
+            app:layout_constraintBottom_toTopOf="@+id/textViewResult"
+            app:layout_constraintStart_toEndOf="@+id/card1"
+            app:layout_constraintEnd_toStartOf="@+id/card3"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_margin="12dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/rounded_liliac">
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    tools:src="@sample/cards"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:id="@+id/name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Candlestick"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/textViewTheSolution"
+            app:layout_constraintBottom_toTopOf="@+id/textViewResult"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/card2"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_margin="12dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/rounded_liliac">
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    tools:src="@sample/cards"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:id="@+id/name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Candlestick"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="You won!"
+        app:layout_constraintTop_toBottomOf="@+id/solutionCardsContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/AgrandirTextView"
+        android:textSize="40sp"
+        android:textColor="@color/gold_web_golden"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

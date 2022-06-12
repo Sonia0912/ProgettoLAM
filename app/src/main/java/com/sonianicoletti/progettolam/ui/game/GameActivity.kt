@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonianicoletti.entities.Card
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
@@ -155,6 +156,8 @@ class GameActivity : AppCompatActivity() {
             NavigateToShowCard -> navigateToShowCard()
             ShowGameNotRunningToast -> showGameNotRunningToast()
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
+            NavigateToSolution -> navigateToSolution()
+            is ShowResultAlert -> showResultAlert(event.someoneWon, event.itsYou, event.player, event.solution)
         }
     }
 
@@ -192,6 +195,29 @@ class GameActivity : AppCompatActivity() {
 
     private fun showGameNotRunningToast() {
         Toast.makeText(this, getString(R.string.game_not_running_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToSolution() {
+        findNavController(R.id.fragment_container_view).apply {
+            if (currentDestination?.id != R.id.solutionFragment) {
+                navigate(R.id.solutionFragment)
+            }
+        }
+    }
+
+    private fun showResultAlert(someoneWon: Boolean, itsYou: Boolean, player: String, solutionCards: MutableList<Card>) {
+        var resultMessage = ""
+        if(someoneWon && itsYou) {
+            resultMessage = "You won! The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
+        } else if(someoneWon && !itsYou) {
+            resultMessage = "$player won the game. The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
+        } else if(!someoneWon) {
+            resultMessage = "$player lost."
+        }
+        MaterialAlertDialogBuilder(this)
+            .setMessage(resultMessage)
+            .setPositiveButton("Yes") { _, _ -> }
+            .show()
     }
 
     override fun onBackPressed() {

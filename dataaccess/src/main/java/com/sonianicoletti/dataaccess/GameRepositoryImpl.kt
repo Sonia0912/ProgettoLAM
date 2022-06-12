@@ -161,12 +161,34 @@ class GameRepositoryImpl @Inject constructor(
         gameService.updateGame(game)
     }
 
-    override suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card) {
+    override suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card, isFinal: Boolean) {
         val game = getOngoingGame()
         val currentPlayerIndex = game.players.indexOf(game.players.first { it.id == authService.getUser()?.id })
         val nextPlayerId = (if (currentPlayerIndex == game.players.lastIndex) game.players[0] else game.players[currentPlayerIndex + 1]).id
-        game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
+        if(isFinal) {
+            val won = gameService.checkVictory(game.id, characterCard, weaponCard, roomCard)
+            if(won) {
+                game.winner = authService.getUser()?.id.toString()
+                game.status = GameStatus.FINISHED
+            } else {
+                authService.getUser()?.id?.let { game.losers.add(it) }
+                // controllo se e' rimasto un solo giocatore
+                if(game.losers.size == (game.players.size - 1)) {
+                    game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
+                    game.status = GameStatus.FINISHED
+                }
+            }
+        } else {
+            game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
+        }
         gameService.updateGame(game)
+    }
+
+    private fun findRemainingPlayer(players: List<String>, losers: List<String>) : String {
+        players.forEach { playerID ->
+            if(playerID !in losers) return playerID
+        }
+        return ""
     }
 
     override suspend fun nextAccusationResponder() {
@@ -182,5 +204,11 @@ class GameRepositoryImpl @Inject constructor(
         }
 
         gameService.updateGame(game)
+    }
+
+    override suspend fun isWinner() : Boolean {
+        val game = getOngoingGame()
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
+        return game.winner == user.id
     }
 }

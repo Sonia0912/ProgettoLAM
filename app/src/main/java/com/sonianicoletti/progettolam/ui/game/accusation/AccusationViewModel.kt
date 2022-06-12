@@ -36,12 +36,13 @@ class AccusationViewModel @Inject constructor(
         viewStateEmitter.emit()
     }
 
-    fun accuse() = viewModelScope.launch {
+    fun accuse(isFinal: Boolean) = viewModelScope.launch {
         viewState.value?.apply {
             gameRepository.makeAccusation(
                 selectedCharacterCard!!.card,
                 selectedWeaponCard!!.card,
                 selectedRoomCard!!.card,
+                isFinal
             )
         }
     }

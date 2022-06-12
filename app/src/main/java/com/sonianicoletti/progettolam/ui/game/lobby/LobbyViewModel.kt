@@ -125,8 +125,7 @@ class LobbyViewModel @Inject constructor(
         object Idle : ViewState()
     }
 
-    // rappresenta una ristretta gerarchia di classe per fornire piu' controllo sull'ereditarieta'
-    // vogliamo che tutto quello che c'e' dentro la classe erediti dal tipo originale
+    // tutto quello che c'e' dentro la classe eredita dal tipo originale
     sealed class ViewEvent {
         object ShowInvalidEmailAlert : ViewEvent()
         object ShowNoNetworkConnectionAlert : ViewEvent()

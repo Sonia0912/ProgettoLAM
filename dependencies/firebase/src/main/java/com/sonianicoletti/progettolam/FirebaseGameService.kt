@@ -35,6 +35,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             solutionCards = mutableListOf(),
             turnPlayerId = "",
             accusation = null,
+            winner = "",
+            losers = mutableListOf()
         )
     }
 
@@ -73,6 +75,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         LEFTOVER_CARDS to leftoverCards,
         TURN_PLAYER to turnPlayerId,
         ACCUSATION to accusation,
+        WINNER to winner,
+        LOSERS to losers
     )
 
     override suspend fun getGameByID(gameID: String): Game {
@@ -89,6 +93,11 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     private fun getPlayersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<Player> {
         val playersMapList = gameSnapshot["players"] as? List<HashMap<String, Any>> ?: emptyList()
         return playersMapList.map { it.toPlayer() }.toMutableList()
+    }
+
+    private fun getLosersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<String> {
+        val losersMapList = gameSnapshot["losers"] as? List<HashMap<String, Any>> ?: emptyList()
+        return losersMapList.map { it.toString() }.toMutableList()
     }
 
     private fun HashMap<String, Any>.toPlayer() = Player(
@@ -117,11 +126,13 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         awaitClose { callback.remove() }
     }
 
+    // converte lo Snapshot in un Game
     private fun DocumentSnapshot.toGame(): Game {
         val players = getPlayersFromGameSnapshot(this)
         val leftoverCards = getLeftoverCardsFromGameSnapshot(this)
         val solutionCards = getSolutionCardsFromGameSnapshot(this)
         val accusation = getAccusationFromGameSnapshot(this)
+        val losers = getLosersFromGameSnapshot(this)
 
         return Game(
             id = id,
@@ -132,6 +143,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
             solutionCards = solutionCards,
             turnPlayerId = getString(TURN_PLAYER).orEmpty(),
             accusation = accusation,
+            winner = getString(WINNER).orEmpty(),
+            losers = losers
         )
     }
 
@@ -157,6 +170,11 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         firestore.collection(GAMES_COLLECTION).document(gameID).delete().await()
     }
 
+    override suspend fun checkVictory(gameID: String, characterCard: Card, weaponCard: Card, roomCard: Card): Boolean {
+        val game = getGameByID(gameID)
+        return (characterCard in game.solutionCards && weaponCard in game.solutionCards && roomCard in game.solutionCards)
+    }
+
     companion object {
         private const val GAMES_COLLECTION = "games"
         private const val HOST = "host"
@@ -168,5 +186,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val ACCUSATION = "accusation"
         private const val ACCUSATION_CARDS = "cards"
         private const val ACCUSATION_RESPONDER = "responder"
+        private const val WINNER = "winner"
+        private const val LOSERS = "losers"
     }
 }

@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
+import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
+    private val authService: AuthService,
 ) : ViewModel() {
 
     private val viewEventEmitter = MutableSingleLiveEvent<ViewEvent>()
@@ -56,6 +59,29 @@ class GameViewModel @Inject constructor(
         if (game.status == GameStatus.SHOW_CARD && gameRepository.isTurnPlayer()) {
             viewEventEmitter.postValue(ViewEvent.NavigateToShowCard)
         }
+
+        // Se il giocatore che ha fatto l'ultima accusa vince o se rimane un solo giocatore
+        if (game.status == GameStatus.FINISHED) {
+            val currentPlayerID = authService.getUser()?.id
+            val currentPlayerDisplayName = authService.getUser()?.displayName
+            if (game.winner == currentPlayerID && game.turnPlayerId == currentPlayerID) {
+                viewEventEmitter.postValue(ViewEvent.NavigateToSolution)
+            } else {
+                val itsYou = game.winner == currentPlayerID
+                val winnerName = game.players.find { player -> player.id == game.winner }?.displayName
+                viewEventEmitter.postValue(winnerName?.let { ViewEvent.ShowResultAlert(true, itsYou, it, game.solutionCards) })
+            }
+        }
+        // Se il giocatore che ha fatto l'ultima accusa ha perso
+        else if(game.turnPlayerId in game.losers) {
+            if(game.turnPlayerId == authService.getUser()?.id) {
+                viewEventEmitter.postValue(ViewEvent.NavigateToSolution)
+            } else {
+                val loserName = game.players.find { player -> player.id == game.turnPlayerId }?.displayName
+                viewEventEmitter.postValue(loserName?.let { ViewEvent.ShowResultAlert(false, false, it, mutableListOf()) })
+            }
+        }
+
     }
 
     private fun handleGameNotRunning() = viewModelScope.launch {
@@ -124,5 +150,7 @@ class GameViewModel @Inject constructor(
         object NavigateToMain : ViewEvent()
         object NavigateToCards : ViewEvent()
         object NavigateToShowCard : ViewEvent()
+        object NavigateToSolution : ViewEvent()
+        class ShowResultAlert(val someoneWon: Boolean, val itsYou: Boolean, val player: String, val solution: MutableList<Card>) : GameViewModel.ViewEvent()
     }
 }

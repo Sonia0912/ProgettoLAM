@@ -9,4 +9,6 @@ data class Game(
     var solutionCards: MutableList<Card>,
     var turnPlayerId: String,
     var accusation: Accusation?,
+    var winner: String,
+    var losers: MutableList<String>
 )

@@ -31,7 +31,7 @@ class AccusationFragment : Fragment() {
         initCardsLists()
         observeViewState()
         observeGameState()
-        binding.accuseButton.setOnClickListener { viewModel.accuse() }
+        binding.accuseButton.setOnClickListener { viewModel.accuse(binding.checkBoxFinal.isChecked) }
         return binding.root
     }
 
