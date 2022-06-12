@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sonianicoletti.entities.*
+import com.sonianicoletti.entities.Card
+import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.GameStatus
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionDefeat
@@ -15,6 +18,7 @@ import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,6 +67,7 @@ class GameViewModel @Inject constructor(
             game.accusation != null && gameRepository.isAccusationResponder() -> startAccusation()
             game.accusation != null -> viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
             isCurrentTurn != gameRepository.isCurrentTurn() -> resetTurn()
+            else -> viewEventEmitter.value = ViewEvent.HideDisplayCard
         }
     }
 
@@ -93,7 +98,7 @@ class GameViewModel @Inject constructor(
         viewEventEmitter.value = when {
             game.winner == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionVictory(false)
             game.winner == currentUserId -> NavigateToSolutionVictory(true)
-            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
+            game.losers.lastOrNull() == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
             game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false)
             else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
         }
@@ -102,6 +107,7 @@ class GameViewModel @Inject constructor(
     private suspend fun showDefeat(game: Game) {
         // Se il giocatore che ha fatto l'ultima accusa ha perso
         viewEventEmitter.value = NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, null, false, false)
+        delay(1)
         gameRepository.nextTurn()
     }
 

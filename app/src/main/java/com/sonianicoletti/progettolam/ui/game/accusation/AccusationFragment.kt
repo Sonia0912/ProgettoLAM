@@ -81,7 +81,10 @@ class AccusationFragment : Fragment() {
             binding.accusationRoomText.text = it.card.name
         }
 
-        binding.accuseButton.isEnabled = state.selectedCharacterCard != null && state.selectedRoomCard != null && state.selectedWeaponCard != null
+        binding.accuseButton.apply {
+            isEnabled = state.selectedCharacterCard != null && state.selectedRoomCard != null && state.selectedWeaponCard != null
+            alpha = if (isEnabled) 1F else 0.5F
+        }
     }
 
     private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) {

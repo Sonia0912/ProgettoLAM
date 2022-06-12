@@ -57,9 +57,11 @@ class GameActivity : AppCompatActivity() {
         binding.displayCardOverlay.button.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
         binding.defeatOverlay.button.setOnClickListener {
             hideDefeatOverlay()
-            findNavController(R.id.fragment_container_view).apply {
-                popBackStack(R.id.game_nav_graph, true)
-                navigate(R.id.scoresFragment)
+            if (hasGameEnded) {
+                findNavController(R.id.fragment_container_view).apply {
+                    popBackStack(R.id.game_nav_graph, true)
+                    navigate(R.id.scoresFragment)
+                }
             }
         }
     }

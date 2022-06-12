@@ -28,6 +28,7 @@ class ScoresViewModel @Inject constructor(
             val rankings = mutableListOf<Score>()
             val winningPlayer = players.first { it.id == game.winner }
             rankings.add(Score(winningPlayer.displayName, ordinalsList[0]))
+
             var position = 1
             game.players.filterNot { it.id == winningPlayer.id }.let { players ->
                 players.filterNot { it.id in game.losers }.forEach {
@@ -36,11 +37,6 @@ class ScoresViewModel @Inject constructor(
                 players.filter { it.id in game.losers }.reversed().forEach {
                     rankings.add(Score(it.displayName, ordinalsList[position++]))
                 }
-            }
-
-            game.losers.forEachIndexed { index, loser ->
-                val loserPlayer = players.find { it.id == loser}
-                loserPlayer?.let { rankings.add(Score(loserPlayer.displayName, ordinalsList[index + 1])) }
             }
 
             val users = userService.getUsers(game.players.map { it.id }).toMutableList().apply { sortByDescending { it.score } }
