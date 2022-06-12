@@ -48,12 +48,6 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    fun getCurrentUserID() : String {
-        viewModelScope.launch {
-            return authService.getUser()?.id ?: throw UserNotLoggedInException()
-        }
-    }
-
     private fun assignPlayersSelectedCharacters(game: Game) {
         characters.value?.forEach { characterItem ->
             val player = game.players.find { it.character == characterItem.character }

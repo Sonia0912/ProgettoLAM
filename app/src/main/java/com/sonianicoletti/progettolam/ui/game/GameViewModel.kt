@@ -92,9 +92,9 @@ class GameViewModel @Inject constructor(
         viewEventEmitter.value = when {
             game.winner == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionVictory(false)
             game.winner == currentUserId -> NavigateToSolutionVictory(true)
-            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
-            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false)
-            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
+            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true).also { stopObservingGame() }
+            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false).also { stopObservingGame() }
+            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false).also { stopObservingGame() }
         }
     }
 
@@ -158,6 +158,10 @@ class GameViewModel @Inject constructor(
 
     fun onDisplayCardButtonClicked() = viewModelScope.launch {
         gameRepository.nextTurn()
+    }
+
+    fun stopObservingGame() {
+        this.observeGameJob.cancel()
     }
 
     data class ViewState(

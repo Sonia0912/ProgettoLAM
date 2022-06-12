@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.sonianicoletti.progettolam.databinding.FragmentSolutionBinding
+import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +17,7 @@ class SolutionFragment : Fragment() {
 
     private lateinit var binding: FragmentSolutionBinding
     private val viewModel: SolutionViewModel by viewModels()
+    private val gameViewModel: GameViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +33,7 @@ class SolutionFragment : Fragment() {
         when (event) {
             is SolutionViewModel.ViewEvent.ShowResult -> showResult(event.won)
             is SolutionViewModel.ViewEvent.ShowSolutionCards -> showSolutionCards(event.card1, event.card2, event.card3)
+            SolutionViewModel.ViewEvent.StopObservingGame -> gameViewModel.stopObservingGame()
         }
     }
 

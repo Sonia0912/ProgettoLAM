@@ -56,6 +56,7 @@ class GameActivity : AppCompatActivity() {
         prepareNavDestinationListener()
 
         binding.displayCardOverlay.button.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
+        binding.defeatOverlay.button.setOnClickListener { viewModel.leaveGame() }
     }
 
     private fun initActionBar() {

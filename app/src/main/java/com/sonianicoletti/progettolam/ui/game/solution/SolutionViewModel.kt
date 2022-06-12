@@ -21,12 +21,13 @@ class SolutionViewModel @Inject constructor(private val gameRepository: GameRepo
             val game = gameRepository.getOngoingGame()
             viewEventEmitter.value = ViewEvent.ShowSolutionCards(CardItem.fromCard(game.solutionCards[0]), CardItem.fromCard(game.solutionCards[1]), CardItem.fromCard(game.solutionCards[2]))
             viewEventEmitter.value = ViewEvent.ShowResult(gameRepository.isWinner())
+            viewEventEmitter.value = ViewEvent.StopObservingGame
         }
     }
 
     sealed class ViewEvent {
         class ShowResult(val won: Boolean) : SolutionViewModel.ViewEvent()
         class ShowSolutionCards(val card1: CardItem, val card2: CardItem, val card3: CardItem) : SolutionViewModel.ViewEvent()
+        object StopObservingGame : SolutionViewModel.ViewEvent()
     }
-
 }
