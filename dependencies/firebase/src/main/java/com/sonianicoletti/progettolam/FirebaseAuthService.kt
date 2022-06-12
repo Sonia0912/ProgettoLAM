@@ -36,6 +36,7 @@ class FirebaseAuthService @Inject constructor(
             // nel caso non abbia un nome viene mostrata l'email
             displayName = displayName,
             messagingToken = null,
+            score = 0
         )
     }
 
@@ -88,6 +89,7 @@ class FirebaseAuthService @Inject constructor(
         FirebaseAuthService.DISPLAY_NAME to displayName,
         FirebaseAuthService.EMAIL to email,
         FirebaseAuthService.MESSAGING_TOKEN to messagingToken,
+        FirebaseAuthService.SCORE to score
     )
 
     companion object {
@@ -95,6 +97,7 @@ class FirebaseAuthService @Inject constructor(
         private const val DISPLAY_NAME = "displayName"
         private const val EMAIL = "email"
         private const val MESSAGING_TOKEN = "messaging_token"
+        private const val SCORE = "score"
     }
 
 }

@@ -195,7 +195,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#AAFFFFFF"
+            android:background="@color/transparent_blue_pigment"
             android:clickable="true"
             android:focusable="true" />
 
@@ -203,8 +203,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Not your turn"
-            android:textColor="#1A1A1A"
-            android:textSize="20sp"
+            style="@style/AgrandirTextViewSmall"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +221,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#AAFFFFFF"
+            android:background="@color/transparent_red_sky_magenta_dark"
             android:clickable="true"
             android:focusable="true" />
 
@@ -229,8 +229,10 @@
             android:id="@+id/waiting_for_responder_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#1A1A1A"
-            android:textSize="20sp"
+            style="@style/AgrandirTextViewSmall"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -20,7 +20,8 @@ class FirebaseUserService @Inject constructor() : UserService {
             id = userDocument.id,
             email = email,
             displayName = userDocument.getString("displayName").orEmpty(),
-            messagingToken = userDocument.getString("messaging_token")
+            messagingToken = userDocument.getString("messaging_token"),
+            score = userDocument.getLong("score")?.toInt() ?: 0
         )
     }
 }

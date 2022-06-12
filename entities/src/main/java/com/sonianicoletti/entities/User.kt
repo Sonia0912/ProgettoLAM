@@ -5,4 +5,5 @@ data class User(
     val email: String,
     var displayName: String,
     val messagingToken: String?,
+    var score: Int
 )
