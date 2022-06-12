@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        android:id="@+id/player_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        tools:text="Jacob:"
-        style="@style/DefaultTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginVertical="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/rounded_light_purple">
 
     <TextView
         android:id="@+id/ranking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        tools:text="300"
-        style="@style/DefaultTextView"
+        tools:text="1st"
+        android:layout_marginStart="24dp"
+        style="@style/AgrandirTextViewSmall"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Jacob"
+        android:layout_marginEnd="24dp"
+        style="@style/AgrandirTextViewSmall"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

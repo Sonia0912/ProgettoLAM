@@ -18,7 +18,7 @@ class ScoresFragment : Fragment() {
     private val viewModel: ScoresViewModel by viewModels()
     private val gameViewModel: GameViewModel by activityViewModels()
 
-    private lateinit var rankingsAdapter: ScoresAdapter
+    private lateinit var rankingsAdapter: RankingAdapter
     private lateinit var totalScoresAdapter: ScoresAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,7 +29,7 @@ class ScoresFragment : Fragment() {
     }
 
     private fun initScoresLists() {
-        rankingsAdapter = ScoresAdapter()
+        rankingsAdapter = RankingAdapter()
         totalScoresAdapter = ScoresAdapter()
         binding.gameRankings.adapter = rankingsAdapter
         binding.totalScores.adapter = totalScoresAdapter

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/russian_violet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:text="Game Rankings:"
-            android:textColor="#1A1A1A"
-            android:textSize="20sp"
+            android:textColor="@color/gold_web_golden"
+            style="@style/AgrandirTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +30,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/game_rankings_header"
             tools:itemCount="6"
-            tools:listitem="@layout/list_item_score" />
+            tools:listitem="@layout/list_item_ranking" />
 
         <TextView
             android:id="@+id/total_scores_header"
@@ -37,8 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:text="Total scores:"
-            android:textColor="#1A1A1A"
-            android:textSize="20sp"
+            style="@style/AgrandirTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/game_rankings" />
