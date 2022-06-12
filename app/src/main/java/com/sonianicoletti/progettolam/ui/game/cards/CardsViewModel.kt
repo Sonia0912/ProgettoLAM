@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sonianicoletti.entities.*
+import com.sonianicoletti.entities.Card
+import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.Player
 import com.sonianicoletti.progettolam.ui.game.GameState
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -48,7 +50,7 @@ class CardsViewModel @Inject constructor(
         val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
         val accusingPlayer = game.players.firstOrNull { it.id == game.accusation?.responder }
         val accusationCards = game.accusation?.cards.mapToCardItems()
-        val canDeny = !yourCards.any { it in accusationCards } && accusingPlayer?.id == currentUser?.id
+        val canSkip = !yourCards.any { it in accusationCards } && accusingPlayer?.id == currentUser?.id
 
         val viewState = ViewState(
             yourCards,
@@ -56,7 +58,7 @@ class CardsViewModel @Inject constructor(
             turnPlayer,
             accusingPlayer,
             accusationCards,
-            canDeny,
+            canSkip,
             currentPlayer?.id.orEmpty()
         )
         viewStateEmitter.postValue(viewState)
@@ -80,7 +82,7 @@ class CardsViewModel @Inject constructor(
         val turnPlayer: Player?,
         val respondingPlayer: Player?,
         val accusationCards: MutableList<CardItem>,
-        val canDeny: Boolean,
+        val canSkip: Boolean,
         val currentUserId: String,
     )
 }

@@ -22,5 +22,7 @@
     <color name="light_blue_pigment">#454AAC</color>
     <color name="light_red_sky_magenta">#D1315F</color>
     <color name="transparent_red_sky_magenta">#77BD2450</color>
+    <color name="transparent_red_sky_magenta_dark">#B514060A</color>
+    <color name="transparent_blue_pigment">#C90F1132</color>
 
 </resources>

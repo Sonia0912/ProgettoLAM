@@ -69,6 +69,7 @@ class ProfileFragment : Fragment() {
     private fun setInformation(user: User) {
         binding.textViewUserEmail.text = user.email
         binding.editTextDisplayName.setText(user.displayName)
+        binding.textViewUserScore.text = user.score.toString()
     }
 
 }
