@@ -96,8 +96,8 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
     }
 
     private fun getLosersFromGameSnapshot(gameSnapshot: DocumentSnapshot): MutableList<String> {
-        val losersMapList = gameSnapshot["losers"] as? List<HashMap<String, Any>> ?: emptyList()
-        return losersMapList.map { it.toString() }.toMutableList()
+        val losersMapList = gameSnapshot["losers"] as? List<String> ?: emptyList()
+        return losersMapList.toMutableList()
     }
 
     private fun HashMap<String, Any>.toPlayer() = Player(

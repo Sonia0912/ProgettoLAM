@@ -27,8 +27,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private val viewModel: GameViewModel by viewModels()
 
-    private var isAccusationStage = false
+    private var isAccusationResponder = false
     private var shouldFabShowInDestination = false
+    private var hasGameEnded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,6 @@ class GameActivity : AppCompatActivity() {
         initActionBar()
         initNavigationFab()
         observeViewState()
-        observeGameState()
         observeViewEvents()
         prepareNavDestinationListener()
 
@@ -138,7 +138,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun handleNavigationFabVisibility() {
-        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationStage
+        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationResponder
     }
 
     private fun observeViewState() = viewModel.viewState.observe(this) { state ->
@@ -146,10 +146,7 @@ class GameActivity : AppCompatActivity() {
         binding.notesFragmentFab.isVisible = state.navigationFabOpened
         binding.accusationFragmentFab.isVisible = state.navigationFabOpened
         binding.blackScreenOverlay.isVisible = state.navigationFabOpened
-    }
-
-    private fun observeGameState() = viewModel.gameState.observe(this) { state ->
-        isAccusationStage = state.game.accusation != null
+        isAccusationResponder = state.isAccusationResponder
         handleNavigationFabVisibility()
     }
 
@@ -231,6 +228,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun showResultAlert(someoneWon: Boolean, itsYou: Boolean, player: String, solutionCards: MutableList<Card>) {
+        if (hasGameEnded) return
+
         var resultMessage = ""
         if(someoneWon && itsYou) {
             resultMessage = "You won! The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
@@ -238,15 +237,23 @@ class GameActivity : AppCompatActivity() {
             resultMessage = "$player won the game. The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
         } else if(!someoneWon) {
             resultMessage = "$player lost."
+            MaterialAlertDialogBuilder(this)
+                .setMessage(resultMessage)
+                .setPositiveButton("OK") { _, _ -> }
+                .show()
+            return
         }
         MaterialAlertDialogBuilder(this)
             .setMessage(resultMessage)
-            .setPositiveButton("Yes") { _, _ -> }
+            .setPositiveButton("Leave") { _, _ -> viewModel.leaveGame() }
+            .setOnDismissListener { viewModel.leaveGame() }
             .show()
+
+        hasGameEnded = true
     }
 
     override fun onBackPressed() {
-        if (!isAccusationStage) {
+        if (!isAccusationResponder) {
             super.onBackPressed()
         }
     }

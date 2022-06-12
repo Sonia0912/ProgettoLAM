@@ -75,7 +75,7 @@ class GameRepositoryImpl @Inject constructor(
 
             when {
                 game.host == user.id -> gameService.deleteGame(game.id)
-                game.status != GameStatus.LOBBY -> gameService.deleteGame(game.id)
+                !(game.status == GameStatus.LOBBY || game.status == GameStatus.FINISHED) -> gameService.deleteGame(game.id)
                 else -> game.removePlayer(user.id)
             }
         } catch (e: GameNotRunningException) {
@@ -157,11 +157,11 @@ class GameRepositoryImpl @Inject constructor(
         val game = getOngoingGame()
         val turnPlayer = game.players.firstOrNull { it.id == game.turnPlayerId }
         game.accusation = null
-
+        val remainingPlayers = game.players.filterNot { player -> player.id in game.losers }
         game.turnPlayerId = when (turnPlayer) {
-            null -> game.players.first()
-            game.players.last() -> game.players.first()
-            else -> game.players[game.players.indexOf(turnPlayer) + 1]
+            null -> remainingPlayers.first()
+            remainingPlayers.last() -> remainingPlayers.first()
+            else -> remainingPlayers[remainingPlayers.indexOf(turnPlayer) + 1]
         }.id
 
         gameService.updateGame(game)
@@ -176,17 +176,20 @@ class GameRepositoryImpl @Inject constructor(
             if(won) {
                 game.winner = authService.getUser()?.id.toString()
                 game.status = GameStatus.FINISHED
+                gameService.updateGame(game)
+                return
             } else {
                 authService.getUser()?.id?.let { game.losers.add(it) }
                 // controllo se e' rimasto un solo giocatore
                 if(game.losers.size == (game.players.size - 1)) {
                     game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
                     game.status = GameStatus.FINISHED
+                    gameService.updateGame(game)
+                    return
                 }
             }
-        } else {
-            game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
         }
+        game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
         gameService.updateGame(game)
     }
 

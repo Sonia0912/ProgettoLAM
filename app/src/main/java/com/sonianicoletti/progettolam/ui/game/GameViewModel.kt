@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Card
 import com.sonianicoletti.entities.Game
+import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
@@ -52,45 +53,46 @@ class GameViewModel @Inject constructor(
 
     private suspend fun handleGameUpdate(game: Game) {
         val isHost = gameRepository.isHost()
-        gameStateEmitter.postValue(GameState(game, isHost))
+        gameStateEmitter.value = GameState(game, isHost)
 
         if (isCurrentTurn && !gameRepository.isCurrentTurn()) {
             isCurrentTurn = false
-            viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+            viewEventEmitter.value = ViewEvent.NavigateToCards
         }
         isCurrentTurn = gameRepository.isCurrentTurn()
 
-        if (game.accusation != null && !gameRepository.isCurrentTurn()) {
-            viewEventEmitter.postValue(ViewEvent.NavigateToCards)
+        if (game.accusation != null && gameRepository.isAccusationResponder()) {
+            viewEventEmitter.value = ViewEvent.NavigateToCards
         }
+        viewStateEmitter.apply { value = value?.copy(isAccusationResponder = gameRepository.isAccusationResponder()) }
 
         game.accusation?.displayCard?.let { displayCard ->
             if (gameRepository.isCurrentTurn()) {
-                viewEventEmitter.postValue(ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), true, gameRepository.getTurnPlayer().displayName))
+                viewEventEmitter.value = ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), true, gameRepository.getTurnPlayer().displayName)
             } else if (gameRepository.isAccusationResponder()) {
-                viewEventEmitter.postValue(ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), false, gameRepository.getTurnPlayer().displayName))
+                viewEventEmitter.value = ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), false, gameRepository.getTurnPlayer().displayName)
             }
-        } ?: viewEventEmitter.postValue(ViewEvent.HideDisplayCard)
+        } ?: viewEventEmitter.setValue(ViewEvent.HideDisplayCard)
 
         // Se il giocatore che ha fatto l'ultima accusa vince o se rimane un solo giocatore
         if (game.status == GameStatus.FINISHED) {
             val currentPlayerID = authService.getUser()?.id
             val currentPlayerDisplayName = authService.getUser()?.displayName
             if (game.winner == currentPlayerID && game.turnPlayerId == currentPlayerID) {
-                viewEventEmitter.postValue(ViewEvent.NavigateToSolution)
+                viewEventEmitter.value = ViewEvent.NavigateToSolution
             } else {
                 val itsYou = game.winner == currentPlayerID
                 val winnerName = game.players.find { player -> player.id == game.winner }?.displayName
-                viewEventEmitter.postValue(winnerName?.let { ViewEvent.ShowResultAlert(true, itsYou, it, game.solutionCards) })
+                viewEventEmitter.value = winnerName?.let { ViewEvent.ShowResultAlert(true, itsYou, it, game.solutionCards) }
             }
         }
         // Se il giocatore che ha fatto l'ultima accusa ha perso
         else if(game.turnPlayerId in game.losers) {
             if(game.turnPlayerId == authService.getUser()?.id) {
-                viewEventEmitter.postValue(ViewEvent.NavigateToSolution)
+                viewEventEmitter.value = ViewEvent.NavigateToSolution
             } else {
                 val loserName = game.players.find { player -> player.id == game.turnPlayerId }?.displayName
-                viewEventEmitter.postValue(loserName?.let { ViewEvent.ShowResultAlert(false, false, it, mutableListOf()) })
+                viewEventEmitter.value = loserName?.let { ViewEvent.ShowResultAlert(false, false, it, mutableListOf()) }
             }
         }
 
@@ -159,7 +161,8 @@ class GameViewModel @Inject constructor(
         val checkedBoxesRooms: MutableList<Pair<Int, Int>> = mutableListOf(),
         val displayCard: CardItem? = null,
         val turnPlayer: Player? = null,
-        val isTurnPlayer: Boolean? = false,
+        val isTurnPlayer: Boolean = false,
+        val isAccusationResponder: Boolean = false
     )
 
     sealed class ViewEvent {
