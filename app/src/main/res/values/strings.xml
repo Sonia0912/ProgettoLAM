@@ -61,5 +61,6 @@
     <string name="game_rankings">Game Rankings:</string>
     <string name="total_scores">Total scores:</string>
     <string name="the_solution">The solution</string>
+    <string name="player_lost_dialog_message">%1$s has made an incorrect accusation and lost the game. They must still respond to accusations.</string>
 
 </resources>

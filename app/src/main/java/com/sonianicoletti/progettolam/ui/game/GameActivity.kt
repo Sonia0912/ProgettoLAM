@@ -167,6 +167,7 @@ class GameActivity : AppCompatActivity() {
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
             is ShowDisplayCard -> showDisplayCard(event.cardItem, event.isTurnPlayer, event.turnPlayerName)
             HideDisplayCard -> hideDisplayCard()
+            is ShowPlayerHasLost -> showPlayerHasLost(event.playerName)
             is NavigateToSolutionVictory -> showVictory(event.wonByNoPlayersRemaining)
             is NavigateToSolutionDefeat -> showDefeat(event.solutionCards, event.winnerName, event.wonByDefault, event.lostByAccusation)
         }
@@ -229,6 +230,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun hideDefeatOverlay() {
         binding.defeatOverlay.root.isVisible = false
+    }
+
+    private fun showPlayerHasLost(playerName: String) {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(getString(R.string.player_lost_dialog_message, playerName))
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun showVictory(wonByNoPlayersRemaining: Boolean) {

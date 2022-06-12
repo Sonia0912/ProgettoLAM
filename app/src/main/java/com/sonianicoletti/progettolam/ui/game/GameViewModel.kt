@@ -11,7 +11,6 @@ import com.sonianicoletti.entities.Player
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
 import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionDefeat
-import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionVictory
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
@@ -39,6 +38,8 @@ class GameViewModel @Inject constructor(
 
     private val observeGameJob = Job()
     private var isCurrentTurn: Boolean = false
+
+    private val losers = mutableListOf<String>()
 
     init {
         observeGameUpdates()
@@ -69,6 +70,17 @@ class GameViewModel @Inject constructor(
             isCurrentTurn != gameRepository.isCurrentTurn() -> resetTurn()
             else -> viewEventEmitter.value = ViewEvent.HideDisplayCard
         }
+
+        if (game.losers.size != losers.size) {
+            losers.clear()
+            losers.addAll(game.losers)
+            game.losers.lastOrNull()?.takeIf { it != user.id && game.status == GameStatus.ACTIVE }?.let { loserID ->
+                val player = game.players.find { it.id == loserID }
+                if (player != null) {
+                    viewEventEmitter.value = ViewEvent.ShowPlayerHasLost(player.displayName)
+                }
+            }
+        }
     }
 
     private suspend fun resetTurn() {
@@ -96,11 +108,20 @@ class GameViewModel @Inject constructor(
         stopObservingGame()
         viewStateEmitter.value = viewState.value?.copy(hasGameEnded = true)
         viewEventEmitter.value = when {
-            game.winner == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionVictory(false)
-            game.winner == currentUserId -> NavigateToSolutionVictory(true)
-            game.losers.lastOrNull() == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
-            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false)
-            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
+            game.winner == currentUserId && game.turnPlayerId == currentUserId -> ViewEvent.NavigateToSolutionVictory(false)
+            game.winner == currentUserId -> ViewEvent.NavigateToSolutionVictory(true)
+            game.losers.lastOrNull() == currentUserId && game.turnPlayerId == currentUserId -> ViewEvent.NavigateToSolutionDefeat(game.solutionCards.map {
+                CardItem.fromCard(
+                    it
+                )
+            }, winningPlayer.displayName, false, true)
+            game.players.size - game.losers.size == 1 -> ViewEvent.NavigateToSolutionDefeat(
+                game.solutionCards.map { CardItem.fromCard(it) },
+                winningPlayer.displayName,
+                true,
+                false
+            )
+            else -> ViewEvent.NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
         }
     }
 
@@ -196,6 +217,7 @@ class GameViewModel @Inject constructor(
         object NavigateToCards : ViewEvent()
         class ShowDisplayCard(val cardItem: CardItem, val isTurnPlayer: Boolean, val turnPlayerName: String) : ViewEvent()
         object HideDisplayCard : ViewEvent()
+        class ShowPlayerHasLost(val playerName: String) : ViewEvent()
         class NavigateToSolutionVictory(val wonByNoPlayersRemaining: Boolean) : ViewEvent()
         class NavigateToSolutionDefeat(val solutionCards: List<CardItem>, val winnerName: String?, val wonByDefault: Boolean, val lostByAccusation: Boolean) : ViewEvent()
     }
