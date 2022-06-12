@@ -8,13 +8,11 @@
     <fragment
         android:id="@+id/lobbyFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.lobby.LobbyFragment"
-        android:label="fragment_lobby"
         tools:layout="@layout/fragment_lobby" />
 
     <fragment
         android:id="@+id/charactersFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.characters.CharactersFragment"
-        android:label="fragment_characters"
         tools:layout="@layout/fragment_characters">
         <action
             android:id="@+id/action_charactersFragment_to_cardsFragment"
@@ -24,7 +22,6 @@
     <fragment
         android:id="@+id/cardsFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.cards.CardsFragment"
-        android:label="fragment_cards"
         tools:layout="@layout/fragment_cards">
         <action
             android:id="@+id/action_cardsFragment_to_notesFragment"
@@ -37,7 +34,6 @@
     <fragment
         android:id="@+id/notesFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.notes.NotesFragment"
-        android:label="fragment_notes"
         tools:layout="@layout/fragment_notes">
         <action
             android:id="@+id/action_notesFragment_to_cardsFragment"
@@ -50,13 +46,11 @@
     <fragment
         android:id="@+id/rulesFragment"
         android:name="com.sonianicoletti.progettolam.ui.shared.RulesFragment"
-        android:label="fragment_rules"
         tools:layout="@layout/fragment_rules"/>
 
     <fragment
         android:id="@+id/accusationFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.accusation.AccusationFragment"
-        android:label="fragment_accusation"
         tools:layout="@layout/fragment_accusation" >
         <action
             android:id="@+id/action_accusationFragment_to_cardsFragment"
@@ -72,13 +66,11 @@
     <fragment
         android:id="@+id/solutionFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.solution.SolutionFragment"
-        android:label="fragment_solution"
         tools:layout="@layout/fragment_solution"/>
 
     <fragment
         android:id="@+id/scoresFragment"
         android:name="com.sonianicoletti.progettolam.ui.game.scores.ScoresFragment"
-        android:label="fragment_scores"
         tools:layout="@layout/fragment_scores" />
 
 </navigation>

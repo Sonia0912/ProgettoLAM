@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.sonianicoletti.progettolam.ui.main.home.HomeFragment"
-        android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
@@ -24,18 +23,15 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.sonianicoletti.progettolam.ui.main.profile.ProfileFragment"
-        android:label="fragment_profile"
         tools:layout="@layout/fragment_profile"/>
 
     <fragment
         android:id="@+id/joingameFragment"
         android:name="com.sonianicoletti.progettolam.ui.main.joingame.JoinGameFragment"
-        android:label="fragment_joingame"
         tools:layout="@layout/fragment_join_game" />
     <fragment
         android:id="@+id/rulesFragment"
         android:name="com.sonianicoletti.progettolam.ui.shared.RulesFragment"
-        android:label="fragment_rules"
         tools:layout="@layout/fragment_rules"/>
 
 </navigation>

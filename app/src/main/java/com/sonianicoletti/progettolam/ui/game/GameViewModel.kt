@@ -131,8 +131,13 @@ class GameViewModel @Inject constructor(
     fun leaveGame() {
         observeGameJob.cancel()
         viewModelScope.launch {
-            gameRepository.leaveGame()
-            viewEventEmitter.value = ViewEvent.NavigateToMain
+            try {
+                gameRepository.leaveGame()
+            } catch (e: Exception) {
+                // do nothing. game might already be deleted
+            } finally {
+                viewEventEmitter.value = ViewEvent.NavigateToMain
+            }
         }
     }
 

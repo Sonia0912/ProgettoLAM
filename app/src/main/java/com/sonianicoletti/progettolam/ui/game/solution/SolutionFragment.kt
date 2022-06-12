@@ -26,7 +26,12 @@ class SolutionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSolutionBinding.inflate(inflater)
-        binding.viewScoresButton.setOnClickListener { findNavController().navigate(R.id.scoresFragment) }
+        binding.viewScoresButton.setOnClickListener {
+            findNavController().apply {
+                popBackStack(R.id.game_nav_graph, true)
+                findNavController().navigate(R.id.scoresFragment)
+            }
+        }
         observeViewEvents()
         return binding.root
     }
