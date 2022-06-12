@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.sonianicoletti.entities.Card
 import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.ActivityGameBinding
 import com.sonianicoletti.progettolam.ui.auth.AuthActivity
@@ -56,7 +55,13 @@ class GameActivity : AppCompatActivity() {
         prepareNavDestinationListener()
 
         binding.displayCardOverlay.button.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
-        binding.defeatOverlay.button.setOnClickListener { viewModel.leaveGame() }
+        binding.defeatOverlay.button.setOnClickListener {
+            hideDefeatOverlay()
+            findNavController(R.id.fragment_container_view).apply {
+                currentDestination?.id?.let { popBackStack(it, true) }
+                navigate(R.id.scoresFragment)
+            }
+        }
     }
 
     private fun initActionBar() {
@@ -133,7 +138,8 @@ class GameActivity : AppCompatActivity() {
 
     private fun prepareNavDestinationListener() {
         findNavController(R.id.fragment_container_view).addOnDestinationChangedListener { _, destination, _ ->
-            shouldFabShowInDestination = destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment && destination.id != R.id.rulesFragment
+            shouldFabShowInDestination =
+                destination.id != R.id.lobbyFragment && destination.id != R.id.charactersFragment && destination.id != R.id.rulesFragment
             handleNavigationFabVisibility()
         }
     }
@@ -163,7 +169,6 @@ class GameActivity : AppCompatActivity() {
             HideDisplayCard -> hideDisplayCard()
             is NavigateToSolutionVictory -> showVictory(event.wonByNoPlayersRemaining)
             is NavigateToSolutionDefeat -> showDefeat(event.solutionCards, event.winnerName, event.wonByDefault, event.lostByAccusation)
-            is ShowResultAlert -> showResultAlert(event.someoneWon, event.itsYou, event.player, event.solution)
         }
     }
 
@@ -198,7 +203,7 @@ class GameActivity : AppCompatActivity() {
     private fun showDisplayCard(cardItem: CardItem, isTurnPlayer: Boolean, turnPlayerName: String) {
         binding.displayCardOverlay.root.visibility = View.INVISIBLE
         binding.displayCardOverlay.card.image.setImageResource(cardItem.imageRes)
-        binding.displayCardOverlay.card.name.text = cardItem.card.name
+        binding.displayCardOverlay.card.playerName.text = cardItem.card.name
         binding.displayCardOverlay.button.isVisible = isTurnPlayer
         binding.displayCardOverlay.subtitle.text = "Showing card to $turnPlayerName"
         binding.displayCardOverlay.subtitle.isVisible = !isTurnPlayer
@@ -222,9 +227,14 @@ class GameActivity : AppCompatActivity() {
         binding.displayCardOverlay.root.isVisible = false
     }
 
+    private fun hideDefeatOverlay() {
+        binding.defeatOverlay.root.isVisible = false
+    }
+
     private fun showVictory(wonByNoPlayersRemaining: Boolean) {
         findNavController(R.id.fragment_container_view).apply {
             if (currentDestination?.id != R.id.solutionFragment) {
+//                currentDestination?.id?.let { popBackStack(it, true) }
                 navigate(R.id.solutionFragment)
             }
         }
@@ -235,16 +245,16 @@ class GameActivity : AppCompatActivity() {
         binding.defeatOverlay.characterCard.image.setImageResource(solutionCards[0].imageRes)
         binding.defeatOverlay.weaponCard.image.setImageResource(solutionCards[1].imageRes)
         binding.defeatOverlay.roomCard.image.setImageResource(solutionCards[2].imageRes)
-        binding.defeatOverlay.characterCard.name.text = solutionCards[0].card.name
-        binding.defeatOverlay.weaponCard.name.text = solutionCards[1].card.name
-        binding.defeatOverlay.roomCard.name.text = solutionCards[2].card.name
+        binding.defeatOverlay.characterCard.playerName.text = solutionCards[0].card.name
+        binding.defeatOverlay.weaponCard.playerName.text = solutionCards[1].card.name
+        binding.defeatOverlay.roomCard.playerName.text = solutionCards[2].card.name
         binding.defeatOverlay.subtitle.text = when {
             winnerName != null && lostByAccusation -> "You made the wrong accusation. $winnerName won by default"
             winnerName != null && wonByNoPlayersRemaining -> "$winnerName won by default"
             winnerName != null -> "$winnerName made the correct accusation"
             else -> "You made the wrong accusation\nYou must continue playing by responding to other players' accusations"
         }
-        binding.defeatOverlay.button.text = if (winnerName != null) "Leave game" else "Continue"
+        binding.defeatOverlay.button.text = if (winnerName != null) "View scores" else "Continue"
 
         binding.defeatOverlay.root.post {
             binding.defeatOverlay.root.isVisible = true
@@ -263,31 +273,6 @@ class GameActivity : AppCompatActivity() {
             binding.defeatOverlay.button.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
             binding.defeatOverlay.subtitle.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
         }
-    }
-
-    private fun showResultAlert(someoneWon: Boolean, itsYou: Boolean, player: String, solutionCards: MutableList<Card>) {
-        if (hasGameEnded) return
-
-        var resultMessage = ""
-        if(someoneWon && itsYou) {
-            resultMessage = "You won! The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
-        } else if(someoneWon && !itsYou) {
-            resultMessage = "$player won the game. The solution was: ${solutionCards[0].name}, ${solutionCards[1].name}, ${solutionCards[2].name}."
-        } else if(!someoneWon) {
-            resultMessage = "$player lost."
-            MaterialAlertDialogBuilder(this)
-                .setMessage(resultMessage)
-                .setPositiveButton("OK") { _, _ -> }
-                .show()
-            return
-        }
-        MaterialAlertDialogBuilder(this)
-            .setMessage(resultMessage)
-            .setPositiveButton("Leave") { _, _ -> viewModel.leaveGame() }
-            .setOnDismissListener { viewModel.leaveGame() }
-            .show()
-
-        hasGameEnded = true
     }
 
     override fun onBackPressed() {

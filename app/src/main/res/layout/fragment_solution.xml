@@ -16,7 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/solutionCardsContainer"
-        app:layout_constraintVertical_bias="0.3"
         style="@style/AgrandirTextViewSmall"
         android:textColor="@color/white"
         app:layout_constraintVertical_chainStyle="packed"
@@ -26,8 +25,9 @@
         android:id="@+id/solutionCardsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewTheSolution"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_scores_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -132,12 +132,27 @@
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/view_scores_button"
+        style="@style/ButtonTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_scores"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_blue_button"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/solutionCardsContainer"
+        app:layout_constraintBottom_toTopOf="@id/textViewResult" />
+
     <TextView
         android:id="@+id/textViewResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="You won!"
-        app:layout_constraintTop_toBottomOf="@+id/solutionCardsContainer"
+        tools:text="@string/you_won"
+        android:layout_marginTop="56dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_scores_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

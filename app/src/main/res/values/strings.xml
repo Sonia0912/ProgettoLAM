@@ -25,4 +25,6 @@
     <string name="victory_description">To win the game you need to guess all the 3 secret cards: the murderer, the weapon and the room. \n\nWhen it\'s your turn you can make an accusation and declare it as final, which means the other players won\'t try to deny your accusation but you will directly look at the secret cards. If your accusation matches the secret cards, you have won! If not, the game will continue and you won\'t be allowed to play, but you will still deny accusations whenever it\'s required.</string>
     <string name="make_it_a_final_accusation">Make it a <b>final</b> accusation</string>
     <string name="continue_text">Continue</string>
+    <string name="view_scores">View Scores</string>
+    <string name="you_won">You won!</string>
 </resources>

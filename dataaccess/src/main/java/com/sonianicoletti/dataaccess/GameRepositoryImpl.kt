@@ -184,13 +184,12 @@ class GameRepositoryImpl @Inject constructor(
             gameService.updateGame(game)
         } else {
             authService.getUser()?.id?.let { game.losers.add(it) }
-            gameService.updateGame(game)
             // controllo se e' rimasto un solo giocatore
             if(game.losers.size == (game.players.size - 1)) {
                 game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
                 game.status = GameStatus.FINISHED
-                gameService.updateGame(game)
             }
+            gameService.updateGame(game)
         }
     }
 

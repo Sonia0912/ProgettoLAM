@@ -186,6 +186,5 @@ class GameViewModel @Inject constructor(
         object HideDisplayCard : ViewEvent()
         class NavigateToSolutionVictory(val wonByNoPlayersRemaining: Boolean) : ViewEvent()
         class NavigateToSolutionDefeat(val solutionCards: List<CardItem>, val winnerName: String?, val wonByDefault: Boolean, val lostByAccusation: Boolean) : ViewEvent()
-        class ShowResultAlert(val someoneWon: Boolean, val itsYou: Boolean, val player: String, val solution: MutableList<Card>) : GameViewModel.ViewEvent()
     }
 }

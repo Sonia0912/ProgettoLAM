@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.sonianicoletti.progettolam.R
 import com.sonianicoletti.progettolam.databinding.FragmentSolutionBinding
 import com.sonianicoletti.progettolam.ui.game.GameViewModel
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
@@ -24,7 +26,7 @@ class SolutionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSolutionBinding.inflate(inflater)
-
+        binding.viewScoresButton.setOnClickListener { findNavController().navigate(R.id.scoresFragment) }
         observeViewEvents()
         return binding.root
     }

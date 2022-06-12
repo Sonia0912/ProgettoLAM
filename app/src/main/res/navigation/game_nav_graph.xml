@@ -75,4 +75,10 @@
         android:label="fragment_solution"
         tools:layout="@layout/fragment_solution"/>
 
+    <fragment
+        android:id="@+id/scoresFragment"
+        android:name="com.sonianicoletti.progettolam.ui.game.scores.ScoresFragment"
+        android:label="fragment_scores"
+        tools:layout="@layout/fragment_scores" />
+
 </navigation>
