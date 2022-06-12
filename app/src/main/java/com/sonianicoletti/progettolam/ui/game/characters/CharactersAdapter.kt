@@ -13,6 +13,8 @@ class CharactersAdapter(
 
     private val characterItems = mutableListOf<SelectCharacterItem>()
 
+    private var currentUserID : String = ""
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -30,6 +32,11 @@ class CharactersAdapter(
             clear()
             addAll(characterItems)
         }
+        notifyDataSetChanged()
+    }
+
+    fun setCurrentUserID(userID: String) {
+        this.currentUserID = userID
         notifyDataSetChanged()
     }
 

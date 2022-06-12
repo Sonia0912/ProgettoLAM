@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sonianicoletti.entities.Game
 import com.sonianicoletti.entities.GameStatus
 import com.sonianicoletti.entities.User
-import com.sonianicoletti.entities.exceptions.DuplicatePlayerException
-import com.sonianicoletti.entities.exceptions.NetworkNotConnectedException
-import com.sonianicoletti.entities.exceptions.NotEnoughPlayersException
-import com.sonianicoletti.entities.exceptions.UserNotFoundException
+import com.sonianicoletti.entities.exceptions.*
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
 import com.sonianicoletti.usecases.servives.AuthService
@@ -43,11 +40,22 @@ class LobbyViewModel @Inject constructor(
         try {
             validateEmail(playerEmail)
             checkNetworkConnectivity()
+            checkMaxPlayersReached()
             viewStateEmitter.postValue(ViewState.AddingPlayer)
-            val invitedUser = userService.getUserByEmail(playerEmail.lowercase())
+            val invitedUser = userService.getUserByEmail(playerEmail.lowercase().trim())
             checkDuplicatePlayer(invitedUser)
             inviteUserToGame(invitedUser)
             clearText()
+        } catch (e: IllegalArgumentException) {
+            viewEventEmitter.postValue(ViewEvent.ShowInvalidEmailAlert)
+        } catch (e: NetworkNotConnectedException) {
+            viewEventEmitter.postValue(ViewEvent.ShowNoNetworkConnectionAlert)
+        } catch (e: MaxPlayersException) {
+            viewEventEmitter.postValue(ViewEvent.ShowMaxPlayersAlert)
+        } catch (e: DuplicatePlayerException) {
+            viewEventEmitter.postValue(ViewEvent.ShowDuplicatePlayerAlert)
+        } catch (e: UserNotFoundException) {
+            viewEventEmitter.postValue(ViewEvent.ShowUserNotFoundAlert)
         } catch (e: Exception) {
             e.printStackTrace()
             viewEventEmitter.postValue(ViewEvent.ShowGeneralErrorAlert)
@@ -76,6 +84,13 @@ class LobbyViewModel @Inject constructor(
     private fun checkNetworkConnectivity() {
         if (!networkService.isConnected()) {
             throw NetworkNotConnectedException()
+        }
+    }
+
+    private suspend fun checkMaxPlayersReached() {
+        val game = gameRepository.getOngoingGame()
+        if (game.players.size == 6) {
+            throw MaxPlayersException()
         }
     }
 

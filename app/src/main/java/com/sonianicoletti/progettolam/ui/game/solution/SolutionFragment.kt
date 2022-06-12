@@ -34,7 +34,7 @@ class SolutionFragment : Fragment() {
     }
 
     private fun showResult(won: Boolean) {
-        val result = if (won) "You won!" else "Game over!"
+        val result = if (won) "You won!" else "You lost!"
         binding.textViewResult.text = result
     }
 
