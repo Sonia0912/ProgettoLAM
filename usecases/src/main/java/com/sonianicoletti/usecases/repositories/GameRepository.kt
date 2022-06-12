@@ -37,7 +37,9 @@ interface GameRepository {
 
     suspend fun nextTurn()
 
-    suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card, isFinal: Boolean)
+    suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card)
+
+    suspend fun makeFinalAccusation(characterCard: Card, weaponCard: Card, roomCard: Card)
 
     suspend fun nextAccusationResponder()
 

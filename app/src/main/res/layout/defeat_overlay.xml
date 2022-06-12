@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/display_card_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EE000000">
+
+    <TextView
+        android:id="@+id/header_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="48dp"
+        android:gravity="center_horizontal"
+        android:text="Solution:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/character_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/defeat"
+        app:layout_constraintBottom_toTopOf="@id/header_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        style="@style/AgrandirTextView"
+        android:textAlignment="center"
+        android:textColor="@color/red_sky_magenta"/>
+
+    <include
+        android:id="@+id/character_card"
+        layout="@layout/solution_card"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@id/subtitle"
+        app:layout_constraintEnd_toStartOf="@id/weapon_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_subtitle"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="UseCompoundDrawables" />
+
+    <include
+        android:id="@+id/weapon_card"
+        layout="@layout/solution_card"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toStartOf="@id/room_card"
+        app:layout_constraintStart_toEndOf="@id/character_card"
+        app:layout_constraintTop_toTopOf="@id/character_card"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="UseCompoundDrawables" />
+
+    <include
+        android:id="@+id/room_card"
+        layout="@layout/solution_card"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weapon_card"
+        app:layout_constraintTop_toTopOf="@id/character_card"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="UseCompoundDrawables" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="48dp"
+        android:gravity="center_horizontal"
+        android:text="You must continue playing by responding to accusations"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_card" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/ButtonTextView"
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_blue_button"
+        android:textColor="@color/white"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:text="@string/continue_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subtitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,7 @@ class GameActivity : AppCompatActivity() {
         observeViewEvents()
         prepareNavDestinationListener()
 
-        binding.displayCardButton.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
+        binding.displayCardOverlay.button.setOnClickListener { viewModel.onDisplayCardButtonClicked() }
     }
 
     private fun initActionBar() {
@@ -138,7 +138,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun handleNavigationFabVisibility() {
-        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationResponder
+        binding.navigationFab.isVisible = shouldFabShowInDestination && !isAccusationResponder && !hasGameEnded
     }
 
     private fun observeViewState() = viewModel.viewState.observe(this) { state ->
@@ -147,6 +147,7 @@ class GameActivity : AppCompatActivity() {
         binding.accusationFragmentFab.isVisible = state.navigationFabOpened
         binding.blackScreenOverlay.isVisible = state.navigationFabOpened
         isAccusationResponder = state.isAccusationResponder
+        hasGameEnded = state.hasGameEnded
         handleNavigationFabVisibility()
     }
 
@@ -159,7 +160,8 @@ class GameActivity : AppCompatActivity() {
             ShowUserNotLoggedInToast -> showUserNotLoggedInToast()
             is ShowDisplayCard -> showDisplayCard(event.cardItem, event.isTurnPlayer, event.turnPlayerName)
             HideDisplayCard -> hideDisplayCard()
-            NavigateToSolution -> navigateToSolution()
+            is NavigateToSolutionVictory -> showVictory(event.wonByNoPlayersRemaining)
+            is NavigateToSolutionDefeat -> showDefeat(event.solutionCards, event.winnerName, event.wonByDefault, event.lostByAccusation)
             is ShowResultAlert -> showResultAlert(event.someoneWon, event.itsYou, event.player, event.solution)
         }
     }
@@ -193,37 +195,72 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun showDisplayCard(cardItem: CardItem, isTurnPlayer: Boolean, turnPlayerName: String) {
-        binding.displayCardLayout.visibility = View.INVISIBLE
-        binding.displayCardImage.setImageResource(cardItem.imageRes)
-        binding.displayCardName.text = cardItem.card.name
-        binding.displayCardButton.isVisible = isTurnPlayer
-        binding.displayCardSubtitle.text = "Showing card to $turnPlayerName"
-        binding.displayCardSubtitle.isVisible = !isTurnPlayer
+        binding.displayCardOverlay.root.visibility = View.INVISIBLE
+        binding.displayCardOverlay.card.image.setImageResource(cardItem.imageRes)
+        binding.displayCardOverlay.card.name.text = cardItem.card.name
+        binding.displayCardOverlay.button.isVisible = isTurnPlayer
+        binding.displayCardOverlay.subtitle.text = "Showing card to $turnPlayerName"
+        binding.displayCardOverlay.subtitle.isVisible = !isTurnPlayer
 
-        binding.displayCard.post {
-            binding.displayCardLayout.isVisible = true
-            val cardY = binding.displayCard.y + binding.displayCard.height
-            binding.displayCard.y = 0F - binding.displayCard.height
-            binding.displayCardLayout.alpha = 0F
-            binding.displayCardButton.alpha = 0F
-            binding.displayCardSubtitle.alpha = 0F
+        binding.displayCardOverlay.root.post {
+            binding.displayCardOverlay.root.isVisible = true
+            val cardY = binding.displayCardOverlay.card.root.y
+            binding.displayCardOverlay.card.root.y = 0F - binding.displayCardOverlay.card.root.height
+            binding.displayCardOverlay.root.alpha = 0F
+            binding.displayCardOverlay.button.alpha = 0F
+            binding.displayCardOverlay.subtitle.alpha = 0F
 
-            binding.displayCardLayout.animate().alpha(1F).setDuration(500).start()
-            binding.displayCard.animate().yBy(cardY).setDuration(500).setStartDelay(100).setInterpolator(DecelerateInterpolator()).start()
-            binding.displayCardButton.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
-            binding.displayCardSubtitle.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
+            binding.displayCardOverlay.root.animate().alpha(1F).setDuration(500).start()
+            binding.displayCardOverlay.card.root.animate().y(cardY).setDuration(500).setStartDelay(100).setInterpolator(DecelerateInterpolator()).start()
+            binding.displayCardOverlay.button.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
+            binding.displayCardOverlay.subtitle.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
         }
     }
 
     private fun hideDisplayCard() {
-        binding.displayCardLayout.isVisible = false
+        binding.displayCardOverlay.root.isVisible = false
     }
 
-    private fun navigateToSolution() {
+    private fun showVictory(wonByNoPlayersRemaining: Boolean) {
         findNavController(R.id.fragment_container_view).apply {
             if (currentDestination?.id != R.id.solutionFragment) {
                 navigate(R.id.solutionFragment)
             }
+        }
+    }
+
+    private fun showDefeat(solutionCards: List<CardItem>, winnerName: String?, wonByNoPlayersRemaining: Boolean, lostByAccusation: Boolean) {
+        binding.defeatOverlay.root.visibility = View.INVISIBLE
+        binding.defeatOverlay.characterCard.image.setImageResource(solutionCards[0].imageRes)
+        binding.defeatOverlay.weaponCard.image.setImageResource(solutionCards[1].imageRes)
+        binding.defeatOverlay.roomCard.image.setImageResource(solutionCards[2].imageRes)
+        binding.defeatOverlay.characterCard.name.text = solutionCards[0].card.name
+        binding.defeatOverlay.weaponCard.name.text = solutionCards[1].card.name
+        binding.defeatOverlay.roomCard.name.text = solutionCards[2].card.name
+        binding.defeatOverlay.subtitle.text = when {
+            winnerName != null && lostByAccusation -> "You made the wrong accusation. $winnerName won by default"
+            winnerName != null && wonByNoPlayersRemaining -> "$winnerName won by default"
+            winnerName != null -> "$winnerName made the correct accusation"
+            else -> "You made the wrong accusation\nYou must continue playing by responding to other players' accusations"
+        }
+        binding.defeatOverlay.button.text = if (winnerName != null) "Leave game" else "Continue"
+
+        binding.defeatOverlay.root.post {
+            binding.defeatOverlay.root.isVisible = true
+            val cardY = binding.defeatOverlay.characterCard.root.y
+            binding.defeatOverlay.characterCard.root.y = cardY / 3 * 2
+            binding.defeatOverlay.weaponCard.root.y = cardY / 3 * 2
+            binding.defeatOverlay.roomCard.root.y = cardY / 3 * 2
+            binding.defeatOverlay.root.alpha = 0F
+            binding.defeatOverlay.button.alpha = 0F
+            binding.defeatOverlay.subtitle.alpha = 0F
+
+            binding.defeatOverlay.root.animate().alpha(1F).setDuration(500).start()
+            binding.defeatOverlay.characterCard.root.animate().y(cardY).setDuration(1000).setStartDelay(100).start()
+            binding.defeatOverlay.weaponCard.root.animate().y(cardY).setDuration(1000).setStartDelay(100).start()
+            binding.defeatOverlay.roomCard.root.animate().y(cardY).setDuration(1000).setStartDelay(100).start()
+            binding.defeatOverlay.button.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
+            binding.defeatOverlay.subtitle.animate().alpha(1F).setDuration(500).setStartDelay(500).start()
         }
     }
 

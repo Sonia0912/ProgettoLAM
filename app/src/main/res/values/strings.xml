@@ -9,6 +9,7 @@
     <string name="join_game_error_blank_field">Please insert a game ID</string>
     <string name="join_game_error_invalid_id">A game ID must be 6 characters</string>
     <string name="choose_your_character">Choose your character</string>
+    <string name="defeat">Defeat</string>
     <string name="game_not_running_toast">This game is no longer running</string>
     <string name="user_not_logged_in_toast">Not logged in</string>
     <string name="user_already_in_game_message">You are already in this game on another device</string>
@@ -23,4 +24,5 @@
     <string name="preparation_description">This game can be played by 3 to 6 people. The host of the game can invite people by their e-mail or players can join through game ID or QR code. Once everyone has joined the lobby, the host can start the game. \n\nIf any player leaves the game when it\'s not finished the game will automatically end. \n\nThe game has 6 character cards, 6 weapon cards and 9 room cards, the objective is for you to guess Who, How and Where the victim was murdered. \n\nThe three solution cards will be kept secret since the beginning of the game, the remaining cards will be mixed and equally distributed to all the players. If there are leftover cards these will be visible to all players.</string>
     <string name="victory_description">To win the game you need to guess all the 3 secret cards: the murderer, the weapon and the room. \n\nWhen it\'s your turn you can make an accusation and declare it as final, which means the other players won\'t try to deny your accusation but you will directly look at the secret cards. If your accusation matches the secret cards, you have won! If not, the game will continue and you won\'t be allowed to play, but you will still deny accusations whenever it\'s required.</string>
     <string name="make_it_a_final_accusation">Make it a <b>final</b> accusation</string>
+    <string name="continue_text">Continue</string>
 </resources>

@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sonianicoletti.entities.Card
-import com.sonianicoletti.entities.Game
-import com.sonianicoletti.entities.GameStatus
-import com.sonianicoletti.entities.Player
+import com.sonianicoletti.entities.*
 import com.sonianicoletti.entities.exceptions.GameNotRunningException
 import com.sonianicoletti.entities.exceptions.UserNotLoggedInException
+import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionDefeat
+import com.sonianicoletti.progettolam.ui.game.GameViewModel.ViewEvent.NavigateToSolutionVictory
 import com.sonianicoletti.progettolam.ui.game.cards.CardItem
 import com.sonianicoletti.progettolam.util.MutableSingleLiveEvent
 import com.sonianicoletti.usecases.repositories.GameRepository
@@ -53,49 +52,56 @@ class GameViewModel @Inject constructor(
 
     private suspend fun handleGameUpdate(game: Game) {
         val isHost = gameRepository.isHost()
+        val user = authService.getUser() ?: throw UserNotLoggedInException()
         gameStateEmitter.value = GameState(game, isHost)
 
-        if (isCurrentTurn && !gameRepository.isCurrentTurn()) {
-            isCurrentTurn = false
-            viewEventEmitter.value = ViewEvent.NavigateToCards
+        when {
+            game.status == GameStatus.FINISHED -> endGame(game, user.id)
+            game.turnPlayerId in game.losers && isCurrentTurn -> showDefeat(game)
+            game.accusation?.displayCard != null && isCurrentTurn -> showDisplayCard(game.accusation!!.displayCard!!, true)
+            game.accusation?.displayCard != null && gameRepository.isAccusationResponder() -> showDisplayCard(game.accusation!!.displayCard!!, false)
+            game.accusation != null && gameRepository.isAccusationResponder() -> startAccusation()
+            game.accusation != null -> viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
+            isCurrentTurn != gameRepository.isCurrentTurn() -> resetTurn()
         }
+    }
+
+    private suspend fun resetTurn() {
         isCurrentTurn = gameRepository.isCurrentTurn()
+        viewEventEmitter.value = ViewEvent.HideDisplayCard
+        viewStateEmitter.value = viewState.value?.copy(isAccusationResponder = false)
 
-        if (game.accusation != null && gameRepository.isAccusationResponder()) {
+        if (!isCurrentTurn) {
             viewEventEmitter.value = ViewEvent.NavigateToCards
         }
-        viewStateEmitter.apply { value = value?.copy(isAccusationResponder = gameRepository.isAccusationResponder()) }
+    }
 
-        game.accusation?.displayCard?.let { displayCard ->
-            if (gameRepository.isCurrentTurn()) {
-                viewEventEmitter.value = ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), true, gameRepository.getTurnPlayer().displayName)
-            } else if (gameRepository.isAccusationResponder()) {
-                viewEventEmitter.value = ViewEvent.ShowDisplayCard(CardItem.fromCard(displayCard), false, gameRepository.getTurnPlayer().displayName)
-            }
-        } ?: viewEventEmitter.setValue(ViewEvent.HideDisplayCard)
+    private fun startAccusation() {
+        viewEventEmitter.value = ViewEvent.NavigateToCards
+        viewStateEmitter.apply { value = value?.copy(isAccusationResponder = true) }
+    }
 
+    private fun showDisplayCard(card: Card, isTurnPlayer: Boolean) {
+        viewEventEmitter.value = ViewEvent.ShowDisplayCard(CardItem.fromCard(card), isTurnPlayer, gameRepository.getTurnPlayer().displayName)
+    }
+
+    private fun endGame(game: Game, currentUserId: String) {
         // Se il giocatore che ha fatto l'ultima accusa vince o se rimane un solo giocatore
-        if (game.status == GameStatus.FINISHED) {
-            val currentPlayerID = authService.getUser()?.id
-            val currentPlayerDisplayName = authService.getUser()?.displayName
-            if (game.winner == currentPlayerID && game.turnPlayerId == currentPlayerID) {
-                viewEventEmitter.value = ViewEvent.NavigateToSolution
-            } else {
-                val itsYou = game.winner == currentPlayerID
-                val winnerName = game.players.find { player -> player.id == game.winner }?.displayName
-                viewEventEmitter.value = winnerName?.let { ViewEvent.ShowResultAlert(true, itsYou, it, game.solutionCards) }
-            }
+        val winningPlayer = game.players.first { it.id == game.winner }
+        viewStateEmitter.value = viewState.value?.copy(hasGameEnded = true)
+        viewEventEmitter.value = when {
+            game.winner == currentUserId && game.turnPlayerId == currentUserId -> NavigateToSolutionVictory(false)
+            game.winner == currentUserId -> NavigateToSolutionVictory(true)
+            game.losers.lastOrNull() == currentUserId -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, true)
+            game.players.size - game.losers.size == 1 -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, true, false)
+            else -> NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, winningPlayer.displayName, false, false)
         }
-        // Se il giocatore che ha fatto l'ultima accusa ha perso
-        else if(game.turnPlayerId in game.losers) {
-            if(game.turnPlayerId == authService.getUser()?.id) {
-                viewEventEmitter.value = ViewEvent.NavigateToSolution
-            } else {
-                val loserName = game.players.find { player -> player.id == game.turnPlayerId }?.displayName
-                viewEventEmitter.value = loserName?.let { ViewEvent.ShowResultAlert(false, false, it, mutableListOf()) }
-            }
-        }
+    }
 
+    private suspend fun showDefeat(game: Game) {
+        // Se il giocatore che ha fatto l'ultima accusa ha perso
+        viewEventEmitter.value = NavigateToSolutionDefeat(game.solutionCards.map { CardItem.fromCard(it) }, null, false, false)
+        gameRepository.nextTurn()
     }
 
     private fun handleGameNotRunning() = viewModelScope.launch {
@@ -162,7 +168,8 @@ class GameViewModel @Inject constructor(
         val displayCard: CardItem? = null,
         val turnPlayer: Player? = null,
         val isTurnPlayer: Boolean = false,
-        val isAccusationResponder: Boolean = false
+        val isAccusationResponder: Boolean = false,
+        var hasGameEnded: Boolean = false,
     )
 
     sealed class ViewEvent {
@@ -173,7 +180,8 @@ class GameViewModel @Inject constructor(
         object NavigateToCards : ViewEvent()
         class ShowDisplayCard(val cardItem: CardItem, val isTurnPlayer: Boolean, val turnPlayerName: String) : ViewEvent()
         object HideDisplayCard : ViewEvent()
-        object NavigateToSolution : ViewEvent()
+        class NavigateToSolutionVictory(val wonByNoPlayersRemaining: Boolean) : ViewEvent()
+        class NavigateToSolutionDefeat(val solutionCards: List<CardItem>, val winnerName: String?, val wonByDefault: Boolean, val lostByAccusation: Boolean) : ViewEvent()
         class ShowResultAlert(val someoneWon: Boolean, val itsYou: Boolean, val player: String, val solution: MutableList<Card>) : GameViewModel.ViewEvent()
     }
 }

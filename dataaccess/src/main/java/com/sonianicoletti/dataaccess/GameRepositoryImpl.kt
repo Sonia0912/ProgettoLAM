@@ -167,30 +167,31 @@ class GameRepositoryImpl @Inject constructor(
         gameService.updateGame(game)
     }
 
-    override suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card, isFinal: Boolean) {
+    override suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card) {
         val game = getOngoingGame()
         val currentPlayerIndex = game.players.indexOf(game.players.first { it.id == authService.getUser()?.id })
         val nextPlayerId = (if (currentPlayerIndex == game.players.lastIndex) game.players[0] else game.players[currentPlayerIndex + 1]).id
-        if(isFinal) {
-            val won = gameService.checkVictory(game.id, characterCard, weaponCard, roomCard)
-            if(won) {
-                game.winner = authService.getUser()?.id.toString()
-                game.status = GameStatus.FINISHED
-                gameService.updateGame(game)
-                return
-            } else {
-                authService.getUser()?.id?.let { game.losers.add(it) }
-                // controllo se e' rimasto un solo giocatore
-                if(game.losers.size == (game.players.size - 1)) {
-                    game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
-                    game.status = GameStatus.FINISHED
-                    gameService.updateGame(game)
-                    return
-                }
-            }
-        }
         game.accusation = Accusation(cards = mutableListOf(characterCard, weaponCard, roomCard), responder = nextPlayerId)
         gameService.updateGame(game)
+    }
+
+    override suspend fun makeFinalAccusation(characterCard: Card, weaponCard: Card, roomCard: Card) {
+        val game = getOngoingGame()
+        val victory = gameService.checkVictory(game.id, characterCard, weaponCard, roomCard)
+        if(victory) {
+            game.winner = authService.getUser()?.id.toString()
+            game.status = GameStatus.FINISHED
+            gameService.updateGame(game)
+        } else {
+            authService.getUser()?.id?.let { game.losers.add(it) }
+            gameService.updateGame(game)
+            // controllo se e' rimasto un solo giocatore
+            if(game.losers.size == (game.players.size - 1)) {
+                game.winner = findRemainingPlayer(game.players.map { it.id }, game.losers)
+                game.status = GameStatus.FINISHED
+                gameService.updateGame(game)
+            }
+        }
     }
 
     private fun findRemainingPlayer(players: List<String>, losers: List<String>) : String {
