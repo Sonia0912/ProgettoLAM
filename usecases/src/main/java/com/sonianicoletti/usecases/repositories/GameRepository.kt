@@ -29,7 +29,9 @@ interface GameRepository {
 
     suspend fun isHost(): Boolean
 
-    suspend fun isTurnPlayer(): Boolean
+    suspend fun isCurrentTurn(): Boolean
+
+    fun getTurnPlayer(): Player
 
     suspend fun distributeCards()
 
@@ -38,6 +40,10 @@ interface GameRepository {
     suspend fun makeAccusation(characterCard: Card, weaponCard: Card, roomCard: Card, isFinal: Boolean)
 
     suspend fun nextAccusationResponder()
+
+    suspend fun setAccusationDisplayCard(card: Card)
+
+    suspend fun isAccusationResponder(): Boolean
 
     suspend fun isWinner(): Boolean
 }

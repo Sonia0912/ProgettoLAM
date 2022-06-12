@@ -70,8 +70,8 @@ class CardsViewModel @Inject constructor(
         gameRepository.nextAccusationResponder()
     }
 
-    fun onAccusationCardClicked() = viewModelScope.launch {
-        gameRepository.updateGameStatus(GameStatus.SHOW_CARD)
+    fun onAccusationCardClicked(cardItem: CardItem) = viewModelScope.launch {
+        gameRepository.setAccusationDisplayCard(cardItem.card)
     }
 
     data class ViewState(

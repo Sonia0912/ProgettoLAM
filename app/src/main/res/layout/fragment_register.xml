@@ -8,84 +8,100 @@
 
     <TextView
         android:id="@+id/textView4"
+        style="@style/AgrandirTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:text="Sign up"
+        android:textColor="@color/gold_web_golden"
         app:layout_constraintBottom_toTopOf="@+id/editTextInputUsername"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        style="@style/AgrandirTextView"
-        android:textColor="@color/gold_web_golden"
-        android:layout_marginBottom="32dp"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
         android:id="@+id/editTextInputUsername"
+        style="@style/DefaultTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/rounded_liliac"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/light_grey"
         app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        android:layout_marginBottom="25dp"
-        android:background="@drawable/rounded_liliac"
-        android:padding="12dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/light_grey"
-        style="@style/DefaultTextView"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/editTextEmail"
+        style="@style/DefaultTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/rounded_liliac"
         android:ems="10"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/light_grey"
         app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextInputUsername"
-        android:layout_marginBottom="25dp"
-        android:background="@drawable/rounded_liliac"
-        android:padding="12dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/light_grey"
-        style="@style/DefaultTextView"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextInputUsername" />
 
     <EditText
         android:id="@+id/editTextPassword"
+        style="@style/DefaultTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/rounded_liliac"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-        android:layout_marginBottom="25dp"
-        android:background="@drawable/rounded_liliac"
         android:padding="12dp"
         android:textColor="@color/white"
         android:textColorHint="@color/light_grey"
-        style="@style/DefaultTextView"/>
+        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonRegister"
+        style="@style/ButtonTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_blue_button"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        android:background="@drawable/rounded_blue_button"
-        style="@style/ButtonTextView"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:layout_marginTop="32dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+    <FrameLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#AA000000"
+        android:elevation="3dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

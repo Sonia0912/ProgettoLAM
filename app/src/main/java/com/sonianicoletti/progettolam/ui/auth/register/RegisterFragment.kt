@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,7 +24,13 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterBinding.inflate(inflater)
+        setClickListeners()
+        observeViewState()
+        observeViewEvents()
+        return binding.root
+    }
 
+    private fun setClickListeners() {
         // Gestire il click su Register
         binding.buttonRegister.setOnClickListener {
             val email = binding.editTextEmail.text.toString()
@@ -44,29 +51,31 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
-
-        observeViewEvents()
-
-        return binding.root
     }
 
-    fun handleTakenUsername(errorMessage: String) {
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        when (state) {
+            RegisterViewModel.ViewState.Loading -> binding.progressLayout.isVisible = true
+            RegisterViewModel.ViewState.Idle -> binding.progressLayout.isVisible = false
+        }
+    }
+
+    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) { event ->
+        when (event) {
+            // se e' una classe serve is, se e' un oggetto no
+            is RegisterViewModel.ViewEvent.HandleTakenUsername -> handleTakenUsername(event.errorMessage)
+            RegisterViewModel.ViewEvent.NavigateToMain -> navigateToMain()
+        }
+    }
+
+    private fun handleTakenUsername(errorMessage: String) {
         MaterialAlertDialogBuilder(requireContext()).setMessage(errorMessage).show()
     }
 
-    fun navigateToMain() {
+    private fun navigateToMain() {
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // non fa tornare indietro
         context?.startActivity(intent)
         activity?.finish()
     }
-
-    private fun observeViewEvents() = viewModel.viewEvent.observe(viewLifecycleOwner) {
-        when (it) {
-            // se e' una classe serve is, se e' un oggetto no
-            is RegisterViewModel.ViewEvent.handleTakenUsername -> handleTakenUsername(it.errorMessage)
-            RegisterViewModel.ViewEvent.navigateToMain -> navigateToMain()
-        }
-    }
-
 }

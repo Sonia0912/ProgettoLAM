@@ -162,8 +162,9 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         val accusationMap = gameSnapshot[ACCUSATION] as? HashMap<String, Any> ?: return null
         val cardsMapList = accusationMap[ACCUSATION_CARDS] as? List<HashMap<String, Any>> ?: emptyList()
         val accusationCards = cardsMapList.map { it.toCard() }.toMutableList()
-        val responder = (accusationMap[ACCUSATION_RESPONDER].toString())
-        return Accusation(accusationCards, responder)
+        val responder = accusationMap[ACCUSATION_RESPONDER].toString()
+        val displayCard = (accusationMap[ACCUSATION_DISPLAY_CARD] as? HashMap<String, Any>)?.toCard()
+        return Accusation(accusationCards, responder, displayCard)
     }
 
     override suspend fun deleteGame(gameID: String) {
@@ -186,6 +187,7 @@ class FirebaseGameService @Inject constructor(private val authService: FirebaseA
         private const val ACCUSATION = "accusation"
         private const val ACCUSATION_CARDS = "cards"
         private const val ACCUSATION_RESPONDER = "responder"
+        private const val ACCUSATION_DISPLAY_CARD = "displayCard"
         private const val WINNER = "winner"
         private const val LOSERS = "losers"
     }

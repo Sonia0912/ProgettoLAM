@@ -71,6 +71,7 @@ class CardsAdapter : RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
             } else {
                 binding.cardLayout.foreground.alpha = 0
                 binding.cardLayout.setOnClickListener(null)
+                binding.cardLayout.clearAnimation()
             }
         }
     }
