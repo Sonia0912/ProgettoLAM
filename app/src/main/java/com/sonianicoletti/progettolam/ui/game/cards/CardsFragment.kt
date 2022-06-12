@@ -57,6 +57,8 @@ class CardsFragment : Fragment() {
 
     private fun observeViewState() {
         viewModel.viewState.observe(viewLifecycleOwner) {
+            binding.mainLayout.isVisible = true
+            binding.progressLayout.isVisible = false
             binding.recyclerViewYourCards.updateList(it.yourCards)
             binding.recyclerViewLeftoverCards.updateList(it.leftoverCards)
 

@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="#88FFFFFF"
+        android:background="#99000000"
         android:translationZ="5dp">
         <ProgressBar
             android:id="@+id/progress_bar"

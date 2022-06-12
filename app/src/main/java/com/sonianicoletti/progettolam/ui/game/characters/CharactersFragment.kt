@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -46,11 +47,19 @@ class CharactersFragment : Fragment() {
         val itemOffsetDecoration = ItemOffsetDecoration(requireContext(), R.dimen.character_offset)
         binding.characterGrid.adapter = adapter
         //binding.characterGrid.addItemDecoration(itemOffsetDecoration)
-        observeCharacterItems()
+        observeViewState()
     }
 
-    private fun observeCharacterItems() = viewModel.characters.observe(viewLifecycleOwner) { characterItems ->
-        adapter.updateItems(characterItems)
+    private fun observeViewState() = viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        when (state) {
+            CharactersViewModel.ViewState.Loading -> {
+                binding.progressLayout.isVisible = true
+            }
+            is CharactersViewModel.ViewState.Data -> {
+                binding.progressLayout.isVisible = false
+                adapter.updateItems(state.characters)
+            }
+        }
     }
 
     private fun observeGameState() = gameViewModel.gameState.observe(viewLifecycleOwner) { state ->
@@ -97,7 +106,10 @@ class CharactersFragment : Fragment() {
     }
 
     private fun navigateToCards() {
-        findNavController().navigate(R.id.action_charactersFragment_to_cardsFragment)
+        findNavController().apply {
+            popBackStack(R.id.game_nav_graph, inclusive = true)
+            navigate(R.id.cardsFragment)
+        }
     }
 
     private fun showGameNotRunningToast() {

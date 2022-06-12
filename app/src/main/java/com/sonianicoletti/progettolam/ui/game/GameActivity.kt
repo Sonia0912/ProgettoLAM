@@ -58,7 +58,7 @@ class GameActivity : AppCompatActivity() {
         binding.defeatOverlay.button.setOnClickListener {
             hideDefeatOverlay()
             findNavController(R.id.fragment_container_view).apply {
-                currentDestination?.id?.let { popBackStack(it, true) }
+                popBackStack(R.id.game_nav_graph, true)
                 navigate(R.id.scoresFragment)
             }
         }
@@ -234,7 +234,7 @@ class GameActivity : AppCompatActivity() {
     private fun showVictory(wonByNoPlayersRemaining: Boolean) {
         findNavController(R.id.fragment_container_view).apply {
             if (currentDestination?.id != R.id.solutionFragment) {
-//                currentDestination?.id?.let { popBackStack(it, true) }
+                popBackStack(R.id.game_nav_graph, true)
                 navigate(R.id.solutionFragment)
             }
         }
@@ -277,7 +277,12 @@ class GameActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (!isAccusationResponder) {
-            super.onBackPressed()
+            val backstack = findNavController(R.id.fragment_container_view).backQueue
+            if (backstack.size > 2) {
+                super.onBackPressed()
+            } else {
+                showLeaveGameDialog()
+            }
         }
     }
 }
