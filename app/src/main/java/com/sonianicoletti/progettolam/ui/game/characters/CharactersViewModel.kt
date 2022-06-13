@@ -68,7 +68,12 @@ class CharactersViewModel @Inject constructor(
     }
 
     fun selectCharacter(character: Character) = viewModelScope.launch(Dispatchers.IO) {
+        val game = gameRepository.getOngoingGame()
         val user = authService.getUser() ?: throw UserNotFoundException()
+        if (game.players.find { it.id == user.id }?.character != Character.UNSELECTED) {
+            return@launch
+        }
+
         when {
             isCharacterSelected(user.id, character) -> {
                 gameRepository.updateCharacter(user.id, Character.UNSELECTED)
@@ -77,7 +82,6 @@ class CharactersViewModel @Inject constructor(
                 viewEventEmitter.postValue(ShowCharacterTaken(character))
             }
             else -> {
-                val game = gameRepository.getOngoingGame()
                 game.players.first { it.id == user.id }.character = character
                 viewStateEmitter.emit()
                 gameRepository.updateCharacter(user.id, character)
